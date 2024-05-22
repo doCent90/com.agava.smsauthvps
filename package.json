@@ -1,0 +1,22 @@
+{
+  "name": "com.agava.smsauthvps",
+  "version": "1.0.0",
+  "displayName": "Sms Auth VPS",
+  "type": "library",
+  "unity": "2022.3",
+  "description": "Sms Authenfication for Wink access.",
+  "license": "MIT",
+  "dependencies": {
+    "com.agava.smsauthapi": "1.0.0",
+    "com.unity.nuget.newtonsoft-json": "3.0.2",
+    "com.unity.textmeshpro": "3.0.6"
+  },
+  "samples": [
+    {
+      "displayName": "Resource",
+      "description": "Contains UI prefab the SDK.",
+      "path": "Samples~/Resource"
+    }
+  ],
+  "author": "github.com/doCent90"
+}
