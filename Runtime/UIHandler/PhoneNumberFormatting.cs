@@ -2,13 +2,14 @@ using System;
 using System.Text.RegularExpressions;
 using TMPro;
 using UnityEngine;
+using System.Collections.Generic;
 
 public class PhoneNumberFormatting : MonoBehaviour
 {
     [SerializeField] private TMP_InputField _inputField;
     [SerializeField] private TMP_Text _placeholder;
-    [SerializeField] private SymbolIndex[] _symbols;
 
+    private List<SymbolIndex> _symbols = new();
     private string _placeholderText;
     private string _colorCode;
     private int _placeholderLength;
@@ -18,10 +19,21 @@ public class PhoneNumberFormatting : MonoBehaviour
 
     private void Awake()
     {
+        _inputField.contentType = TMP_InputField.ContentType.IntegerNumber;
         _placeholderText = _placeholder.text;
         _colorCode = ColorUtility.ToHtmlStringRGB(_placeholder.color);
         _placeholderLength = _placeholderText.Length;
         _inputField.text = ColorText(_colorCode, _placeholderText);
+
+        try
+        {
+            foreach (Match match in Regex.Matches(_placeholderText, @"[^0-9]", RegexOptions.None, TimeSpan.FromSeconds(1)))
+                _symbols.Add(new SymbolIndex(char.Parse(match.Value), match.Index));
+        }
+        catch (RegexMatchTimeoutException)
+        {
+
+        }
     }
 
     private void OnEnable()
@@ -94,9 +106,14 @@ public class PhoneNumberFormatting : MonoBehaviour
     private string ColorText(string colorCode, string text) => $"<color=#{colorCode}>{text}</color>";
 }
 
-[Serializable]
 internal struct SymbolIndex
 {
-    [field: SerializeField] public char Symbol { get; private set; }
-    [field: SerializeField] public int Index { get; private set; }
+    public char Symbol { get; private set; }
+    public int Index { get; private set; }
+
+    public SymbolIndex(char symbol, int index)
+    {
+        Symbol = symbol;
+        Index = index;
+    }
 }

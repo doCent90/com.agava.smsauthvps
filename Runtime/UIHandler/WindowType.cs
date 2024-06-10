@@ -14,5 +14,6 @@
         Redirect,
         EnterOtpCode,
         Hello,
+        HelloSubscribe,
     }
 }

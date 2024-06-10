@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
@@ -15,6 +13,6 @@ public class SignInButton : MonoBehaviour
         bool numberFilled = _numbersInputField.NumberFilled;
 
         _active.SetActive(numberFilled);
-        _unactive.SetActive(numberFilled);
+        _unactive.SetActive(!numberFilled);
     }
 }
