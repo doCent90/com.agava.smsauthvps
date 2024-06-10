@@ -37,45 +37,39 @@ namespace Agava.Wink
                 return;
             }
 
-            _notifyWindowHandler.OpenInputWindow(onInputDone: (code) =>
+            _notifyWindowHandler.OpenWindow(WindowType.ProccessOn);
+
+            _winkAccessManager.Regist(phoneNumber: number,
+            otpCodeRequest: (hasOtpCode) =>
             {
-                _notifyWindowHandler.OpenWindow(WindowType.ProccessOn);
-                _winkAccessManager.SendOtpCode(code);
+                if (hasOtpCode)
+                {
+                    _notifyWindowHandler.CloseWindow(WindowType.ProccessOn);
+
+                    _notifyWindowHandler.OpenInputWindow(onInputDone: (code) =>
+                    {
+                        _notifyWindowHandler.OpenWindow(WindowType.ProccessOn);
+                        _winkAccessManager.SendOtpCode(code);
+                    });
+                }
+                else
+                {
+                    _notifyWindowHandler.CloseWindow(WindowType.ProccessOn);
+                    _notifyWindowHandler.OpenWindow(WindowType.Fail);
+                }
+            },
+            winkSubscriptionAccessRequest: (hasAccess) =>
+            {
+                if (hasAccess)
+                {
+                    OnSignInDone(onSuccessfully);
+                }
+                else
+                {
+                    _notifyWindowHandler.CloseWindow(WindowType.ProccessOn);
+                    _notifyWindowHandler.OpenWindow(WindowType.Redirect);
+                }
             });
-
-            //_notifyWindowHandler.OpenWindow(WindowType.ProccessOn);
-
-            //_winkAccessManager.Regist(phoneNumber: number,
-            //otpCodeRequest: (hasOtpCode) =>
-            //{
-            //    if (hasOtpCode)
-            //    {
-            //        _notifyWindowHandler.CloseWindow(WindowType.ProccessOn);
-
-            //        _notifyWindowHandler.OpenInputWindow(onInputDone: (code) =>
-            //        {
-            //            _notifyWindowHandler.OpenWindow(WindowType.ProccessOn);
-            //            _winkAccessManager.SendOtpCode(code);
-            //        });
-            //    }
-            //    else
-            //    {
-            //        _notifyWindowHandler.CloseWindow(WindowType.ProccessOn);
-            //        _notifyWindowHandler.OpenWindow(WindowType.Fail);
-            //    }
-            //},
-            //winkSubscriptionAccessRequest: (hasAccess) =>
-            //{
-            //    if (hasAccess)
-            //    {
-            //        OnSignInDone(onSuccessfully);
-            //    }
-            //    else
-            //    {
-            //        _notifyWindowHandler.CloseWindow(WindowType.ProccessOn);
-            //        _notifyWindowHandler.OpenWindow(WindowType.Redirect);
-            //    }
-            //});
         }
 
         internal void OnSubsDenied(bool hasAccess)
