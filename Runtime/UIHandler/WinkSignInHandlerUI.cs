@@ -29,6 +29,8 @@ namespace Agava.Wink
         [SerializeField] private bool _additivePlusChar = false;
         [Header("Factory components")]
         [SerializeField] private Transform _containerButtons;
+        [Header("Phone Number Placeholders")]
+        [SerializeField] private PhoneNumberPlaceholder[] _phoneNumberPlaceholders;
 
         private SignInFuctionsUI _signInFuctionsUI;
         private WinkAccessManager _winkAccessManager;
@@ -37,7 +39,6 @@ namespace Agava.Wink
         public static WinkSignInHandlerUI Instance { get; private set; }
 
         public bool IsAnyWindowEnabled => _notifyWindowHandler.IsAnyWindowEnabled;
-        public string Number { get; private set; }
 
         public event Action AllWindowsClosed;
         public event Action SignInWindowClosed;
@@ -103,8 +104,13 @@ namespace Agava.Wink
 
         private void OnSignInClicked()
         {
-            Number = WinkAcceessHelper.GetNumber(_numbersInputField.text, _minNumberCount, _maxNumberCount, _additivePlusChar);
-            _signInFuctionsUI.OnSignInClicked(Number, OnSuccessfully);
+            string formattedNumber = _numbersInputField.text;
+
+            foreach(PhoneNumberPlaceholder placeholder in _phoneNumberPlaceholders)
+                placeholder.ReplaceValue(formattedNumber);
+
+            string number = WinkAcceessHelper.GetNumber(formattedNumber, _minNumberCount, _maxNumberCount, _additivePlusChar);
+            _signInFuctionsUI.OnSignInClicked(number, OnSuccessfully);
         }
 
         private void OnLimitReached(IReadOnlyList<string> devicesList)

@@ -283,10 +283,6 @@ PrefabInstance:
       propertyPath: _ip
       value: 192.168.174.128
       objectReference: {fileID: 0}
-    - target: {fileID: 3722590748452739527, guid: 9c403f81a96e0614aa478405fd9d1560, type: 3}
-      propertyPath: m_Alpha
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 5362313161217916099, guid: 9c403f81a96e0614aa478405fd9d1560, type: 3}
       propertyPath: m_Name
       value: WinkAccessManager

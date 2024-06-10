@@ -43,10 +43,10 @@ namespace Agava.Wink
             _unlinkWindow.Enable();
         }
 
-        internal bool HasOpenedWindow(WindowType type) 
+        internal bool HasOpenedWindow(WindowType type)
             => _windows.Any(window => window.Type == type && window.isActiveAndEnabled == true);
 
-        private WindowPresenter GetWindowByType(WindowType type) 
+        private WindowPresenter GetWindowByType(WindowType type)
             => _windows.FirstOrDefault(window => window.Type == type);
     }
 }
