@@ -10,24 +10,22 @@ namespace Agava.Wink
         /// <summary>
         ///     Return formated number after enter.
         /// </summary>
-        public static string GetNumber(string otp_code, string phone_number, int minNumberCount, int maxNumberCount, int codeCount, bool additivePlusChar)
+        public static string GetNumber(string phone_number, int minNumberCount, int maxNumberCount, bool additivePlusChar)
         {
-            bool isCorrectCode = uint.TryParse(otp_code, System.Globalization.NumberStyles.Any, CultureInfo.InvariantCulture, out uint resultCode);
+            phone_number.Replace(" ", string.Empty);
+
             bool isCorrectNumber = ulong.TryParse(phone_number, System.Globalization.NumberStyles.Any, CultureInfo.InvariantCulture, out ulong resultNumber);
 
-            int countCode = resultCode.ToString().Length;
             int countNumber = resultNumber.ToString().Length;
 
-            if (isCorrectNumber == false || isCorrectCode == false
-                || string.IsNullOrEmpty(phone_number)
-                || (countNumber < minNumberCount || countNumber > maxNumberCount)
-                || (countCode > codeCount || countCode <= 0 || resultCode == 0))
+            if (isCorrectNumber == false || string.IsNullOrEmpty(phone_number)
+                || (countNumber < minNumberCount || countNumber > maxNumberCount))
             {
                 return string.Empty;
             }
 
             string plus = additivePlusChar == true ? "+" : "";
-            string number = $"{plus}{resultCode}{resultNumber}";
+            string number = $"{plus}{resultNumber}";
             return number;
         }
     }

@@ -12,7 +12,7 @@ using UnityEngine.Networking;
 namespace Agava.Wink
 {
     /// <summary>
-    ///     Requests/response to/from YBD fuction.
+    ///    Requests/response to/from YBD fuction.
     /// </summary>
     internal class RequestHandler
     {
@@ -56,6 +56,7 @@ namespace Agava.Wink
         internal async void Login(LoginData data, Action<IReadOnlyList<string>> onLimitReached, Action<bool> onWinkSubscriptionAccessRequest, Action onSuccessed)
         {
             var response = await SmsAuthApi.Login(data);
+
             if (response.statusCode != UnityWebRequest.Result.Success)
             {
                 Debug.LogError("ValidationError : " + response.statusCode);
@@ -84,11 +85,11 @@ namespace Agava.Wink
                     return;
                 }
 
-                RequestWinkDataBase(onWinkSubscriptionAccessRequest, onSuccessed);
+                await RequestWinkDataBase(data.phone, onWinkSubscriptionAccessRequest, onSuccessed);
             }
         }
 
-        internal async void QuickAccess(Action onSuccessed, Action onResetLogin)
+        internal async void QuickAccess(string phoneNumber, Action onSuccessed, Action onResetLogin, Action<bool> onWinkSubscriptionAccessRequest)
         {
             var tokens = SaveLoadLocalDataService.Load<Tokens>(TokenLifeHelper.Tokens);
 
@@ -123,14 +124,16 @@ namespace Agava.Wink
             }
 
             var response = await SmsAuthApi.SampleAuth(currentToken);
+            var hasSubsc = await RequestWinkDataBase(phoneNumber, onWinkSubscriptionAccessRequest, null);
 
-            if (response.statusCode == UnityWebRequest.Result.Success)
+            if (response.statusCode == UnityWebRequest.Result.Success && hasSubsc)
             {
                 onSuccessed?.Invoke();
             }
             else
             {
-                Debug.LogError($"Quick access Validation Error: {response.reasonPhrase}: {response.statusCode}");
+                Debug.LogError($"Quick access Validation Error: {response.reasonPhrase}: {response.statusCode}/Wink: {hasSubsc}");
+                TokenLifeHelper.ClearTokens();
                 onResetLogin?.Invoke();
             }
         }
@@ -151,10 +154,23 @@ namespace Agava.Wink
             }
         }
 
-        private void RequestWinkDataBase(Action<bool> onWinkSubscriptionAccessRequest, Action onSuccessed)
+        private async Task<bool> RequestWinkDataBase(string phoneNumber, Action<bool> onWinkSubscriptionAccessRequest, Action onSuccessed)
         {
-            onWinkSubscriptionAccessRequest?.Invoke(true); //TODO: Make Wink request
-            onSuccessed?.Invoke();
+            var response = await SmsAuthApi.GetAccountData(phoneNumber);
+#if UNITY_EDITOR || TEST
+            Debug.Log("Account subscription: " + response.statusCode);
+#endif
+            if (response.statusCode == UnityWebRequest.Result.Success)
+            {
+                onWinkSubscriptionAccessRequest?.Invoke(true);
+                onSuccessed?.Invoke();
+                return true;
+            }
+            else
+            {
+                onWinkSubscriptionAccessRequest?.Invoke(false);
+                return false;
+            }
         }
     }
 }

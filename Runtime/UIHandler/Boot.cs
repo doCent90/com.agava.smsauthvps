@@ -41,14 +41,14 @@ namespace Agava.Wink
             _startLogoPresenter.Construct();
             _startLogoPresenter.ShowLogo();
 
-            _winkAccessManager.Construct();
-            yield return _winkSignInHandlerUI.Construct(_winkAccessManager);
+            yield return _winkAccessManager.Construct();
+            _winkSignInHandlerUI.Construct(_winkAccessManager);
+            yield return _winkSignInHandlerUI.Initialize();
 
             yield return new WaitForSecondsRealtime(_startLogoPresenter.LogoDuration);
             yield return _startLogoPresenter.HidingLogo();
             yield return new WaitWhile(() => Application.internetReachability == NetworkReachability.NotReachable);
 
-            _winkSignInHandlerUI.CloseAllWindows();
             _signInProcess = StartCoroutine(OnStarted());
             yield return _signInProcess;
 

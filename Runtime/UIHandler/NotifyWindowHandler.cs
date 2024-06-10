@@ -14,6 +14,7 @@ namespace Agava.Wink
         [SerializeField] private NotifyWindowPresenter _wrongNumberWindow;
         [SerializeField] private NotifyWindowPresenter _proccesOnWindow;
         [SerializeField] private NotifyWindowPresenter _successfullyWindow;
+        [SerializeField] private NotifyWindowPresenter _helloWindow;
         [SerializeField] private NotifyWindowPresenter _unlinkWindow;
         [SerializeField] private NotifyWindowPresenter _demoTimerExpiredWindow;
         [SerializeField] private NotifyWindowPresenter _noEnternetWindow;
@@ -28,13 +29,21 @@ namespace Agava.Wink
         internal void OpenWindow(WindowType type) => GetWindowByType(type).Enable();
         internal void CloseWindow(WindowType type) => GetWindowByType(type).Disable();
         internal void OpenInputWindow(Action<uint> onInputDone) => _enterCodeWindow.Enable(onInputDone);
-        internal void CloseAllWindows() => _windows.ForEach(window => window.Disable());
+
+        internal void CloseAllWindows(Action onClosed)
+        {
+            _windows.ForEach(window => window.Disable());
+            onClosed?.Invoke();
+        }
 
         internal void OnLimitReached()
         {
             _enterCodeWindow.Clear();
             _unlinkWindow.Enable();
         }
+
+        internal bool HasOpenedWindow(WindowType type) 
+            => _windows.Any(window => window.Type == type && window.isActiveAndEnabled == true);
 
         private WindowPresenter GetWindowByType(WindowType type) 
             => _windows.FirstOrDefault(window => window.Type == type);

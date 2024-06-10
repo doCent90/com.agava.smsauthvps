@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using SmsAuthAPI.DTO;
 using SmsAuthAPI.Program;
+using System.Threading.Tasks;
+using System.Collections;
 
 namespace Agava.Wink
 {
@@ -12,9 +14,9 @@ namespace Agava.Wink
     public class WinkAccessManager : MonoBehaviour, IWinkAccessManager
     {
         private const string UniqueId = nameof(UniqueId);
+        private const string PhoneNumber = nameof(PhoneNumber);
 
         [SerializeField] private string _ip;
-        [SerializeField] private string _port;
         [SerializeField] private string _additiveId;
 
         private RequestHandler _requestHandler;
@@ -29,7 +31,7 @@ namespace Agava.Wink
         public event Action ResetLogin;
         public event Action Successfully;
 
-        public void Construct()
+        public IEnumerator Construct()
         {
             if (Instance == null)
                 Instance = this;
@@ -42,17 +44,20 @@ namespace Agava.Wink
             else
                 _uniqueId = UnityEngine.PlayerPrefs.GetString(UniqueId);
       
+            if (UnityEngine.PlayerPrefs.HasKey(PhoneNumber))
+                _data = new LoginData() { phone = UnityEngine.PlayerPrefs.GetString(PhoneNumber), device_id = _uniqueId};
+
             if (SmsAuthApi.Initialized == false)
-            {
-                if (string.IsNullOrEmpty(_port))
-                    SmsAuthApi.Initialize(_ip, _uniqueId);
-                else
-                    SmsAuthApi.Initialize(_ip + ":" + _port, _uniqueId);
-            }
+                SmsAuthApi.Initialize(_ip, _uniqueId);
+
+            yield return null;
 
             if (UnityEngine.PlayerPrefs.HasKey(TokenLifeHelper.Tokens))
                 QuickAccess();
         }
+
+        public void SetWinkSubsEvent(Action<bool> winkSubscriptionAccessRequest) 
+            => _winkSubscriptionAccessRequest = winkSubscriptionAccessRequest;
 
         public void SendOtpCode(uint enteredOtpCode)
         {
@@ -63,6 +68,7 @@ namespace Agava.Wink
         public async void Regist(string phoneNumber, Action<bool> otpCodeRequest, Action<bool> winkSubscriptionAccessRequest)
         {
             _winkSubscriptionAccessRequest = winkSubscriptionAccessRequest;
+            UnityEngine.PlayerPrefs.SetString(PhoneNumber, phoneNumber);
             _data = await _requestHandler.Regist(phoneNumber, _uniqueId, otpCodeRequest);
         }
 
@@ -80,7 +86,11 @@ namespace Agava.Wink
         private void Login(LoginData data) 
             => _requestHandler.Login(data, LimitReached, _winkSubscriptionAccessRequest, OnSubscriptionExist);
 
-        private void QuickAccess() => _requestHandler.QuickAccess(OnSubscriptionExist, ResetLogin);
+        private async void QuickAccess()
+        {
+            while(_winkSubscriptionAccessRequest == null) await Task.Yield();
+            _requestHandler.QuickAccess(_data.phone, OnSubscriptionExist, ResetLogin, _winkSubscriptionAccessRequest);
+        }
 
         private void OnSubscriptionExist()
         {

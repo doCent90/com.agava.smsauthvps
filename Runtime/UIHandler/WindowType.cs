@@ -13,5 +13,6 @@
         NoEnternet,
         Redirect,
         EnterOtpCode,
+        Hello,
     }
 }
