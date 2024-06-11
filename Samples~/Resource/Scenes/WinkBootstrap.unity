@@ -281,7 +281,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3558283120338427668, guid: 9c403f81a96e0614aa478405fd9d1560, type: 3}
       propertyPath: _ip
-      value: 192.168.174.128
+      value: 195.19.5.54
       objectReference: {fileID: 0}
     - target: {fileID: 5362313161217916099, guid: 9c403f81a96e0614aa478405fd9d1560, type: 3}
       propertyPath: m_Name
