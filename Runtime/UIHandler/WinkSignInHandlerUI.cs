@@ -42,6 +42,7 @@ namespace Agava.Wink
 
         public event Action AllWindowsClosed;
         public event Action SignInWindowClosed;
+        public event Action HelloWindowsClosed;
 
         public void Dispose()
         {
@@ -106,7 +107,7 @@ namespace Agava.Wink
         {
             string formattedNumber = _numbersInputField.text;
 
-            foreach(PhoneNumberPlaceholder placeholder in _phoneNumberPlaceholders)
+            foreach (PhoneNumberPlaceholder placeholder in _phoneNumberPlaceholders)
                 placeholder.ReplaceValue(formattedNumber);
 
             string number = WinkAcceessHelper.GetNumber(formattedNumber, _minNumberCount, _maxNumberCount, _additivePlusChar);
@@ -143,6 +144,18 @@ namespace Agava.Wink
         private void OnSuccessfully()
         {
             _openSignInButton.gameObject.SetActive(false);
+
+            bool subscribed = true;
+
+            if (_winkAccessManager.HasAccess)
+            {
+                _notifyWindowHandler.OpenHelloWindow(onEnd: () =>
+                {
+                    if (subscribed == false)
+                        _notifyWindowHandler.OpenHelloSubscribeWindow(null);
+                });
+            }
+
             _notifyWindowHandler.OpenWindow(WindowType.Hello);
         }
 
