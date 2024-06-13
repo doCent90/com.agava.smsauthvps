@@ -145,18 +145,7 @@ namespace Agava.Wink
         {
             _openSignInButton.gameObject.SetActive(false);
 
-            bool subscribed = true;
-
-            if (_winkAccessManager.HasAccess)
-            {
-                _notifyWindowHandler.OpenHelloWindow(onEnd: () =>
-                {
-                    if (subscribed == false)
-                        _notifyWindowHandler.OpenHelloSubscribeWindow(null);
-                });
-            }
-
-            _notifyWindowHandler.OpenWindow(WindowType.Hello);
+            //_notifyWindowHandler.OpenWindow(WindowType.Hello);
         }
 
         private void OnTimerExpired() => _notifyWindowHandler.OpenWindow(WindowType.DemoTimerExpired);

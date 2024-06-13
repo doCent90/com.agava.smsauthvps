@@ -1,20 +1,23 @@
 using TMPro;
 using UnityEngine;
 
-public class PhoneNumberPlaceholder : MonoBehaviour
+namespace Agava.Wink
 {
-    [SerializeField] private TMP_Text _text;
-    [SerializeField] private string _placeholderText;
-
-    private string _startText;
-
-    private void Awake()
+    internal class PhoneNumberPlaceholder : MonoBehaviour
     {
-        _startText = _text.text;
-    }
+        [SerializeField] private TMP_Text _text;
+        [SerializeField] private string _placeholderText;
 
-    public void ReplaceValue(string value)
-    {
-        _text.text = _startText.Replace($"{{{_placeholderText}}}", value);
+        private string _startText;
+
+        private void Awake()
+        {
+            _startText = _text.text;
+        }
+
+        public void ReplaceValue(string value)
+        {
+            _text.text = _startText.Replace($"{{{_placeholderText}}}", value);
+        }
     }
 }

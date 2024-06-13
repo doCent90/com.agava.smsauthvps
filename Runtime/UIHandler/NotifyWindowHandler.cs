@@ -31,7 +31,7 @@ namespace Agava.Wink
         internal void CloseWindow(WindowType type) => GetWindowByType(type).Disable();
         internal void OpenInputWindow(Action<uint> onInputDone) => _enterCodeWindow.Enable(onInputDone);
         internal void OpenHelloWindow(Action onEnd) => _helloWindow.Enable(onEnd);
-        internal void OpenHelloSubscribeWindow(Action onClose) => _helloWindow.Enable(onClose);
+        internal void OpenHelloSubscribeWindow(Action onClose) => _helloSubscribeWindow.Enable(onClose);
 
         internal void CloseAllWindows(Action onClosed)
         {

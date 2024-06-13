@@ -18,6 +18,7 @@ namespace Agava.Wink
         [SerializeField] private WinkSignInHandlerUI _winkSignInHandlerUI;
         [SerializeField] private StartLogoPresenter _startLogoPresenter;
         [SerializeField] private SceneLoader _sceneLoader;
+        [SerializeField] private LoadingProgressBar _loadingProgressBar;
         [SerializeField] private bool _restartAfterAuth = true;
 
         private Coroutine _signInProcess;
@@ -38,6 +39,10 @@ namespace Agava.Wink
             if (Instance == null)
                 Instance = this;
 
+            SmsAuthApi.DownloadCloudSavesProgress += OnDownloadCloudSavesProgress;
+
+            _loadingProgressBar.Enable();
+
             _startLogoPresenter.Construct();
             _startLogoPresenter.ShowLogo();
 
@@ -52,8 +57,16 @@ namespace Agava.Wink
             _signInProcess = StartCoroutine(OnStarted());
             yield return _signInProcess;
 
+            SmsAuthApi.DownloadCloudSavesProgress -= OnDownloadCloudSavesProgress;
+            _loadingProgressBar.Disable();
+
             _sceneLoader.LoadGameScene();
             _startLogoPresenter.CloseBootView();
+        }
+
+        private void OnDownloadCloudSavesProgress(float progress)
+        {
+            _loadingProgressBar.SetProgress(progress);
         }
 
         private IEnumerator OnStarted()

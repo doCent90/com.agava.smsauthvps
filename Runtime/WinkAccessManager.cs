@@ -11,8 +11,9 @@ namespace Agava.Wink
     /// <summary>
     ///     Auth process logic.
     /// </summary>
-    public class WinkAccessManager : MonoBehaviour, IWinkAccessManager
+    public class WinkAccessManager : MonoBehaviour, IWinkAccessManager, ICoroutine
     {
+        private const string FirstRegist = nameof(FirstRegist);
         private const string UniqueId = nameof(UniqueId);
         private const string PhoneNumber = nameof(PhoneNumber);
 
@@ -20,6 +21,7 @@ namespace Agava.Wink
         [SerializeField] private string _additiveId;
 
         private RequestHandler _requestHandler;
+        private TimespentService _timespentService;
         private LoginData _data;
         private Action<bool> _winkSubscriptionAccessRequest;
         private string _uniqueId;
@@ -31,12 +33,21 @@ namespace Agava.Wink
         public event Action ResetLogin;
         public event Action Successfully;
 
+        private void OnApplicationFocus(bool focus)
+        {
+            if (focus == false && _timespentService != null)
+                _timespentService.OnFinishedApp();
+            else if (focus && _timespentService != null)
+                _timespentService.OnStartedApp();
+        }
+
         public IEnumerator Construct()
         {
             if (Instance == null)
                 Instance = this;
 
             _requestHandler = new();
+
             DontDestroyOnLoad(this);
 
             if (UnityEngine.PlayerPrefs.HasKey(UniqueId) == false)
@@ -47,6 +58,9 @@ namespace Agava.Wink
             if (UnityEngine.PlayerPrefs.HasKey(PhoneNumber))
                 _data = new LoginData() { phone = UnityEngine.PlayerPrefs.GetString(PhoneNumber), device_id = _uniqueId};
 
+            if (_data != null)
+                StartTimespentAnalytics();
+
             if (SmsAuthApi.Initialized == false)
                 SmsAuthApi.Initialize(_ip, _uniqueId);
 
@@ -54,6 +68,8 @@ namespace Agava.Wink
 
             if (UnityEngine.PlayerPrefs.HasKey(TokenLifeHelper.Tokens))
                 QuickAccess();
+
+            StartCoroutine(DelayedSendStatistic());
         }
 
         public void SetWinkSubsEvent(Action<bool> winkSubscriptionAccessRequest) 
@@ -70,6 +86,9 @@ namespace Agava.Wink
             _winkSubscriptionAccessRequest = winkSubscriptionAccessRequest;
             UnityEngine.PlayerPrefs.SetString(PhoneNumber, phoneNumber);
             _data = await _requestHandler.Regist(phoneNumber, _uniqueId, otpCodeRequest);
+
+            if (_timespentService == null)
+                StartTimespentAnalytics();
         }
 
         public void Unlink(string deviceId) => _requestHandler.Unlink(deviceId, ResetLogin);
@@ -83,8 +102,15 @@ namespace Agava.Wink
         }
 #endif
 
-        private void Login(LoginData data) 
-            => _requestHandler.Login(data, LimitReached, _winkSubscriptionAccessRequest, OnSubscriptionExist);
+        private void Login(LoginData data)
+        {
+            _requestHandler.Login(data, LimitReached, _winkSubscriptionAccessRequest, 
+            () => 
+                { 
+                    OnSubscriptionExist();
+                    TrySendAnalyticsData(_data.phone);
+                });
+        }
 
         private async void QuickAccess()
         {
@@ -96,7 +122,49 @@ namespace Agava.Wink
         {
             HasAccess = true;
             Successfully?.Invoke();
+
+            if (PlayerPrefs.HasKey(FirstRegist))
+                AnalyticsWinkService.SendHasActiveAccountUser(hasActiveAcc: true);
+
             Debug.Log("Access succesfully");
+        }
+
+        private async void TrySendAnalyticsData(string phone)
+        {
+            if (PlayerPrefs.HasKey(FirstRegist) == false)
+            {
+                var responseActiveAccount = await SmsAuthApi.HasActiveAccount(phone);
+
+                if (responseActiveAccount.statusCode == UnityEngine.Networking.UnityWebRequest.Result.Success)
+                {
+                    var responseGetSanId = await SmsAuthApi.GetSanId(phone);
+
+                    if (responseGetSanId.statusCode == UnityEngine.Networking.UnityWebRequest.Result.Success)
+                    {
+                        AnalyticsWinkService.SendSanId(responseGetSanId.body);
+                        AnalyticsWinkService.SendHasActiveAccountNewUser(hasActiveAcc: true);
+                        PlayerPrefs.SetString(FirstRegist, "done");
+                    }
+                }
+                else
+                {
+                    AnalyticsWinkService.SendHasActiveAccountNewUser(hasActiveAcc: false);
+                }
+            }
+        }
+
+        private void StartTimespentAnalytics()
+        {
+            _timespentService = new(this, _data.phone, _uniqueId, Application.identifier);
+            _timespentService.OnStartedApp();
+        }
+
+        private IEnumerator DelayedSendStatistic()
+        {
+            yield return new WaitForSecondsRealtime(time: 120f);
+
+            if (HasAccess == false)
+                AnalyticsWinkService.SendHasActiveAccountUser(hasActiveAcc: false);
         }
     }
 }

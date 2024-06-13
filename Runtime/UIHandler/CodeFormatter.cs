@@ -2,40 +2,47 @@ using System.Text.RegularExpressions;
 using TMPro;
 using UnityEngine;
 
-public class CodeFormatter : MonoBehaviour
+namespace Agava.Wink
 {
-    [SerializeField] private TMP_InputField _inputField;
-    [SerializeField] private TMP_Text[] _textCells;
-
-    private int _codeLength;
-
-    private void Start()
+    internal class CodeFormatter : MonoBehaviour, IInputFieldFormatting
     {
-        _codeLength = _textCells.Length;
-    }
+        [SerializeField] private TMP_InputField _inputField;
+        [SerializeField] private TMP_Text[] _textCells;
 
-    private void OnEnable()
-    {
-        _inputField.onValueChanged.AddListener(OnValueChanged);
-    }
+        private int _codeLength;
 
-    private void OnDisable()
-    {
-        _inputField.onValueChanged.RemoveListener(OnValueChanged);
-    }
+        public bool InputDone { get; private set; } = false;
 
-    private void OnValueChanged(string newValue)
-    {
-        if (newValue.Length > _codeLength)
+        private void Start()
         {
-            _inputField.text = newValue.Substring(0, _codeLength);
+            _codeLength = _textCells.Length;
         }
-        else
+
+        private void OnEnable()
         {
-            for (int i = 0; i < _codeLength; i++)
+            _inputField.onValueChanged.AddListener(OnValueChanged);
+        }
+
+        private void OnDisable()
+        {
+            _inputField.onValueChanged.RemoveListener(OnValueChanged);
+        }
+
+        private void OnValueChanged(string newValue)
+        {
+            if (newValue.Length > _codeLength)
             {
-                _textCells[i].text = i >= newValue.Length ? string.Empty : newValue[i].ToString();
+                _inputField.text = newValue.Substring(0, _codeLength);
             }
+            else
+            {
+                for (int i = 0; i < _codeLength; i++)
+                {
+                    _textCells[i].text = i >= newValue.Length ? string.Empty : newValue[i].ToString();
+                }
+            }
+
+            InputDone = string.IsNullOrEmpty(_textCells[_textCells.Length - 1].text) == false;
         }
     }
 }

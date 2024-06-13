@@ -60,15 +60,17 @@ namespace Agava.Wink
             },
             winkSubscriptionAccessRequest: (hasAccess) =>
             {
-                if (hasAccess)
-                {
-                    OnSignInDone(onSuccessfully);
-                }
-                else
-                {
-                    _notifyWindowHandler.CloseWindow(WindowType.ProccessOn);
-                    _notifyWindowHandler.OpenWindow(WindowType.Redirect);
-                }
+                OnSignInDone(onSuccessfully, hasAccess);
+
+                //if (hasAccess)
+                //{
+                //    OnSignInDone(onSuccessfully);
+                //}
+                //else
+                //{
+                //    _notifyWindowHandler.CloseWindow(WindowType.ProccessOn);
+                //    _notifyWindowHandler.OpenWindow(WindowType.Redirect);
+                //}
             });
         }
 
@@ -115,23 +117,35 @@ namespace Agava.Wink
             }
         }
 
-        private void OnSignInDone(Action onSuccessfully)
+        private void OnSignInDone(Action onSuccessfully, bool hasAccess)
         {
-            _notifyWindowHandler.OpenWindow(WindowType.Successfully);
-            _notifyWindowHandler.CloseWindow(WindowType.SignIn);
-            _notifyWindowHandler.CloseWindow(WindowType.ProccessOn);
-
             onSuccessfully?.Invoke();
             OnSuccessfully();
 
-            _coroutine.StartCoroutine(Waiting());
-            IEnumerator Waiting()
-            {
-                yield return new WaitForSecondsRealtime(2f);
+            _notifyWindowHandler.CloseWindow(WindowType.SignIn);
+            _notifyWindowHandler.CloseWindow(WindowType.ProccessOn);
 
-                if (_notifyWindowHandler.HasOpenedWindow(WindowType.Successfully))
-                    _notifyWindowHandler.CloseWindow(WindowType.Successfully);
-            }
+            _notifyWindowHandler.OpenHelloWindow(onEnd: () =>
+            {
+                if (hasAccess == false)
+                    _notifyWindowHandler.OpenHelloSubscribeWindow(null);
+            });
+
+            //_notifyWindowHandler.OpenWindow(WindowType.Successfully);
+            //_notifyWindowHandler.CloseWindow(WindowType.SignIn);
+            //_notifyWindowHandler.CloseWindow(WindowType.ProccessOn);
+
+            //onSuccessfully?.Invoke();
+            //OnSuccessfully();
+
+            //_coroutine.StartCoroutine(Waiting());
+            //IEnumerator Waiting()
+            //{
+            //    yield return new WaitForSecondsRealtime(2f);
+
+            //    if (_notifyWindowHandler.HasOpenedWindow(WindowType.Successfully))
+            //        _notifyWindowHandler.CloseWindow(WindowType.Successfully);
+            //}
         }
 
         private void OnSuccessfully()

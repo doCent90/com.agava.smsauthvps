@@ -156,7 +156,7 @@ namespace Agava.Wink
 
         private async Task<bool> RequestWinkDataBase(string phoneNumber, Action<bool> onWinkSubscriptionAccessRequest, Action onSuccessed)
         {
-            var response = await SmsAuthApi.GetAccountData(phoneNumber);
+            var response = await SmsAuthApi.HasActiveAccount(phoneNumber);
 #if UNITY_EDITOR || TEST
             Debug.Log("Account subscription: " + response.statusCode);
 #endif
