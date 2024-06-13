@@ -297,7 +297,7 @@ MonoBehaviour:
       m_Calls: []
   m_Sprite: {fileID: 21300000, guid: 0251a5904331ada4aa89e5efce38c66f, type: 3}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
@@ -481,11 +481,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84c1f853478c3984a9e8177feb7af745, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _winkAccessManagerComponent: {fileID: 0}
-  _winkSignInHandlerUIComponent: {fileID: 0}
+  _winkAccessManager: {fileID: 0}
+  _winkSignInHandlerUI: {fileID: 0}
   _startLogoPresenter: {fileID: 115698839703872439}
   _sceneLoader: {fileID: 0}
-  _logoDuration: 3
+  _loadingProgressBar: {fileID: 0}
+  _restartAfterAuth: 1
 --- !u!114 &115698839703872439
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -498,11 +499,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a754381b3b2ba4a40b49b64f4b26262d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <LogoDuration>k__BackingField: 3
   _logoGroup: {fileID: 7702160634805857277}
   _bootGroup: {fileID: 4849872907614531783}
   _enLogo: {fileID: 5347123710913937166}
   _ruLogo: {fileID: 5950134469734200129}
   _loading: {fileID: 6073833241247710249}
+  _enable: 1
 --- !u!225 &4849872907614531783
 CanvasGroup:
   m_ObjectHideFlags: 0

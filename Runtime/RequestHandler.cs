@@ -53,17 +53,18 @@ namespace Agava.Wink
                 onResetLogin?.Invoke();
         }
 
-        internal async void Login(LoginData data, Action<IReadOnlyList<string>> onLimitReached, Action<bool> onWinkSubscriptionAccessRequest, Action onSuccessed)
+        internal async void Login(LoginData data, Action<IReadOnlyList<string>> onLimitReached, Action<bool> onWinkSubscriptionAccessRequest, Action<bool> otpCodeAccepted, Action onSuccessed)
         {
             var response = await SmsAuthApi.Login(data);
 
             if (response.statusCode != UnityWebRequest.Result.Success)
             {
                 Debug.LogError("ValidationError : " + response.statusCode);
-                onWinkSubscriptionAccessRequest?.Invoke(false);
+                otpCodeAccepted?.Invoke(false);
             }
             else
             {
+                otpCodeAccepted?.Invoke(true);
                 string token;
 
                 if (response.isBase64Encoded)

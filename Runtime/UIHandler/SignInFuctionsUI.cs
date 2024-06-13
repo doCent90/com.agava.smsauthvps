@@ -61,16 +61,14 @@ namespace Agava.Wink
             winkSubscriptionAccessRequest: (hasAccess) =>
             {
                 OnSignInDone(onSuccessfully, hasAccess);
-
-                //if (hasAccess)
-                //{
-                //    OnSignInDone(onSuccessfully);
-                //}
-                //else
-                //{
-                //    _notifyWindowHandler.CloseWindow(WindowType.ProccessOn);
-                //    _notifyWindowHandler.OpenWindow(WindowType.Redirect);
-                //}
+            },
+            otpCodeAccepted: (accepted) =>
+            {
+                if (accepted == false)
+                {
+                    _notifyWindowHandler.CloseWindow(WindowType.ProccessOn);
+                    _notifyWindowHandler.OpenWindow(WindowType.Fail);
+                }
             });
         }
 
@@ -130,22 +128,6 @@ namespace Agava.Wink
                 if (hasAccess == false)
                     _notifyWindowHandler.OpenHelloSubscribeWindow(null);
             });
-
-            //_notifyWindowHandler.OpenWindow(WindowType.Successfully);
-            //_notifyWindowHandler.CloseWindow(WindowType.SignIn);
-            //_notifyWindowHandler.CloseWindow(WindowType.ProccessOn);
-
-            //onSuccessfully?.Invoke();
-            //OnSuccessfully();
-
-            //_coroutine.StartCoroutine(Waiting());
-            //IEnumerator Waiting()
-            //{
-            //    yield return new WaitForSecondsRealtime(2f);
-
-            //    if (_notifyWindowHandler.HasOpenedWindow(WindowType.Successfully))
-            //        _notifyWindowHandler.CloseWindow(WindowType.Successfully);
-            //}
         }
 
         private void OnSuccessfully()

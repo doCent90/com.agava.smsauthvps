@@ -24,6 +24,7 @@ namespace Agava.Wink
         private TimespentService _timespentService;
         private LoginData _data;
         private Action<bool> _winkSubscriptionAccessRequest;
+        private Action<bool> _otpCodeAccepted;
         private string _uniqueId;
 
         public bool HasAccess { get; private set; } = false;
@@ -54,9 +55,9 @@ namespace Agava.Wink
                 _uniqueId = SystemInfo.deviceName + Application.identifier + _additiveId;
             else
                 _uniqueId = UnityEngine.PlayerPrefs.GetString(UniqueId);
-      
+
             if (UnityEngine.PlayerPrefs.HasKey(PhoneNumber))
-                _data = new LoginData() { phone = UnityEngine.PlayerPrefs.GetString(PhoneNumber), device_id = _uniqueId};
+                _data = new LoginData() { phone = UnityEngine.PlayerPrefs.GetString(PhoneNumber), device_id = _uniqueId };
 
             if (_data != null)
                 StartTimespentAnalytics();
@@ -72,7 +73,7 @@ namespace Agava.Wink
             StartCoroutine(DelayedSendStatistic());
         }
 
-        public void SetWinkSubsEvent(Action<bool> winkSubscriptionAccessRequest) 
+        public void SetWinkSubsEvent(Action<bool> winkSubscriptionAccessRequest)
             => _winkSubscriptionAccessRequest = winkSubscriptionAccessRequest;
 
         public void SendOtpCode(uint enteredOtpCode)
@@ -81,9 +82,10 @@ namespace Agava.Wink
             Login(_data);
         }
 
-        public async void Regist(string phoneNumber, Action<bool> otpCodeRequest, Action<bool> winkSubscriptionAccessRequest)
+        public async void Regist(string phoneNumber, Action<bool> otpCodeRequest, Action<bool> winkSubscriptionAccessRequest, Action<bool> otpCodeAccepted)
         {
             _winkSubscriptionAccessRequest = winkSubscriptionAccessRequest;
+            _otpCodeAccepted = otpCodeAccepted;
             UnityEngine.PlayerPrefs.SetString(PhoneNumber, phoneNumber);
             _data = await _requestHandler.Regist(phoneNumber, _uniqueId, otpCodeRequest);
 
@@ -104,9 +106,9 @@ namespace Agava.Wink
 
         private void Login(LoginData data)
         {
-            _requestHandler.Login(data, LimitReached, _winkSubscriptionAccessRequest, 
-            () => 
-                { 
+            _requestHandler.Login(data, LimitReached, _winkSubscriptionAccessRequest, _otpCodeAccepted,
+            () =>
+                {
                     OnSubscriptionExist();
                     TrySendAnalyticsData(_data.phone);
                 });
@@ -114,7 +116,7 @@ namespace Agava.Wink
 
         private async void QuickAccess()
         {
-            while(_winkSubscriptionAccessRequest == null) await Task.Yield();
+            while (_winkSubscriptionAccessRequest == null) await Task.Yield();
             _requestHandler.QuickAccess(_data.phone, OnSubscriptionExist, ResetLogin, _winkSubscriptionAccessRequest);
         }
 
