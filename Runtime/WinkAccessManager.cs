@@ -139,6 +139,8 @@ namespace Agava.Wink
 
                 if (responseActiveAccount.statusCode == UnityEngine.Networking.UnityWebRequest.Result.Success)
                 {
+                    AnalyticsWinkService.SendFirstOpen();
+
                     var responseGetSanId = await SmsAuthApi.GetSanId(phone);
 
                     if (responseGetSanId.statusCode == UnityEngine.Networking.UnityWebRequest.Result.Success)

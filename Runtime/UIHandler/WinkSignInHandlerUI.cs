@@ -98,7 +98,12 @@ namespace Agava.Wink
             _signInFuctionsUI.SetRemoteConfig();
         }
 
-        public void OpenSignWindow() => _notifyWindowHandler.OpenSignInWindow(() => SignInWindowClosed?.Invoke());
+        public void OpenSignWindow()
+        {
+            _notifyWindowHandler.OpenSignInWindow(() => SignInWindowClosed?.Invoke());
+            AnalyticsWinkService.SendEnterPhoneWindow();
+        }
+
         public void OpenWindow(WindowType type) => _notifyWindowHandler.OpenWindow(type);
         public void CloseWindow(WindowType type) => _notifyWindowHandler.CloseWindow(type);
         public void CloseAllWindows() => _notifyWindowHandler.CloseAllWindows(AllWindowsClosed);
@@ -144,7 +149,6 @@ namespace Agava.Wink
         private void OnSuccessfully()
         {
             _openSignInButton.gameObject.SetActive(false);
-
             //_notifyWindowHandler.OpenWindow(WindowType.Hello);
         }
 

@@ -41,8 +41,6 @@ namespace Agava.Wink
 
             SmsAuthApi.DownloadCloudSavesProgress += OnDownloadCloudSavesProgress;
 
-            _loadingProgressBar.Enable();
-
             _startLogoPresenter.Construct();
             _startLogoPresenter.ShowLogo();
 
@@ -57,16 +55,19 @@ namespace Agava.Wink
             _signInProcess = StartCoroutine(OnStarted());
             yield return _signInProcess;
 
-            SmsAuthApi.DownloadCloudSavesProgress -= OnDownloadCloudSavesProgress;
-            _loadingProgressBar.Disable();
-
-            _sceneLoader.LoadGameScene();
             _startLogoPresenter.CloseBootView();
+            var loadingScene = _sceneLoader.LoadGameScene();
+            SmsAuthApi.DownloadCloudSavesProgress -= OnDownloadCloudSavesProgress;
+            _loadingProgressBar.Enable();
+
+            yield return new WaitUntil(() => { _loadingProgressBar.SetProgress(loadingScene.progress, 0.5f, 1.0f); return loadingScene.isDone; });
+
+            _loadingProgressBar.Disable();
         }
 
         private void OnDownloadCloudSavesProgress(float progress)
         {
-            _loadingProgressBar.SetProgress(progress);
+            _loadingProgressBar.SetProgress(progress, 0.0f, 0.5f);
         }
 
         private IEnumerator OnStarted()
@@ -77,6 +78,7 @@ namespace Agava.Wink
             {
                 _winkSignInHandlerUI.OpenSignWindow();
                 UnityEngine.PlayerPrefs.SetString(FirsttimeStartApp, "true");
+                AnalyticsWinkService.SendSubscribeOfferWindow();
 
                 yield return new WaitUntil(() => (WinkAccessManager.Instance.HasAccess == true || _winkSignInHandlerUI.IsAnyWindowEnabled == false));
 

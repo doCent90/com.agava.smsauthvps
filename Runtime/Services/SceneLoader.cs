@@ -21,8 +21,8 @@ namespace Agava.Wink
         /// <summary>
         ///     Load game scene.
         /// </summary>
-        internal void LoadGameScene() => UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(_startSceneName);
-        internal void LoadScene(string sceneName) => UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(sceneName);
-        internal void LoadScene(int sceneBuildIndex) => UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(sceneBuildIndex);
+        internal AsyncOperation LoadGameScene() => UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(_startSceneName);
+        internal AsyncOperation LoadScene(string sceneName) => UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(sceneName);
+        internal AsyncOperation LoadScene(int sceneBuildIndex) => UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(sceneBuildIndex);
     }
 }
