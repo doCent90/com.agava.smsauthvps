@@ -7482,7 +7482,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70ec58d84ed9e66418df474fc863b924, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _ip: 195.19.5.54:5000
+  _ip: 
   _additiveId: 
 --- !u!114 &2206036496812303545
 MonoBehaviour:

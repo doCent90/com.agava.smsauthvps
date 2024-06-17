@@ -18,7 +18,7 @@ namespace Agava.Wink
         private readonly string _deviceId;
         private readonly string _appId;
 
-        private int _spentTimeMin = 0;
+        private ulong _spentTimeMin = 0;
         private List<int> _savedTime = new();
 
         public TimespentService(ICoroutine coroutine, string phone, string deviceId, string appId)
@@ -60,9 +60,9 @@ namespace Agava.Wink
             }
         }
 
-        private void SetAverageSessionTimespent(int time)
+        private void SetAverageSessionTimespent(ulong minutes)
         {
-            _savedTime.Add(time);
+            _savedTime.Add((int)minutes);
 
             if (_savedTime.Count > 3)
             {
