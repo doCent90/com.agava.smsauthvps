@@ -80,9 +80,9 @@ namespace Agava.Wink
                 UnityEngine.PlayerPrefs.SetString(FirsttimeStartApp, "true");
                 AnalyticsWinkService.SendSubscribeOfferWindow();
 
-                yield return new WaitUntil(() => (WinkAccessManager.Instance.Authorized == true || _winkSignInHandlerUI.IsAnyWindowEnabled == false));
+                yield return new WaitUntil(() => (WinkAccessManager.Instance.HasAccess == true || _winkSignInHandlerUI.IsAnyWindowEnabled == false));
 
-                if (WinkAccessManager.Instance.Authorized)
+                if (WinkAccessManager.Instance.HasAccess)
                 {
                     yield return CloudSavesLoading();
 #if UNITY_EDITOR || TEST
@@ -99,7 +99,9 @@ namespace Agava.Wink
                 if (UnityEngine.PlayerPrefs.HasKey(SmsAuthAPI.DTO.TokenLifeHelper.Tokens))
                 {
                     yield return new WaitUntil(() => WinkAccessManager.Instance.Authorized == true);
-                    yield return CloudSavesLoading();
+
+                    if (WinkAccessManager.Instance.HasAccess)
+                        yield return CloudSavesLoading();
                 }
                 else
                 {
@@ -113,9 +115,9 @@ namespace Agava.Wink
             _signInProcess = null;
         }
 
-        private void OnAuthorizedSuccessfully()
+        private void OnSuccessfully()
         {
-            _winkAccessManager.AuthorizedSuccessfully -= OnAuthorizedSuccessfully;
+            _winkAccessManager.Successfully -= OnSuccessfully;
 
 #if UNITY_EDITOR || TEST
             Debug.Log($"Boot: Access Successfully");
@@ -159,7 +161,7 @@ namespace Agava.Wink
 
         private void OnSkiped()
         {
-            _winkAccessManager.AuthorizedSuccessfully += OnAuthorizedSuccessfully;
+            _winkAccessManager.Successfully += OnSuccessfully;
 #if UNITY_EDITOR || TEST
             Debug.Log($"Boot: SignIn skiped");
 #endif
