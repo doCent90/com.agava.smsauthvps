@@ -53,7 +53,9 @@ namespace Agava.Wink
                 onResetLogin?.Invoke();
         }
 
-        internal async void Login(LoginData data, Action<IReadOnlyList<string>> onLimitReached, Action<bool> onWinkSubscriptionAccessRequest, Action<bool> otpCodeAccepted, Action onSuccessed)
+        internal async void Login(LoginData data, Action<IReadOnlyList<string>> onLimitReached,
+            Action<bool> onWinkSubscriptionAccessRequest, Action<bool> otpCodeAccepted,
+            Action onSuccessed, Action onAuthorizedSuccessfully = null)
         {
             var response = await SmsAuthApi.Login(data);
 
@@ -86,7 +88,11 @@ namespace Agava.Wink
                     return;
                 }
 
-                await RequestWinkDataBase(data.phone, onWinkSubscriptionAccessRequest, onSuccessed);
+                await RequestWinkDataBase(data.phone, onWinkSubscriptionAccessRequest, () =>
+                {
+                    onSuccessed?.Invoke();
+                    onAuthorizedSuccessfully?.Invoke();
+                });
             }
         }
 

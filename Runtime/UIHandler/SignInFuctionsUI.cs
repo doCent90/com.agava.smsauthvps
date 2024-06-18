@@ -59,10 +59,7 @@ namespace Agava.Wink
                     _notifyWindowHandler.OpenWindow(WindowType.Fail);
                 }
             },
-            winkSubscriptionAccessRequest: (hasAccess) =>
-            {
-                OnSignInDone(onSuccessfully, hasAccess);
-            },
+            winkSubscriptionAccessRequest: (hasAccess) => { OnSignInDone(onSuccessfully); },
             otpCodeAccepted: (accepted) =>
             {
                 if (accepted == false)
@@ -111,7 +108,7 @@ namespace Agava.Wink
             }
         }
 
-        private void OnSignInDone(Action onSuccessfully, bool hasAccess)
+        private void OnSignInDone(Action onSuccessfully)
         {
             onSuccessfully?.Invoke();
             OnSuccessfully();

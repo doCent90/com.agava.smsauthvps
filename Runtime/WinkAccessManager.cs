@@ -105,18 +105,12 @@ namespace Agava.Wink
 
         private void Login(LoginData data)
         {
-            _requestHandler.Login(data, LimitReached, _winkSubscriptionAccessRequest, (bool otpCodeAccepted) =>
+            _requestHandler.Login(data, LimitReached, _winkSubscriptionAccessRequest, _otpCodeAccepted, () =>
             {
-                _otpCodeAccepted?.Invoke(otpCodeAccepted);
-
-                if (otpCodeAccepted)
-                    OnAuthorizedSuccessfully();
-            },
-            () =>
-                {
-                    OnSubscriptionExist();
-                    TrySendAnalyticsData(_data.phone);
-                });
+                OnSubscriptionExist();
+                TrySendAnalyticsData(_data.phone);
+            }, 
+            OnAuthorizedSuccessfully);
         }
 
         private void QuickAccess() =>
@@ -181,7 +175,7 @@ namespace Agava.Wink
             Authorized = true;
             AuthorizedSuccessfully?.Invoke();
 
-            Debug.Log("Authorizated successfully");
+            Debug.Log("Authorized successfully");
         }
     }
 }
