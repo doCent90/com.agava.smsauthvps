@@ -3,6 +3,7 @@ using System.Globalization;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using SmsAuthAPI.Program;
 
 namespace Agava.Wink
 {
@@ -17,21 +18,25 @@ namespace Agava.Wink
         [SerializeField] private EnterCodeShaking _enterCodeShaking;
 
         private Action<string> _onInputDone;
+        private string _phone;
 
         private void Awake()
         {
             _sendButton.onClick.AddListener(OnSendCodeClicked);
+            _sendRepeatCodeButton.onClick.AddListener(OnRepeatClicked);
             _repeatCodeTimer.TimerExpired += OnNewCodeTimerExpired;
         }
 
         private void OnDestroy()
         {
             _sendButton.onClick.RemoveListener(OnSendCodeClicked);
+            _sendRepeatCodeButton.onClick.RemoveListener(OnRepeatClicked);
             _repeatCodeTimer.TimerExpired -= OnNewCodeTimerExpired;
         }
 
-        public void Enable(Action<string> onInputDone)
+        public void Enable(string phone, Action<string> onInputDone)
         {
+            _phone = phone;
             _repeatCodeTimer.Enable();
             _onInputDone = onInputDone;
             EnableCanvasGroup(_canvasGroup);
@@ -63,14 +68,25 @@ namespace Agava.Wink
             _onInputDone?.Invoke(code);
         }
 
-        internal void ResetInputText()
+        public void ResetInputText()
         {
             _inputField.text = string.Empty;
             _enterCodeShaking.StartAnimation();
         }
 
-        internal void Clear() => _inputField.text = string.Empty;
+        public void Clear() => _inputField.text = string.Empty;
 
-        private void OnNewCodeTimerExpired() => _sendRepeatCodeButton.gameObject.SetActive(true);
+        private void OnNewCodeTimerExpired()
+        {
+            _sendRepeatCodeButton.gameObject.SetActive(true);
+            _repeatCodeTimer.Disable();
+        }
+
+        private async void OnRepeatClicked()
+        {
+            _sendRepeatCodeButton.gameObject.SetActive(false);
+            _repeatCodeTimer.Enable();
+            await SmsAuthApi.SendSms(_phone);
+        }
     }
 }

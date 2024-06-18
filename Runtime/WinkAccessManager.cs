@@ -141,8 +141,6 @@ namespace Agava.Wink
 
                     if (responseGetSanId.statusCode == UnityEngine.Networking.UnityWebRequest.Result.Success)
                     {
-                        Debug.Log($"san_id: " + responseGetSanId.body);
-
                         AnalyticsWinkService.SendSanId(responseGetSanId.body);
                         AnalyticsWinkService.SendHasActiveAccountNewUser(hasActiveAcc: true);
                         SmsAuthApi.OnUserAddApp(_data.phone, responseGetSanId.body);

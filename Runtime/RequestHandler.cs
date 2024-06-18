@@ -35,6 +35,7 @@ namespace Agava.Wink
             }
             else
             {
+                await SmsAuthApi.SendSms(phoneNumber);
                 otpCodeRequest?.Invoke(true);
                 return data;
             }

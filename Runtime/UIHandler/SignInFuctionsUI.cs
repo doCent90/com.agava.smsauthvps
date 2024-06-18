@@ -28,9 +28,9 @@ namespace Agava.Wink
             _winkSignInHandlerUI = winkSignInHandlerUI;
         }
 
-        internal void OnSignInClicked(string number, Action onSuccessfully)
+        internal void OnSignInClicked(string phone, Action onSuccessfully)
         {
-            if (string.IsNullOrEmpty(number))
+            if (string.IsNullOrEmpty(phone))
             {
                 _notifyWindowHandler.OpenWindow(WindowType.WrongNumber);
                 return;
@@ -39,7 +39,7 @@ namespace Agava.Wink
             _notifyWindowHandler.OpenWindow(WindowType.ProccessOn);
             AnalyticsWinkService.SendOnEnteredPhoneWindow();
 
-            _winkAccessManager.Regist(phoneNumber: number,
+            _winkAccessManager.Regist(phoneNumber: phone,
             otpCodeRequest: (hasOtpCode) =>
             {
                 if (hasOtpCode)
@@ -47,7 +47,7 @@ namespace Agava.Wink
                     _notifyWindowHandler.CloseWindow(WindowType.ProccessOn);
                     AnalyticsWinkService.SendEnterOtpCodeWindow();
 
-                    _notifyWindowHandler.OpenInputWindow(onInputDone: (code) =>
+                    _notifyWindowHandler.OpenInputWindow(phone, onInputDone: (code) =>
                     {
                         _winkAccessManager.SendOtpCode(code);
                         AnalyticsWinkService.SendOnEnteredOtpCodeWindow();
