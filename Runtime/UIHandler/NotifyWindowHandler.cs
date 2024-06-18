@@ -20,6 +20,7 @@ namespace Agava.Wink
         [SerializeField] private NotifyWindowPresenter _noEnternetWindow;
         [SerializeField] private RedirectWindowPresenter _redirectToWebsiteWindow;
         [SerializeField] private InputWindowPresenter _enterCodeWindow;
+        [SerializeField] private WinkProfileWindow _winkProfileWindow;
         [Header("All UI Windows")]
         [SerializeField] private List<WindowPresenter> _windows;
 
@@ -30,6 +31,9 @@ namespace Agava.Wink
         internal void CloseWindow(WindowType type) => GetWindowByType(type).Disable();
         internal void OpenInputWindow(Action<uint> onInputDone) => _enterCodeWindow.Enable(onInputDone);
         internal void OpenHelloWindow(Action onEnd) => _helloWindow.Enable(onEnd);
+        internal void OpenDemoExpiredWindow(bool closeButton) => _demoTimerExpiredWindow.Enable(closeButton);
+
+        internal void ResetInputWindow() => _enterCodeWindow.ResetInputText();
 
         internal void CloseAllWindows(Action onClosed)
         {

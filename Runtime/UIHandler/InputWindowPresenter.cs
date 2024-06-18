@@ -12,22 +12,38 @@ namespace Agava.Wink
         [SerializeField] private CanvasGroup _canvasGroup;
         [SerializeField] private Button _sendButton;
         [SerializeField] private TMP_InputField _inputField;
+        [SerializeField] private TextTimer _repeatCodeTimer;
+        [SerializeField] private Button _sendRepeatCodeButton;
+        [SerializeField] private EnterCodeShaking _enterCodeShaking;
 
         private Action<uint> _onInputDone;
 
-        private void OnDestroy() => _sendButton.onClick.RemoveListener(OnSendCodeClicked);
+        private void Awake()
+        {
+            _sendButton.onClick.AddListener(OnSendCodeClicked);
+            _repeatCodeTimer.TimerExpired += OnNewCodeTimerExpired;
+        }
 
-        private void Awake() => _sendButton.onClick.AddListener(OnSendCodeClicked);
+        private void OnDestroy()
+        {
+            _sendButton.onClick.RemoveListener(OnSendCodeClicked);
+            _repeatCodeTimer.TimerExpired -= OnNewCodeTimerExpired;
+        }
 
         public void Enable(Action<uint> onInputDone)
         {
+            _repeatCodeTimer.Enable();
             _onInputDone = onInputDone;
             EnableCanvasGroup(_canvasGroup);
         }
 
         public override void Enable() { }
 
-        public override void Disable() => DisableCanvasGroup(_canvasGroup);
+        public override void Disable()
+        {
+            _repeatCodeTimer.Disable();
+            DisableCanvasGroup(_canvasGroup);
+        }
 
         public void OnSendCodeClicked()
         {
@@ -43,9 +59,19 @@ namespace Agava.Wink
             }
 
             _onInputDone?.Invoke(resultCode);
-            Disable();
+        }
+
+        internal void ResetInputText()
+        {
+            _inputField.text = string.Empty;
+            _enterCodeShaking.StartAnimation();
         }
 
         internal void Clear() => _inputField.text = string.Empty;
+
+        private void OnNewCodeTimerExpired()
+        {
+            _sendRepeatCodeButton.gameObject.SetActive(true);
+        }
     }
 }

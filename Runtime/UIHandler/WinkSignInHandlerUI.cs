@@ -30,7 +30,7 @@ namespace Agava.Wink
         [Header("Factory components")]
         [SerializeField] private Transform _containerButtons;
         [Header("Phone Number Placeholders")]
-        [SerializeField] private PhoneNumberPlaceholder[] _phoneNumberPlaceholders;
+        [SerializeField] private TextPlaceholder[] _phoneNumberPlaceholders;
 
         private SignInFuctionsUI _signInFuctionsUI;
         private WinkAccessManager _winkAccessManager;
@@ -52,7 +52,7 @@ namespace Agava.Wink
 
             _winkAccessManager.ResetLogin -= OpenSignWindow;
             _winkAccessManager.LimitReached -= OnLimitReached;
-            _winkAccessManager.Successfully -= OnSuccessfully;
+            _winkAccessManager.AuthorizedSuccessfully -= OnAuthorizedSuccessfully;
             _demoTimer.Dispose();
         }
 
@@ -79,7 +79,7 @@ namespace Agava.Wink
 
             _winkAccessManager.ResetLogin += OpenSignWindow;
             _winkAccessManager.LimitReached += OnLimitReached;
-            _winkAccessManager.Successfully += OnSuccessfully;
+            _winkAccessManager.AuthorizedSuccessfully += OnAuthorizedSuccessfully;
             _demoTimer.TimerExpired += OnTimerExpired;
         }
 
@@ -108,15 +108,35 @@ namespace Agava.Wink
         public void CloseWindow(WindowType type) => _notifyWindowHandler.CloseWindow(type);
         public void CloseAllWindows() => _notifyWindowHandler.CloseAllWindows(AllWindowsClosed);
 
+        internal void OnWinkButtonClick()
+        {
+            if (_winkAccessManager.Authorized)
+            {
+                if (_winkAccessManager.HasAccess)
+                {
+                    _notifyWindowHandler.OpenWindow(WindowType.WinkProfile);
+                }
+                else
+                {
+                    AnalyticsWinkService.SendSubscribeProfileWindow();
+                    _notifyWindowHandler.OpenDemoExpiredWindow(true);
+                }
+            }
+            else
+            {
+                OpenSignWindow();
+            }
+        }
+
         private void OnSignInClicked()
         {
             string formattedNumber = _numbersInputField.text;
 
-            foreach (PhoneNumberPlaceholder placeholder in _phoneNumberPlaceholders)
+            foreach (TextPlaceholder placeholder in _phoneNumberPlaceholders)
                 placeholder.ReplaceValue(formattedNumber);
 
             string number = WinkAcceessHelper.GetNumber(formattedNumber, _minNumberCount, _maxNumberCount, _additivePlusChar);
-            _signInFuctionsUI.OnSignInClicked(number, OnSuccessfully);
+            _signInFuctionsUI.OnSignInClicked(number, OnAuthorizedSuccessfully);
         }
 
         private void OnLimitReached(IReadOnlyList<string> devicesList)
@@ -146,13 +166,23 @@ namespace Agava.Wink
             _signInFuctionsUI.OnUnlinkClicked(device);
         }
 
-        private void OnSuccessfully()
+        private void OnAuthorizedSuccessfully()
         {
             _openSignInButton.gameObject.SetActive(false);
-            //_notifyWindowHandler.OpenWindow(WindowType.Hello);
+
+            _notifyWindowHandler.OpenHelloWindow(onEnd: () =>
+            {
+                AnalyticsWinkService.SendHelloWindow();
+
+                if (WinkAccessManager.Instance.HasAccess == false)
+                {
+                    _notifyWindowHandler.OpenWindow(WindowType.Redirect);
+                    AnalyticsWinkService.SendPayWallWindow();
+                }
+            });
         }
 
-        private void OnTimerExpired() => _notifyWindowHandler.OpenWindow(WindowType.DemoTimerExpired);
+        private void OnTimerExpired() => _notifyWindowHandler.OpenDemoExpiredWindow(false);
         #region TEST_METHODS
 #if UNITY_EDITOR || TEST
         private void OnTestSignInClicked()

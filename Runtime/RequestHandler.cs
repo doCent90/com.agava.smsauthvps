@@ -90,7 +90,9 @@ namespace Agava.Wink
             }
         }
 
-        internal async void QuickAccess(string phoneNumber, Action onSuccessed, Action onResetLogin, Action<bool> onWinkSubscriptionAccessRequest)
+        internal async void QuickAccess(string phoneNumber, Action onSuccessed,
+            Action onResetLogin, Action<bool> onWinkSubscriptionAccessRequest,
+            Action onAuthorizedSuccessfully = null)
         {
             var tokens = SaveLoadLocalDataService.Load<Tokens>(TokenLifeHelper.Tokens);
 
@@ -125,11 +127,14 @@ namespace Agava.Wink
             }
 
             var response = await SmsAuthApi.SampleAuth(currentToken);
-            var hasSubsc = await RequestWinkDataBase(phoneNumber, onWinkSubscriptionAccessRequest, null);
+            var hasSubsc = await RequestWinkDataBase(phoneNumber, onWinkSubscriptionAccessRequest, onAuthorizedSuccessfully);
 
-            if (response.statusCode == UnityWebRequest.Result.Success && hasSubsc)
+            if (response.statusCode == UnityWebRequest.Result.Success)
             {
-                onSuccessed?.Invoke();
+                onAuthorizedSuccessfully?.Invoke();
+
+                if (hasSubsc)
+                    onSuccessed?.Invoke();
             }
             else
             {

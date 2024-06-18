@@ -8,6 +8,7 @@ namespace Agava.Wink
         bool HasAccess { get; }
 
         event Action Successfully;
+        event Action AuthorizedSuccessfully;
         event Action ResetLogin;
         event Action<IReadOnlyList<string>> LimitReached;
     }

@@ -49,7 +49,6 @@ namespace Agava.Wink
 
                     _notifyWindowHandler.OpenInputWindow(onInputDone: (code) =>
                     {
-                        _notifyWindowHandler.OpenWindow(WindowType.ProccessOn);
                         _winkAccessManager.SendOtpCode(code);
                         AnalyticsWinkService.SendOnEnteredOtpCodeWindow();
                     });
@@ -68,20 +67,24 @@ namespace Agava.Wink
             {
                 if (accepted == false)
                 {
-                    _notifyWindowHandler.CloseWindow(WindowType.ProccessOn);
-                    _notifyWindowHandler.OpenWindow(WindowType.Fail);
+                    _notifyWindowHandler.ResetInputWindow();
+                }
+                else
+                {
+                    _notifyWindowHandler.CloseWindow(WindowType.EnterOtpCode);
+                    _notifyWindowHandler.OpenWindow(WindowType.ProccessOn);
                 }
             });
         }
 
         internal void OnSubsDenied(bool hasAccess)
         {
-            if (hasAccess == false)
-            {
-                _notifyWindowHandler.CloseWindow(WindowType.ProccessOn);
-                _notifyWindowHandler.OpenWindow(WindowType.Redirect);
-                AnalyticsWinkService.SendPayWallWindow();
-            }
+            //if (hasAccess == false)
+            //{
+            //    _notifyWindowHandler.CloseWindow(WindowType.ProccessOn);
+            //    _notifyWindowHandler.OpenWindow(WindowType.Redirect);
+            //    AnalyticsWinkService.SendPayWallWindow();
+            //}
         }
 
         internal void OnUnlinkClicked(string device)
@@ -126,16 +129,16 @@ namespace Agava.Wink
             _notifyWindowHandler.CloseWindow(WindowType.SignIn);
             _notifyWindowHandler.CloseWindow(WindowType.ProccessOn);
 
-            _notifyWindowHandler.OpenHelloWindow(onEnd: () =>
-            {
-                AnalyticsWinkService.SendHelloWindow();
+            //_notifyWindowHandler.OpenHelloWindow(onEnd: () =>
+            //{
+            //    AnalyticsWinkService.SendHelloWindow();
 
-                if (hasAccess == false)
-                {
-                    _notifyWindowHandler.OpenWindow(WindowType.Redirect);
-                    AnalyticsWinkService.SendPayWallWindow();
-                }
-            });
+            //    if (hasAccess == false)
+            //    {
+            //        _notifyWindowHandler.OpenWindow(WindowType.Redirect);
+            //        AnalyticsWinkService.SendPayWallWindow();
+            //    }
+            //});
         }
 
         private void OnSuccessfully()

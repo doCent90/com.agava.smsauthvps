@@ -80,9 +80,9 @@ namespace Agava.Wink
                 UnityEngine.PlayerPrefs.SetString(FirsttimeStartApp, "true");
                 AnalyticsWinkService.SendSubscribeOfferWindow();
 
-                yield return new WaitUntil(() => (WinkAccessManager.Instance.HasAccess == true || _winkSignInHandlerUI.IsAnyWindowEnabled == false));
+                yield return new WaitUntil(() => (WinkAccessManager.Instance.Authorized == true || _winkSignInHandlerUI.IsAnyWindowEnabled == false));
 
-                if (WinkAccessManager.Instance.HasAccess)
+                if (WinkAccessManager.Instance.Authorized)
                 {
                     yield return CloudSavesLoading();
 #if UNITY_EDITOR || TEST
@@ -98,7 +98,7 @@ namespace Agava.Wink
             {
                 if (UnityEngine.PlayerPrefs.HasKey(SmsAuthAPI.DTO.TokenLifeHelper.Tokens))
                 {
-                    yield return new WaitUntil(() => WinkAccessManager.Instance.HasAccess == true);
+                    yield return new WaitUntil(() => WinkAccessManager.Instance.Authorized == true);
                     yield return CloudSavesLoading();
                 }
                 else
@@ -106,16 +106,16 @@ namespace Agava.Wink
                     OnSkiped();
                 }
 #if UNITY_EDITOR || TEST
-                Debug.Log($"Boot: App Started. SignIn: {WinkAccessManager.Instance.HasAccess}");
+                Debug.Log($"Boot: App Started. SignIn: {WinkAccessManager.Instance.Authorized}");
 #endif
             }
 
             _signInProcess = null;
         }
 
-        private void OnSuccessfully()
+        private void OnAuthorizedSuccessfully()
         {
-            _winkAccessManager.Successfully -= OnSuccessfully;
+            _winkAccessManager.AuthorizedSuccessfully -= OnAuthorizedSuccessfully;
 
 #if UNITY_EDITOR || TEST
             Debug.Log($"Boot: Access Successfully");
@@ -159,7 +159,7 @@ namespace Agava.Wink
 
         private void OnSkiped()
         {
-            _winkAccessManager.Successfully += OnSuccessfully;
+            _winkAccessManager.AuthorizedSuccessfully += OnAuthorizedSuccessfully;
 #if UNITY_EDITOR || TEST
             Debug.Log($"Boot: SignIn skiped");
 #endif

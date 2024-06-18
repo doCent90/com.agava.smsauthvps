@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Agava.Wink
 {
-    internal class PhoneNumberPlaceholder : MonoBehaviour
+    internal class TextPlaceholder : MonoBehaviour
     {
         [SerializeField] private TMP_Text _text;
         [SerializeField] private string _placeholderText;
