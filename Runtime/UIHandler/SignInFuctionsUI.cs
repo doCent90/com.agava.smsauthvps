@@ -77,16 +77,6 @@ namespace Agava.Wink
             });
         }
 
-        internal void OnSubsDenied(bool hasAccess)
-        {
-            //if (hasAccess == false)
-            //{
-            //    _notifyWindowHandler.CloseWindow(WindowType.ProccessOn);
-            //    _notifyWindowHandler.OpenWindow(WindowType.Redirect);
-            //    AnalyticsWinkService.SendPayWallWindow();
-            //}
-        }
-
         internal void OnUnlinkClicked(string device)
         {
             _winkAccessManager.Unlink(device);
@@ -128,17 +118,6 @@ namespace Agava.Wink
 
             _notifyWindowHandler.CloseWindow(WindowType.SignIn);
             _notifyWindowHandler.CloseWindow(WindowType.ProccessOn);
-
-            //_notifyWindowHandler.OpenHelloWindow(onEnd: () =>
-            //{
-            //    AnalyticsWinkService.SendHelloWindow();
-
-            //    if (hasAccess == false)
-            //    {
-            //        _notifyWindowHandler.OpenWindow(WindowType.Redirect);
-            //        AnalyticsWinkService.SendPayWallWindow();
-            //    }
-            //});
         }
 
         private void OnSuccessfully()

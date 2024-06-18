@@ -16,7 +16,7 @@ namespace Agava.Wink
         [SerializeField] private Button _sendRepeatCodeButton;
         [SerializeField] private EnterCodeShaking _enterCodeShaking;
 
-        private Action<uint> _onInputDone;
+        private Action<string> _onInputDone;
 
         private void Awake()
         {
@@ -30,7 +30,7 @@ namespace Agava.Wink
             _repeatCodeTimer.TimerExpired -= OnNewCodeTimerExpired;
         }
 
-        public void Enable(Action<uint> onInputDone)
+        public void Enable(Action<string> onInputDone)
         {
             _repeatCodeTimer.Enable();
             _onInputDone = onInputDone;
@@ -50,7 +50,9 @@ namespace Agava.Wink
             if (string.IsNullOrEmpty(_inputField.text))
                 return;
 
-            bool isCorrectCode = uint.TryParse(_inputField.text, System.Globalization.NumberStyles.Any, CultureInfo.InvariantCulture, out uint resultCode);
+            string code = _inputField.text;
+
+            bool isCorrectCode = uint.TryParse(code, System.Globalization.NumberStyles.Integer, CultureInfo.InvariantCulture, out uint _);
 
             if (isCorrectCode == false)
             {
@@ -58,7 +60,7 @@ namespace Agava.Wink
                 return;
             }
 
-            _onInputDone?.Invoke(resultCode);
+            _onInputDone?.Invoke(code);
         }
 
         internal void ResetInputText()
@@ -69,9 +71,6 @@ namespace Agava.Wink
 
         internal void Clear() => _inputField.text = string.Empty;
 
-        private void OnNewCodeTimerExpired()
-        {
-            _sendRepeatCodeButton.gameObject.SetActive(true);
-        }
+        private void OnNewCodeTimerExpired() => _sendRepeatCodeButton.gameObject.SetActive(true);
     }
 }

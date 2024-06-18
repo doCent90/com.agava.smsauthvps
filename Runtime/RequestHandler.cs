@@ -21,7 +21,7 @@ namespace Agava.Wink
             LoginData data = new()
             {
                 phone = phoneNumber,
-                otp_code = 0,
+                otp_code = "0",
                 device_id = uniqueId,
             };
 

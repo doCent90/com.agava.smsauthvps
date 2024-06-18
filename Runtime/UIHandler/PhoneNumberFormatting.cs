@@ -32,26 +32,17 @@ namespace Agava.Wink
                 foreach (Match match in Regex.Matches(_placeholderText, @"[^0-9]", RegexOptions.None, TimeSpan.FromSeconds(1)))
                     _symbols.Add(new SymbolIndex(char.Parse(match.Value), match.Index));
             }
-            catch (RegexMatchTimeoutException)
+            catch (RegexMatchTimeoutException exception)
             {
-
+                Debug.LogError(exception.Message);
             }
         }
 
-        private void OnEnable()
-        {
-            _inputField.onValueChanged.AddListener(OnValueChanged);
-        }
+        private void OnEnable() => _inputField.onValueChanged.AddListener(OnValueChanged);
 
-        private void OnDisable()
-        {
-            _inputField.onValueChanged.RemoveListener(OnValueChanged);
-        }
+        private void OnDisable() => _inputField.onValueChanged.RemoveListener(OnValueChanged);
 
-        private void Update()
-        {
-            _inputField.caretPosition = _length;
-        }
+        private void Update() => _inputField.caretPosition = _length;
 
         private void OnValueChanged(string newValue)
         {

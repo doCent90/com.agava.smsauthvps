@@ -72,7 +72,6 @@ namespace Agava.Wink
             _testSignInButton.gameObject.SetActive(false);
 #endif
             _winkAccessManager = winkAccessManager;
-            _winkAccessManager.SetWinkSubsEvent(_signInFuctionsUI.OnSubsDenied);
             _signInButton.onClick.AddListener(OnSignInClicked);
             _openSignInButton.onClick.AddListener(OpenSignWindow);
             CloseAllWindows();
