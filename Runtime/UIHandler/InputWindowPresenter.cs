@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using SmsAuthAPI.Program;
+using SmsAuthAPI.DTO;
+using UnityEngine.Networking;
 
 namespace Agava.Wink
 {
@@ -86,7 +88,11 @@ namespace Agava.Wink
         {
             _sendRepeatCodeButton.gameObject.SetActive(false);
             _repeatCodeTimer.Enable();
-            await SmsAuthApi.SendSms(_phone);
+
+            Response response = await SmsAuthApi.Regist(_phone);
+
+            if (response.statusCode != UnityWebRequest.Result.Success)
+                Debug.LogError("Repeat send sms Error : " + response.statusCode);
         }
     }
 }
