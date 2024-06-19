@@ -102,6 +102,8 @@ namespace Agava.Wink
 
                     if (WinkAccessManager.Instance.HasAccess)
                         yield return CloudSavesLoading();
+                    else
+                        OnSkiped();
                 }
                 else
                 {
@@ -142,7 +144,11 @@ namespace Agava.Wink
             cancelation = StartCoroutine(TimeOutWaiting());
 
             var task = SmsAuthAPI.Utility.PlayerPrefs.Load();
-            yield return new WaitWhile(() => task.IsCompleted == false);
+            yield return new WaitUntil(() => task.IsCompleted);
+
+#if UNITY_EDITOR || TEST
+            Debug.Log($"[Boot] PlayerPrefs loading result: {task.Status}, is completed: {task.IsCompleted}");
+#endif
 
             if (cancelation != null)
                 StopCoroutine(cancelation);
@@ -151,6 +157,7 @@ namespace Agava.Wink
         private IEnumerator TimeOutWaiting()
         {
             yield return new WaitForSecondsRealtime(TimeOutTime);
+
             StopCoroutine(_signInProcess);
             _winkSignInHandlerUI.CloseAllWindows();
             _winkSignInHandlerUI.OpenWindow(WindowType.Fail);
