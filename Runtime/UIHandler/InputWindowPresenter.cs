@@ -68,7 +68,6 @@ namespace Agava.Wink
             }
 
             _onInputDone?.Invoke(code);
-            Clear();
         }
 
         public void ResetInputText()
@@ -87,7 +86,6 @@ namespace Agava.Wink
 
         private async void OnRepeatClicked()
         {
-            Clear();
             _sendRepeatCodeButton.gameObject.SetActive(false);
             _repeatCodeTimer.Enable();
 

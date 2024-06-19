@@ -2,7 +2,6 @@
 using System.Collections;
 using UnityEngine;
 using SmsAuthAPI.Program;
-using System.Threading.Tasks;
 
 namespace Agava.Wink
 {
@@ -22,13 +21,15 @@ namespace Agava.Wink
         [SerializeField] private LoadingProgressBar _loadingProgressBar;
         [SerializeField] private bool _restartAfterAuth = true;
 
+        private Coroutine _signInProcess;
+
         public static Boot Instance { get; private set; }
 
         public event Action Restarted;
 
         private void OnDestroy() => _winkSignInHandlerUI.Dispose();
 
-        private async void Start()
+        private IEnumerator Start()
         {
             DontDestroyOnLoad(this);
 
@@ -43,28 +44,23 @@ namespace Agava.Wink
             _startLogoPresenter.Construct();
             _startLogoPresenter.ShowLogo();
 
-            _winkAccessManager.Construct();
+            yield return _winkAccessManager.Construct();
             _winkSignInHandlerUI.Construct(_winkAccessManager);
+            yield return _winkSignInHandlerUI.Initialize();
 
-            await _winkSignInHandlerUI.Initialize();
-            await Task.Delay((int)_startLogoPresenter.LogoDuration * 1000);
+            yield return new WaitForSecondsRealtime(_startLogoPresenter.LogoDuration);
+            yield return _startLogoPresenter.HidingLogo();
+            yield return new WaitWhile(() => Application.internetReachability == NetworkReachability.NotReachable);
 
-            StartCoroutine(_startLogoPresenter.HidingLogo());
-
-            OnStarted();
+            _signInProcess = StartCoroutine(OnStarted());
+            yield return _signInProcess;
 
             _startLogoPresenter.CloseBootView();
             var loadingScene = _sceneLoader.LoadGameScene();
             SmsAuthApi.DownloadCloudSavesProgress -= OnDownloadCloudSavesProgress;
             _loadingProgressBar.Enable();
 
-            while (Application.internetReachability == NetworkReachability.NotReachable)
-                await Task.Yield();
-
-            _loadingProgressBar.SetProgress(loadingScene.progress, 0.5f, 1.0f);
-
-            while (loadingScene.isDone == false)
-                await Task.Yield();
+            yield return new WaitUntil(() => { _loadingProgressBar.SetProgress(loadingScene.progress, 0.5f, 1.0f); return loadingScene.isDone; });
 
             _loadingProgressBar.Disable();
         }
@@ -74,10 +70,9 @@ namespace Agava.Wink
             _loadingProgressBar.SetProgress(progress, 0.0f, 0.5f);
         }
 
-        private async void OnStarted()
+        private IEnumerator OnStarted()
         {
-            while (SmsAuthApi.Initialized == false)
-                await Task.Yield();
+            yield return new WaitWhile(() => SmsAuthApi.Initialized == false);
 
             if (UnityEngine.PlayerPrefs.HasKey(FirsttimeStartApp) == false)
             {
@@ -85,12 +80,11 @@ namespace Agava.Wink
                 UnityEngine.PlayerPrefs.SetString(FirsttimeStartApp, "true");
                 AnalyticsWinkService.SendSubscribeOfferWindow();
 
-                while ((WinkAccessManager.Instance.HasAccess == true || _winkSignInHandlerUI.IsAnyWindowEnabled == false))
-                    await Task.Yield();
+                yield return new WaitUntil(() => (WinkAccessManager.Instance.HasAccess == true || _winkSignInHandlerUI.IsAnyWindowEnabled == false));
 
                 if (WinkAccessManager.Instance.HasAccess)
                 {
-                    await CloudSavesLoading();
+                    yield return CloudSavesLoading();
 #if UNITY_EDITOR || TEST
                     Debug.Log($"Boot: App First Started. SignIn successfully");
 #endif
@@ -104,20 +98,23 @@ namespace Agava.Wink
             {
                 if (UnityEngine.PlayerPrefs.HasKey(SmsAuthAPI.DTO.TokenLifeHelper.Tokens))
                 {
-                    while (WinkAccessManager.Instance.HasAccess == false)
-                        await Task.Yield();
+                    yield return new WaitUntil(() => WinkAccessManager.Instance.Authorized == true);
 
                     if (WinkAccessManager.Instance.HasAccess)
-                        await CloudSavesLoading();
+                        yield return CloudSavesLoading();
+                    else
+                        OnSkiped();
                 }
                 else
                 {
                     OnSkiped();
                 }
 #if UNITY_EDITOR || TEST
-                Debug.Log($"Boot: App Started. SignIn: {WinkAccessManager.Instance.HasAccess}");
+                Debug.Log($"Boot: App Started. SignIn: {WinkAccessManager.Instance.Authorized}");
 #endif
             }
+
+            _signInProcess = null;
         }
 
         private void OnSuccessfully()
@@ -138,7 +135,7 @@ namespace Agava.Wink
             }
         }
 
-        private async Task<bool> CloudSavesLoading()
+        private IEnumerator CloudSavesLoading()
         {
 #if UNITY_EDITOR || TEST
             Debug.Log($"Boot: Try load cloud saves");
@@ -146,24 +143,18 @@ namespace Agava.Wink
             Coroutine cancelation = null;
             cancelation = StartCoroutine(TimeOutWaiting());
 
-            var result = await SmsAuthAPI.Utility.PlayerPrefs.Load();
+            var task = SmsAuthAPI.Utility.PlayerPrefs.Load();
+            yield return new WaitUntil(() => task.IsCompleted);
 
-            if (result)
-            {
-                if (cancelation != null)
-                    StopCoroutine(cancelation);
-
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            if (cancelation != null)
+                StopCoroutine(cancelation);
         }
 
         private IEnumerator TimeOutWaiting()
         {
             yield return new WaitForSecondsRealtime(TimeOutTime);
+
+            StopCoroutine(_signInProcess);
             _winkSignInHandlerUI.CloseAllWindows();
             _winkSignInHandlerUI.OpenWindow(WindowType.Fail);
 #if UNITY_EDITOR || TEST
