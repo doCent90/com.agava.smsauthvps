@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine;
 using SmsAuthAPI.Program;
+using System.Threading.Tasks;
 
 namespace Agava.Wink
 {
@@ -21,15 +22,13 @@ namespace Agava.Wink
         [SerializeField] private LoadingProgressBar _loadingProgressBar;
         [SerializeField] private bool _restartAfterAuth = true;
 
-        private Coroutine _signInProcess;
-
         public static Boot Instance { get; private set; }
 
         public event Action Restarted;
 
         private void OnDestroy() => _winkSignInHandlerUI.Dispose();
 
-        private IEnumerator Start()
+        private async void Start()
         {
             DontDestroyOnLoad(this);
 
@@ -44,23 +43,28 @@ namespace Agava.Wink
             _startLogoPresenter.Construct();
             _startLogoPresenter.ShowLogo();
 
-            yield return _winkAccessManager.Construct();
+            _winkAccessManager.Construct();
             _winkSignInHandlerUI.Construct(_winkAccessManager);
-            yield return _winkSignInHandlerUI.Initialize();
 
-            yield return new WaitForSecondsRealtime(_startLogoPresenter.LogoDuration);
-            yield return _startLogoPresenter.HidingLogo();
-            yield return new WaitWhile(() => Application.internetReachability == NetworkReachability.NotReachable);
+            await _winkSignInHandlerUI.Initialize();
+            await Task.Delay((int)_startLogoPresenter.LogoDuration * 1000);
 
-            _signInProcess = StartCoroutine(OnStarted());
-            yield return _signInProcess;
+            StartCoroutine(_startLogoPresenter.HidingLogo());
+
+            OnStarted();
 
             _startLogoPresenter.CloseBootView();
             var loadingScene = _sceneLoader.LoadGameScene();
             SmsAuthApi.DownloadCloudSavesProgress -= OnDownloadCloudSavesProgress;
             _loadingProgressBar.Enable();
 
-            yield return new WaitUntil(() => { _loadingProgressBar.SetProgress(loadingScene.progress, 0.5f, 1.0f); return loadingScene.isDone; });
+            while (Application.internetReachability == NetworkReachability.NotReachable)
+                await Task.Yield();
+
+            _loadingProgressBar.SetProgress(loadingScene.progress, 0.5f, 1.0f);
+
+            while (loadingScene.isDone == false)
+                await Task.Yield();
 
             _loadingProgressBar.Disable();
         }
@@ -70,9 +74,10 @@ namespace Agava.Wink
             _loadingProgressBar.SetProgress(progress, 0.0f, 0.5f);
         }
 
-        private IEnumerator OnStarted()
+        private async void OnStarted()
         {
-            yield return new WaitWhile(() => SmsAuthApi.Initialized == false);
+            while (SmsAuthApi.Initialized == false)
+                await Task.Yield();
 
             if (UnityEngine.PlayerPrefs.HasKey(FirsttimeStartApp) == false)
             {
@@ -80,11 +85,12 @@ namespace Agava.Wink
                 UnityEngine.PlayerPrefs.SetString(FirsttimeStartApp, "true");
                 AnalyticsWinkService.SendSubscribeOfferWindow();
 
-                yield return new WaitUntil(() => (WinkAccessManager.Instance.HasAccess == true || _winkSignInHandlerUI.IsAnyWindowEnabled == false));
+                while ((WinkAccessManager.Instance.HasAccess == true || _winkSignInHandlerUI.IsAnyWindowEnabled == false))
+                    await Task.Yield();
 
                 if (WinkAccessManager.Instance.HasAccess)
                 {
-                    yield return CloudSavesLoading();
+                    await CloudSavesLoading();
 #if UNITY_EDITOR || TEST
                     Debug.Log($"Boot: App First Started. SignIn successfully");
 #endif
@@ -98,23 +104,20 @@ namespace Agava.Wink
             {
                 if (UnityEngine.PlayerPrefs.HasKey(SmsAuthAPI.DTO.TokenLifeHelper.Tokens))
                 {
-                    yield return new WaitUntil(() => WinkAccessManager.Instance.Authorized == true);
+                    while (WinkAccessManager.Instance.HasAccess == false)
+                        await Task.Yield();
 
                     if (WinkAccessManager.Instance.HasAccess)
-                        yield return CloudSavesLoading();
-                    else
-                        OnSkiped();
+                        await CloudSavesLoading();
                 }
                 else
                 {
                     OnSkiped();
                 }
 #if UNITY_EDITOR || TEST
-                Debug.Log($"Boot: App Started. SignIn: {WinkAccessManager.Instance.Authorized}");
+                Debug.Log($"Boot: App Started. SignIn: {WinkAccessManager.Instance.HasAccess}");
 #endif
             }
-
-            _signInProcess = null;
         }
 
         private void OnSuccessfully()
@@ -135,7 +138,7 @@ namespace Agava.Wink
             }
         }
 
-        private IEnumerator CloudSavesLoading()
+        private async Task<bool> CloudSavesLoading()
         {
 #if UNITY_EDITOR || TEST
             Debug.Log($"Boot: Try load cloud saves");
@@ -143,22 +146,24 @@ namespace Agava.Wink
             Coroutine cancelation = null;
             cancelation = StartCoroutine(TimeOutWaiting());
 
-            var task = SmsAuthAPI.Utility.PlayerPrefs.Load();
-            yield return new WaitUntil(() => task.IsCompleted);
+            var result = await SmsAuthAPI.Utility.PlayerPrefs.Load();
 
-#if UNITY_EDITOR || TEST
-            Debug.Log($"[Boot] PlayerPrefs loading result: {task.Status}, is completed: {task.IsCompleted}");
-#endif
+            if (result)
+            {
+                if (cancelation != null)
+                    StopCoroutine(cancelation);
 
-            if (cancelation != null)
-                StopCoroutine(cancelation);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         private IEnumerator TimeOutWaiting()
         {
             yield return new WaitForSecondsRealtime(TimeOutTime);
-
-            StopCoroutine(_signInProcess);
             _winkSignInHandlerUI.CloseAllWindows();
             _winkSignInHandlerUI.OpenWindow(WindowType.Fail);
 #if UNITY_EDITOR || TEST

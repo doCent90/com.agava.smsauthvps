@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Threading.Tasks;
 
 namespace Agava.Wink
 {
@@ -82,18 +83,17 @@ namespace Agava.Wink
             _demoTimer.TimerExpired += OnTimerExpired;
         }
 
-        public IEnumerator Initialize()
+        public async Task Initialize()
         {
             if (Application.internetReachability == NetworkReachability.NotReachable)
             {
                 _notifyWindowHandler.OpenWindow(WindowType.NoEnternet);
-                yield return new WaitWhile(() => Application.internetReachability == NetworkReachability.NotReachable);
-            }
-            else
-            {
-                _notifyWindowHandler.CloseWindow(WindowType.NoEnternet);
+
+                while (Application.internetReachability == NetworkReachability.NotReachable)
+                    await Task.Yield();
             }
 
+            _notifyWindowHandler.CloseWindow(WindowType.NoEnternet);
             _signInFuctionsUI.SetRemoteConfig();
         }
 

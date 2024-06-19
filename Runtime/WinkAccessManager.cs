@@ -4,6 +4,7 @@ using UnityEngine;
 using SmsAuthAPI.DTO;
 using SmsAuthAPI.Program;
 using System.Collections;
+using System.Threading.Tasks;
 
 namespace Agava.Wink
 {
@@ -44,7 +45,7 @@ namespace Agava.Wink
                 _timespentService.OnStartedApp();
         }
 
-        public IEnumerator Construct()
+        public async void Construct()
         {
             if (Instance == null)
                 Instance = this;
@@ -67,7 +68,7 @@ namespace Agava.Wink
             if (SmsAuthApi.Initialized == false)
                 SmsAuthApi.Initialize(_ip, _uniqueId);
 
-            yield return null;
+            await Task.Yield();
 
             if (UnityEngine.PlayerPrefs.HasKey(TokenLifeHelper.Tokens))
                 QuickAccess();
