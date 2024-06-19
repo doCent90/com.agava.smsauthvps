@@ -12,7 +12,7 @@ using UnityEngine.Networking;
 namespace Agava.Wink
 {
     /// <summary>
-    ///    Requests/response to/from YBD fuction.
+    ///    Requests/response to/from VPS server.
     /// </summary>
     internal class RequestHandler
     {
