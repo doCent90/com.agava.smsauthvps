@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using SmsAuthAPI.DTO;
 
 namespace Agava.Wink
 {
@@ -29,8 +30,9 @@ namespace Agava.Wink
         [SerializeField] private bool _additivePlusChar = false;
         [Header("Factory components")]
         [SerializeField] private Transform _containerButtons;
-        [Header("Phone Number Placeholders")]
+        [Header("Placeholders")]
         [SerializeField] private TextPlaceholder[] _phoneNumberPlaceholders;
+        [SerializeField] private TextPlaceholder[] _idPlaceholders;
 
         private SignInFuctionsUI _signInFuctionsUI;
         private WinkAccessManager _winkAccessManager;
@@ -52,7 +54,8 @@ namespace Agava.Wink
 
             _winkAccessManager.ResetLogin -= OpenSignWindow;
             _winkAccessManager.LimitReached -= OnLimitReached;
-            _winkAccessManager.AuthorizedSuccessfully -= OnAuthorizedSuccessfully;
+            _winkAccessManager.AuthenficationSuccessfully -= OnAuthenficationSuccessfully;
+            _winkAccessManager.AuthorizationSuccessfully -= OnAuthorizationSuccessfully;
             _demoTimer.Dispose();
         }
 
@@ -78,7 +81,8 @@ namespace Agava.Wink
 
             _winkAccessManager.ResetLogin += OpenSignWindow;
             _winkAccessManager.LimitReached += OnLimitReached;
-            _winkAccessManager.AuthorizedSuccessfully += OnAuthorizedSuccessfully;
+            _winkAccessManager.AuthenficationSuccessfully += OnAuthenficationSuccessfully;
+            _winkAccessManager.AuthorizationSuccessfully += OnAuthorizationSuccessfully;
             _demoTimer.TimerExpired += OnTimerExpired;
         }
 
@@ -135,7 +139,7 @@ namespace Agava.Wink
                 placeholder.ReplaceValue(formattedNumber);
 
             string number = WinkAcceessHelper.GetNumber(formattedNumber, _minNumberCount, _maxNumberCount, _additivePlusChar);
-            _signInFuctionsUI.OnSignInClicked(number, OnAuthorizedSuccessfully);
+            _signInFuctionsUI.OnSignInClicked(number, OnAuthenficationSuccessfully);
         }
 
         private void OnLimitReached(IReadOnlyList<string> devicesList)
@@ -165,9 +169,16 @@ namespace Agava.Wink
             _signInFuctionsUI.OnUnlinkClicked(device);
         }
 
-        private void OnAuthorizedSuccessfully()
+        private void OnAuthenficationSuccessfully()
         {
             _openSignInButton.gameObject.SetActive(false);
+            string phone = "N/A";
+
+            if (UnityEngine.PlayerPrefs.HasKey(_winkAccessManager.PhoneNumber))
+                phone = UnityEngine.PlayerPrefs.GetString(_winkAccessManager.PhoneNumber);
+
+            foreach (TextPlaceholder placeholder in _phoneNumberPlaceholders)
+                placeholder.ReplaceValue(phone);
 
             _notifyWindowHandler.OpenHelloWindow(onEnd: () =>
             {
@@ -179,6 +190,24 @@ namespace Agava.Wink
                     AnalyticsWinkService.SendPayWallWindow();
                 }
             });
+        }
+
+        private void OnAuthorizationSuccessfully()
+        {
+            string sanId = "N/A";
+            var wait = new WaitUntil(() => UnityEngine.PlayerPrefs.HasKey(_winkAccessManager.SanId) == true);
+
+            StartCoroutine(HellowWindowOpening());
+            IEnumerator HellowWindowOpening()
+            {
+                yield return wait;
+
+                if (UnityEngine.PlayerPrefs.HasKey(_winkAccessManager.SanId))
+                    sanId = UnityEngine.PlayerPrefs.GetString(_winkAccessManager.SanId);
+
+                foreach (TextPlaceholder placeholder in _idPlaceholders)
+                    placeholder.ReplaceValue(sanId);
+            }
         }
 
         private void OnTimerExpired() => _notifyWindowHandler.OpenDemoExpiredWindow(false);

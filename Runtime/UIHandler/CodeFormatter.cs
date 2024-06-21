@@ -1,6 +1,5 @@
-using System.Text.RegularExpressions;
-using TMPro;
 using UnityEngine;
+using TMPro;
 
 namespace Agava.Wink
 {
@@ -13,19 +12,16 @@ namespace Agava.Wink
 
         public bool InputDone { get; private set; } = false;
 
-        private void Start()
-        {
-            _codeLength = _textCells.Length;
-        }
+        private void Start() => _codeLength = _textCells.Length;
 
-        private void OnEnable()
-        {
-            _inputField.onValueChanged.AddListener(OnValueChanged);
-        }
+        private void OnEnable() => _inputField.onValueChanged.AddListener(OnValueChanged);
 
-        private void OnDisable()
+        private void OnDisable() => _inputField.onValueChanged.RemoveListener(OnValueChanged);
+
+        public void Clear()
         {
-            _inputField.onValueChanged.RemoveListener(OnValueChanged);
+            foreach (var cell in _textCells)
+                cell.text = string.Empty;
         }
 
         private void OnValueChanged(string newValue)

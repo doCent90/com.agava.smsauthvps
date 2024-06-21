@@ -119,7 +119,7 @@ namespace Agava.Wink
 
         private void OnSuccessfully()
         {
-            _winkAccessManager.Successfully -= OnSuccessfully;
+            _winkAccessManager.AuthorizationSuccessfully -= OnSuccessfully;
 
 #if UNITY_EDITOR || TEST
             Debug.Log($"Boot: Access Successfully");
@@ -164,7 +164,7 @@ namespace Agava.Wink
 
         private void OnSkiped()
         {
-            _winkAccessManager.Successfully += OnSuccessfully;
+            _winkAccessManager.AuthorizationSuccessfully += OnSuccessfully;
 #if UNITY_EDITOR || TEST
             Debug.Log($"Boot: SignIn skiped");
 #endif

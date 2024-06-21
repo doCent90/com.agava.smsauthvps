@@ -40,13 +40,13 @@ namespace Agava.Wink
             else
                 _seconds = remoteCfgSeconds;
 
-            _winkAccessManager.Successfully += Stop;
+            _winkAccessManager.AuthorizationSuccessfully += Stop;
         }
 
         internal void Dispose()
         {
             if (_winkAccessManager != null)
-                _winkAccessManager.Successfully -= Stop;
+                _winkAccessManager.AuthorizationSuccessfully -= Stop;
 
             UnityEngine.PlayerPrefs.SetInt(TimerKey, _seconds);
         }

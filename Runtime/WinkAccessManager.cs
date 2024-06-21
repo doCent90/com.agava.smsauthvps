@@ -14,27 +14,27 @@ namespace Agava.Wink
     {
         private const string FirstRegist = nameof(FirstRegist);
         private const string UniqueId = nameof(UniqueId);
-        private const string PhoneNumber = nameof(PhoneNumber);
 
         [SerializeField] private string _ip;
         [SerializeField] private string _additiveId;
 
         private RequestHandler _requestHandler;
         private TimespentService _timespentService;
-        private LoginData _data;
         private Action<bool> _winkSubscriptionAccessRequest;
         private Action<bool> _otpCodeAccepted;
         private string _uniqueId;
 
+        public readonly string PhoneNumber = nameof(PhoneNumber);
+        public readonly string SanId = nameof(SanId);
+        public LoginData LoginData { get; private set; }
         public bool Authorized { get; private set; } = false;
         public bool HasAccess { get; private set; } = false;
-
         public static WinkAccessManager Instance { get; private set; }
 
         public event Action<IReadOnlyList<string>> LimitReached;
         public event Action ResetLogin;
-        public event Action Successfully;
-        public event Action AuthorizedSuccessfully;
+        public event Action AuthorizationSuccessfully;
+        public event Action AuthenficationSuccessfully;
 
         private void OnApplicationFocus(bool focus)
         {
@@ -59,9 +59,9 @@ namespace Agava.Wink
                 _uniqueId = UnityEngine.PlayerPrefs.GetString(UniqueId);
 
             if (UnityEngine.PlayerPrefs.HasKey(PhoneNumber))
-                _data = new LoginData() { phone = UnityEngine.PlayerPrefs.GetString(PhoneNumber), device_id = _uniqueId };
+                LoginData = new LoginData() { phone = UnityEngine.PlayerPrefs.GetString(PhoneNumber), device_id = _uniqueId };
 
-            if (_data != null)
+            if (LoginData != null)
                 StartTimespentAnalytics();
 
             if (SmsAuthApi.Initialized == false)
@@ -77,8 +77,8 @@ namespace Agava.Wink
 
         public void SendOtpCode(string enteredOtpCode)
         {
-            _data.otp_code = enteredOtpCode;
-            Login(_data);
+            LoginData.otp_code = enteredOtpCode;
+            Login(LoginData);
         }
 
         public async void Regist(string phoneNumber, Action<bool> otpCodeRequest, Action<bool> winkSubscriptionAccessRequest, Action<bool> otpCodeAccepted)
@@ -86,7 +86,7 @@ namespace Agava.Wink
             _winkSubscriptionAccessRequest = winkSubscriptionAccessRequest;
             _otpCodeAccepted = otpCodeAccepted;
             UnityEngine.PlayerPrefs.SetString(PhoneNumber, phoneNumber);
-            _data = await _requestHandler.Regist(phoneNumber, _uniqueId, otpCodeRequest);
+            LoginData = await _requestHandler.Regist(phoneNumber, _uniqueId, otpCodeRequest);
 
             if (_timespentService == null)
                 StartTimespentAnalytics();
@@ -98,33 +98,47 @@ namespace Agava.Wink
         public void TestEnableSubsription()
         {
             HasAccess = true;
-            Successfully?.Invoke();
+            AuthorizationSuccessfully?.Invoke();
             Debug.Log("Test Access succesfully. No cloud saves");
         }
 #endif
 
         private void Login(LoginData data)
         {
-            _requestHandler.Login(data, LimitReached, _winkSubscriptionAccessRequest, _otpCodeAccepted, () =>
+            _requestHandler.Login(data, LimitReached, _winkSubscriptionAccessRequest, _otpCodeAccepted,
+            onAuthenficationSuccessfully: () =>
+            {
+                OnAuthenficationSuccessfully();
+            },
+            onAuthorizationSuccessfully: () =>
             {
                 OnSubscriptionExist();
-                TrySendAnalyticsData(_data.phone);
-            }, 
-            OnAuthorizedSuccessfully);
+                TrySendAnalyticsData(LoginData.phone);
+            }); 
         }
 
         private void QuickAccess() =>
-            _requestHandler.QuickAccess(_data.phone, OnSubscriptionExist, ResetLogin, _winkSubscriptionAccessRequest, OnAuthorizedSuccessfully);
+            _requestHandler.QuickAccess(LoginData.phone, OnSubscriptionExist, ResetLogin, _winkSubscriptionAccessRequest, OnAuthenficationSuccessfully);
+
+        private void OnAuthenficationSuccessfully()
+        {
+            Authorized = true;
+            AuthenficationSuccessfully?.Invoke();
+#if UNITY_EDITOR || TEST
+            Debug.Log("Authenfication succesfully");
+#endif
+        }
 
         private void OnSubscriptionExist()
         {
             HasAccess = true;
-            Successfully?.Invoke();
+            AuthorizationSuccessfully?.Invoke();
 
             if (PlayerPrefs.HasKey(FirstRegist))
                 AnalyticsWinkService.SendHasActiveAccountUser(hasActiveAcc: true);
-
+#if UNITY_EDITOR || TEST
             Debug.Log("Wink access succesfully");
+#endif
         }
 
         private async void TrySendAnalyticsData(string phone)
@@ -141,9 +155,10 @@ namespace Agava.Wink
 
                     if (responseGetSanId.statusCode == UnityEngine.Networking.UnityWebRequest.Result.Success)
                     {
+                        UnityEngine.PlayerPrefs.SetString(SanId, responseGetSanId.body);
                         AnalyticsWinkService.SendSanId(responseGetSanId.body);
                         AnalyticsWinkService.SendHasActiveAccountNewUser(hasActiveAcc: true);
-                        SmsAuthApi.OnUserAddApp(_data.phone, responseGetSanId.body);
+                        SmsAuthApi.OnUserAddApp(LoginData.phone, responseGetSanId.body);
                         PlayerPrefs.SetString(FirstRegist, "done");
                     }
                 }
@@ -156,7 +171,7 @@ namespace Agava.Wink
 
         private void StartTimespentAnalytics()
         {
-            _timespentService = new(this, _data.phone, _uniqueId, Application.identifier);
+            _timespentService = new(this, LoginData.phone, _uniqueId, Application.identifier);
             _timespentService.OnStartedApp();
         }
 
@@ -166,14 +181,6 @@ namespace Agava.Wink
 
             if (HasAccess == false)
                 AnalyticsWinkService.SendHasActiveAccountUser(hasActiveAcc: false);
-        }
-
-        private void OnAuthorizedSuccessfully()
-        {
-            Authorized = true;
-            AuthorizedSuccessfully?.Invoke();
-
-            Debug.Log("Authorized successfully");
         }
     }
 }

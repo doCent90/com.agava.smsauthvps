@@ -18,6 +18,7 @@ namespace Agava.Wink
         [SerializeField] private TextTimer _repeatCodeTimer;
         [SerializeField] private Button _sendRepeatCodeButton;
         [SerializeField] private EnterCodeShaking _enterCodeShaking;
+        [SerializeField] private CodeFormatter _codeFormatter;
 
         private Action<string> _onInputDone;
         private string _phone;
@@ -68,6 +69,7 @@ namespace Agava.Wink
             }
 
             _onInputDone?.Invoke(code);
+            Clear();
         }
 
         public void ResetInputText()
@@ -76,7 +78,11 @@ namespace Agava.Wink
             _enterCodeShaking.StartAnimation();
         }
 
-        public void Clear() => _inputField.text = string.Empty;
+        public void Clear()
+        {
+            _inputField.text = string.Empty;
+            _codeFormatter.Clear();
+        }
 
         private void OnNewCodeTimerExpired()
         {
