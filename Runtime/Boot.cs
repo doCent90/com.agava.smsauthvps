@@ -63,6 +63,7 @@ namespace Agava.Wink
             yield return new WaitUntil(() => { _loadingProgressBar.SetProgress(loadingScene.progress, 0.5f, 1.0f); return loadingScene.isDone; });
 
             _loadingProgressBar.Disable();
+            AnalyticsWinkService.SendStartApp(appId: Application.identifier);
         }
 
         private void OnDownloadCloudSavesProgress(float progress)

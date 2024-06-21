@@ -4,9 +4,11 @@ namespace Agava.Wink
 {
     public static class AnalyticsWinkService
     {
-       /// <summary>
-       /// Auditory
-       /// </summary>
+        /// <summary>
+        /// Auditory
+        /// </summary>
+
+        public static void SendStartApp(string appId) => AppMetrica.ReportEvent("App run ", appId);
         public static void SendSanId(string sanId) => AppMetrica.ReportEvent("SanId", sanId);
         public static void SendSex(string sex) => AppMetrica.ReportEvent("Sex", sex);//N/A
         public static void SendAge(string age) => AppMetrica.ReportEvent("Age", age);//N/A
