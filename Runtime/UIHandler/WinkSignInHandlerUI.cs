@@ -54,7 +54,7 @@ namespace Agava.Wink
 
             _winkAccessManager.ResetLogin -= OpenSignWindow;
             _winkAccessManager.LimitReached -= OnLimitReached;
-            _winkAccessManager.AuthenficationSuccessfully -= OnAuthenficationSuccessfully;
+            _winkAccessManager.AuthenficationSuccessfully -= OnAuthenticationSuccessfully;
             _winkAccessManager.AuthorizationSuccessfully -= OnAuthorizationSuccessfully;
             _demoTimer.Dispose();
         }
@@ -81,7 +81,7 @@ namespace Agava.Wink
 
             _winkAccessManager.ResetLogin += OpenSignWindow;
             _winkAccessManager.LimitReached += OnLimitReached;
-            _winkAccessManager.AuthenficationSuccessfully += OnAuthenficationSuccessfully;
+            _winkAccessManager.AuthenficationSuccessfully += OnAuthenticationSuccessfully;
             _winkAccessManager.AuthorizationSuccessfully += OnAuthorizationSuccessfully;
             _demoTimer.TimerExpired += OnTimerExpired;
         }
@@ -133,13 +133,14 @@ namespace Agava.Wink
 
         private void OnSignInClicked()
         {
-            string formattedNumber = _numbersInputField.text;
+            string number = WinkAcceessHelper.GetNumber(_numbersInputField.text, _minNumberCount, _maxNumberCount, _additivePlusChar);
+
+            string formattedNumber = PhoneNumber.FormatNumber(number);
 
             foreach (TextPlaceholder placeholder in _phoneNumberPlaceholders)
                 placeholder.ReplaceValue(formattedNumber);
 
-            string number = WinkAcceessHelper.GetNumber(formattedNumber, _minNumberCount, _maxNumberCount, _additivePlusChar);
-            _signInFuctionsUI.OnSignInClicked(number, OnAuthenficationSuccessfully);
+            _signInFuctionsUI.OnSignInClicked(number, OnAuthenticationSuccessfully);
         }
 
         private void OnLimitReached(IReadOnlyList<string> devicesList)
@@ -169,16 +170,16 @@ namespace Agava.Wink
             _signInFuctionsUI.OnUnlinkClicked(device);
         }
 
-        private void OnAuthenficationSuccessfully()
+        private void OnAuthenticationSuccessfully()
         {
             _openSignInButton.gameObject.SetActive(false);
-            string phone = "N/A";
+            string number = "N/A";
 
             if (UnityEngine.PlayerPrefs.HasKey(_winkAccessManager.PhoneNumber))
-                phone = UnityEngine.PlayerPrefs.GetString(_winkAccessManager.PhoneNumber);
+                number = PhoneNumber.FormatNumber(UnityEngine.PlayerPrefs.GetString(_winkAccessManager.PhoneNumber));
 
             foreach (TextPlaceholder placeholder in _phoneNumberPlaceholders)
-                placeholder.ReplaceValue(phone);
+                placeholder.ReplaceValue(number);
 
             _notifyWindowHandler.OpenHelloWindow(onEnd: () =>
             {
