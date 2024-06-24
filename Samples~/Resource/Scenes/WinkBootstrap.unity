@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.12731749, g: 0.13414757, b: 0.1210787, a: 1}
+  m_IndirectSpecularColor: {r: 0.12731715, g: 0.13414735, b: 0.121078536, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -226,9 +226,10 @@ MonoBehaviour:
     Text: To log in, enter the code from the SMS sent to the number
     Object: {fileID: 0}
   - Language: Russian
-    Text: "\u0414\u043B\u044F \u0432\u0445\u043E\u0434\u0430 \u0432\u0432\u0435\u0434\u0438\u0442\u0435
-      \u043A\u043E\u0434 \u0438\u0437 \u0421\u041C\u0421, \u043E\u0442\u043F\u0440\u0430\u0432\u043B\u0435\u043D\u043D\u043E\u0433\u043E
-      \u043D\u0430 \u043D\u043E\u043C\u0435\u0440"
+    Text: "\u0427\u0442\u043E\u0431\u044B \u0432\u043E\u0439\u0442\u0438 \u0432 \u0441\u0438\u0441\u0442\u0435\u043C\u0443,
+      \u0432\u0432\u0435\u0434\u0438\u0442\u0435 \u043A\u043E\u0434 \u0438\u0437
+      SMS, \u043E\u0442\u043F\u0440\u0430\u0432\u043B\u0435\u043D\u043D\u043E\u0433\u043E
+      \u043D\u0430 \u0443\u043A\u0430\u0437\u0430\u043D\u043D\u044B\u0439 \u043D\u043E\u043C\u0435\u0440"
     Object: {fileID: 0}
 --- !u!1 &104234245
 GameObject:
@@ -428,8 +429,8 @@ MonoBehaviour:
   - Language: Russian
     Text: "<color=#4D4D3D>\u042F \u043F\u0440\u0438\u043D\u0438\u043C\u0430\u044E
       \u0443\u0441\u043B\u043E\u0432\u0438\u044F</color> \u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u044C\u0441\u043A\u043E\u0433\u043E
-      \u0441\u043E\u0433\u043B\u0430\u0448\u0435\u043D\u0438\u044F \u0438 \u0443\u0441\u043B\u043E\u0432\u0438\u044F
-      \u043F\u043E\u043B\u0438\u0442\u0438\u043A\u0438 \u043A\u043E\u043D\u0444\u0438\u0434\u0435\u043D\u0446\u0438\u0430\u043B\u044C\u043D\u043E\u0441\u0442\u0438
+      \u0441\u043E\u0433\u043B\u0430\u0448\u0435\u043D\u0438\u044F \u0438 \u043F\u043E\u043B\u0438\u0442\u0438\u043A\u0438
+      \u043A\u043E\u043D\u0444\u0438\u0434\u0435\u043D\u0446\u0438\u0430\u043B\u044C\u043D\u043E\u0441\u0442\u0438
       \u0441\u0435\u0440\u0432\u0438\u0441\u0430"
     Object: {fileID: 0}
 --- !u!1 &144984665
@@ -479,7 +480,7 @@ MonoBehaviour:
   data: 0
   entries:
   - Language: English
-    Text: "WINK \nCHILDREN"
+    Text: "WINK \n\u0414\u0415\u0422\u0418"
     Object: {fileID: 0}
   - Language: Russian
     Text: "WINK \n\u0414\u0415\u0422\u0418"
@@ -607,10 +608,10 @@ MonoBehaviour:
   data: 0
   entries:
   - Language: English
-    Text: Hello, friend!
+    Text: Welcome!
     Object: {fileID: 0}
   - Language: Russian
-    Text: "\u041F\u0440\u0438\u0432\u0435\u0442, \u0434\u0440\u0443\u0433!"
+    Text: "\u0414\u043E\u0431\u0440\u043E \u043F\u043E\u0436\u0430\u043B\u043E\u0432\u0430\u0442\u044C!"
     Object: {fileID: 0}
 --- !u!1 &289619831
 GameObject:
@@ -1133,7 +1134,7 @@ MonoBehaviour:
     Text: Get a repeat code after
     Object: {fileID: 0}
   - Language: Russian
-    Text: "\u041F\u043E\u043B\u0443\u0447\u0438\u0442\u044C \u043A\u043E\u0434 \u043F\u043E\u0432\u0442\u043E\u0440\u0430
+    Text: "\u041F\u043E\u043B\u0443\u0447\u0438\u0442\u044C \u043A\u043E\u0434 \u043F\u043E\u0432\u0442\u043E\u0440\u043D\u043E
       \u0447\u0435\u0440\u0435\u0437"
     Object: {fileID: 0}
 --- !u!1 &939332166
@@ -1238,7 +1239,7 @@ MonoBehaviour:
     Text: Try it for free
     Object: {fileID: 0}
   - Language: Russian
-    Text: "\u041F\u043E\u043F\u0440\u043E\u0431\u0443\u0439 \u0431\u0435\u0441\u043F\u043B\u0430\u0442\u043D\u043E"
+    Text: "\u041F\u043E\u043F\u0440\u043E\u0431\u043E\u0432\u0430\u0442\u044C \u0431\u0435\u0441\u043F\u043B\u0430\u0442\u043D\u043E"
     Object: {fileID: 0}
 --- !u!1001 &1124556225
 PrefabInstance:
@@ -2054,11 +2055,10 @@ MonoBehaviour:
   data: 0
   entries:
   - Language: English
-    Text: Audio tales and songs
+    Text: Secured account
     Object: {fileID: 0}
   - Language: Russian
-    Text: "\u0410\u0443\u0434\u0438\u043E \u0441\u043A\u0430\u0437\u043A\u0438 \u0438
-      \u043F\u0435\u0441\u043D\u0438"
+    Text: "\u0411\u0435\u0437\u043E\u043F\u0430\u0441\u043D\u044B\u0439 \u0430\u043A\u043A\u0430\u0443\u043D\u0442"
     Object: {fileID: 0}
 --- !u!1 &1705684885
 GameObject:
@@ -2164,8 +2164,9 @@ MonoBehaviour:
     Text: Subscribe to get access
     Object: {fileID: 0}
   - Language: Russian
-    Text: "\u041F\u043E\u0434\u043F\u0438\u0448\u0438\u0442\u0435\u0441\u044C, \u0447\u0442\u043E\u0431\u044B
-      \u043F\u043E\u043B\u0443\u0447\u0438\u0442\u044C \u0434\u043E\u0441\u0442\u0443\u043F"
+    Text: "\u041E\u0444\u043E\u0440\u043C\u0438\u0442\u0435 \u043F\u043E\u0434\u043F\u0438\u0441\u043A\u0443,
+      \u0447\u0442\u043E\u0431\u044B \u043F\u043E\u043B\u0443\u0447\u0438\u0442\u044C
+      \u0434\u043E\u0441\u0442\u0443\u043F"
     Object: {fileID: 0}
 --- !u!1 &1742402227
 GameObject:
@@ -2582,8 +2583,10 @@ MonoBehaviour:
     Text: "No Internet! \nPlease, try again"
     Object: {fileID: 0}
   - Language: Russian
-    Text: "\u041D\u0435\u0442 \u0438\u043D\u0442\u0435\u0440\u043D\u0435\u0442\u0430!\n\u041F\u043E\u043F\u0440\u043E\u0431\u0443\u0439\u0442\u0435
-      \u0441\u043D\u043E\u0432\u0430\n"
+    Text: "\u041D\u0435\u0442 \u0438\u043D\u0442\u0435\u0440\u043D\u0435\u0442 \u0441\u043E\u0435\u0434\u0438\u043D\u0435\u043D\u0438\u044F.\n\u041F\u0440\u043E\u0432\u0435\u0440\u044C\u0442\u0435
+      \u0441\u0432\u043E\u0451 \u043F\u043E\u0434\u043A\u043B\u044E\u0447\u0435\u043D\u0438\u0435
+      \u043A \u0418\u043D\u0442\u0435\u0440\u043D\u0435\u0442\u0443, \u0447\u0442\u043E\u0431\u044B
+      \u043F\u0440\u043E\u0434\u043E\u043B\u0436\u0438\u0442\u044C \u0438\u0433\u0440\u0430\u0442\u044C."
     Object: {fileID: 0}
 --- !u!223 &822961566679058729
 Canvas:

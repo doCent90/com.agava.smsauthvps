@@ -29,7 +29,8 @@ namespace Agava.Wink
         internal void OpenSignInWindow(Action closeCallback = null) => _signInWindow.Enable(closeCallback);
         internal void OpenWindow(WindowType type) => GetWindowByType(type).Enable();
         internal void CloseWindow(WindowType type) => GetWindowByType(type).Disable();
-        internal void OpenInputWindow(string phone, Action<string> onInputDone) => _enterCodeWindow.Enable(phone, onInputDone);
+        internal void OpenInputOtpCodeWindow(string phone, Action<string> onInputDone, Action onBackClicked)
+            => _enterCodeWindow.Enable(phone, onInputDone, onBackClicked);
         internal void OpenHelloWindow(Action onEnd) => _helloWindow.Enable(onEnd);
         internal void OpenDemoExpiredWindow(bool closeButton) => _demoTimerExpiredWindow.Enable(closeButton);
 

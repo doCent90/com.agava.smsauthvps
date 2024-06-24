@@ -13,20 +13,24 @@ namespace Agava.Wink
     {
         [SerializeField] private NotifyWindowPresenter _failWindow;
         [SerializeField] private CanvasGroup _canvasGroup;
-        [SerializeField] private Button _sendButton;
         [SerializeField] private TMP_InputField _inputField;
         [SerializeField] private TextTimer _repeatCodeTimer;
-        [SerializeField] private Button _sendRepeatCodeButton;
         [SerializeField] private EnterCodeShaking _enterCodeShaking;
         [SerializeField] private CodeFormatter _codeFormatter;
+        [Header("Buttons")]
+        [SerializeField] private Button _sendButton;
+        [SerializeField] private Button _sendRepeatCodeButton;
+        [SerializeField] private Button _backButton;
 
         private Action<string> _onInputDone;
+        private Action _onBackClicked;
         private string _phone;
 
         private void Awake()
         {
             _sendButton.onClick.AddListener(OnSendCodeClicked);
             _sendRepeatCodeButton.onClick.AddListener(OnRepeatClicked);
+            _backButton.onClick.AddListener(OnBackClicked);
             _repeatCodeTimer.TimerExpired += OnNewCodeTimerExpired;
         }
 
@@ -34,14 +38,16 @@ namespace Agava.Wink
         {
             _sendButton.onClick.RemoveListener(OnSendCodeClicked);
             _sendRepeatCodeButton.onClick.RemoveListener(OnRepeatClicked);
+            _backButton.onClick.RemoveListener(OnBackClicked);
             _repeatCodeTimer.TimerExpired -= OnNewCodeTimerExpired;
         }
 
-        public void Enable(string phone, Action<string> onInputDone)
+        public void Enable(string phone, Action<string> onInputDone, Action onBackClicked)
         {
             _phone = phone;
             _repeatCodeTimer.Enable();
             _onInputDone = onInputDone;
+            _onBackClicked = onBackClicked;
             EnableCanvasGroup(_canvasGroup);
         }
 
@@ -82,6 +88,12 @@ namespace Agava.Wink
         {
             _inputField.text = string.Empty;
             _codeFormatter.Clear();
+        }
+
+        private void OnBackClicked()
+        {
+            Clear();
+            _onBackClicked?.Invoke();
         }
 
         private void OnNewCodeTimerExpired()

@@ -98,10 +98,16 @@ namespace Agava.Wink
                 _notifyWindowHandler.CloseWindow(WindowType.ProccessOn);
                 AnalyticsWinkService.SendEnterOtpCodeWindow();
 
-                _notifyWindowHandler.OpenInputWindow(phone, onInputDone: (code) =>
+                _notifyWindowHandler.OpenInputOtpCodeWindow(phone, 
+                onInputDone: (code) =>
                 {
                     _winkAccessManager.SendOtpCode(code);
                     AnalyticsWinkService.SendOnEnteredOtpCodeWindow();
+                },
+                onBackClicked: () => 
+                {
+                    _notifyWindowHandler.CloseWindow(WindowType.EnterOtpCode);
+                    _notifyWindowHandler.OpenSignInWindow();
                 });
             }
             else
