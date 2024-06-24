@@ -99,7 +99,7 @@ namespace Agava.Wink
             {
                 if (UnityEngine.PlayerPrefs.HasKey(SmsAuthAPI.DTO.TokenLifeHelper.Tokens))
                 {
-                    yield return new WaitUntil(() => WinkAccessManager.Instance.Authorized == true);
+                    yield return new WaitUntil(() => WinkAccessManager.Instance.Authenficated == true);
 
                     if (WinkAccessManager.Instance.HasAccess)
                         yield return CloudSavesLoading();
@@ -111,7 +111,7 @@ namespace Agava.Wink
                     OnSkiped();
                 }
 #if UNITY_EDITOR || TEST
-                Debug.Log($"Boot: App Started. SignIn: {WinkAccessManager.Instance.Authorized}");
+                Debug.Log($"Boot: App Started. SignIn: {WinkAccessManager.Instance.Authenficated}");
 #endif
             }
 

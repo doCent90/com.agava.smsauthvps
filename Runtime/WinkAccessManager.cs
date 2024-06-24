@@ -27,7 +27,7 @@ namespace Agava.Wink
         public readonly string PhoneNumber = nameof(PhoneNumber);
         public readonly string SanId = nameof(SanId);
         public LoginData LoginData { get; private set; }
-        public bool Authorized { get; private set; } = false;
+        public bool Authenficated { get; private set; } = false;
         public bool HasAccess { get; private set; } = false;
         public static WinkAccessManager Instance { get; private set; }
 
@@ -98,6 +98,7 @@ namespace Agava.Wink
         public void TestEnableSubsription()
         {
             HasAccess = true;
+            Authenficated = true;
             AuthorizationSuccessfully?.Invoke();
             Debug.Log("Test Access succesfully. No cloud saves");
         }
@@ -114,7 +115,7 @@ namespace Agava.Wink
             {
                 OnSubscriptionExist();
                 TrySendAnalyticsData(LoginData.phone);
-            }); 
+            });
         }
 
         private void QuickAccess() =>
@@ -122,7 +123,7 @@ namespace Agava.Wink
 
         private void OnAuthenficationSuccessfully()
         {
-            Authorized = true;
+            Authenficated = true;
             AuthenficationSuccessfully?.Invoke();
 #if UNITY_EDITOR || TEST
             Debug.Log("Authenfication succesfully");
@@ -132,6 +133,7 @@ namespace Agava.Wink
         private void OnSubscriptionExist()
         {
             HasAccess = true;
+            Authenficated = true;
             AuthorizationSuccessfully?.Invoke();
 
             if (PlayerPrefs.HasKey(FirstRegist))

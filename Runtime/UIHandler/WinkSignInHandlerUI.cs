@@ -113,7 +113,7 @@ namespace Agava.Wink
 
         internal void OnWinkButtonClick()
         {
-            if (_winkAccessManager.Authorized)
+            if (_winkAccessManager.Authenficated)
             {
                 if (_winkAccessManager.HasAccess)
                 {
