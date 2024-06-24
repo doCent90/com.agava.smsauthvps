@@ -67,6 +67,7 @@ namespace Agava.Wink
             else
             {
                 otpCodeAccepted?.Invoke(true);
+                onAuthenficationSuccessfully?.Invoke();
                 string token;
 
                 if (response.isBase64Encoded)
@@ -91,7 +92,6 @@ namespace Agava.Wink
                 await RequestWinkDataBase(data.phone, onWinkSubscriptionAccessRequest, () =>
                 {
                     onAuthorizationSuccessfully?.Invoke();
-                    onAuthenficationSuccessfully?.Invoke();
                 });
             }
         }
