@@ -118,8 +118,8 @@ namespace Agava.Wink
             });
         }
 
-        private void QuickAccess() =>
-            _requestHandler.QuickAccess(LoginData.phone, OnSubscriptionExist, ResetLogin, _winkSubscriptionAccessRequest, OnAuthenficationSuccessfully);
+        private void QuickAccess() 
+            => _requestHandler.QuickAccess(LoginData.phone, OnSubscriptionExist, ResetLogin, _winkSubscriptionAccessRequest, OnAuthenficationSuccessfully);
 
         private void OnAuthenficationSuccessfully()
         {
@@ -157,7 +157,6 @@ namespace Agava.Wink
 
                     if (responseGetSanId.statusCode == UnityEngine.Networking.UnityWebRequest.Result.Success)
                     {
-                        UnityEngine.PlayerPrefs.SetString(SanId, responseGetSanId.body);
                         AnalyticsWinkService.SendSanId(responseGetSanId.body);
                         AnalyticsWinkService.SendHasActiveAccountNewUser(hasActiveAcc: true);
                         SmsAuthApi.OnUserAddApp(LoginData.phone, responseGetSanId.body);

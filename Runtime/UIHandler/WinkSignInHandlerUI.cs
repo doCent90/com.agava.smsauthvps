@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using SmsAuthAPI.DTO;
+using SmsAuthAPI.Program;
 
 namespace Agava.Wink
 {
@@ -193,10 +194,23 @@ namespace Agava.Wink
             });
         }
 
-        private void OnAuthorizationSuccessfully()
+        private async void OnAuthorizationSuccessfully()
         {
+            if (UnityEngine.PlayerPrefs.HasKey(_winkAccessManager.SanId) == false && UnityEngine.PlayerPrefs.HasKey(_winkAccessManager.PhoneNumber))
+            {
+                var phone = UnityEngine.PlayerPrefs.GetString(_winkAccessManager.PhoneNumber);
+                var responseGetSanId = await SmsAuthApi.GetSanId(phone);
+
+                if (responseGetSanId.statusCode == UnityEngine.Networking.UnityWebRequest.Result.Success)
+                    UnityEngine.PlayerPrefs.SetString(_winkAccessManager.SanId, responseGetSanId.body);
+            }
+
             string sanId = "N/A";
-            var wait = new WaitUntil(() => UnityEngine.PlayerPrefs.HasKey(_winkAccessManager.SanId) == true);
+
+            foreach (TextPlaceholder placeholder in _idPlaceholders)
+                placeholder.ReplaceValue(sanId);
+
+            var wait = new WaitWhile(() => UnityEngine.PlayerPrefs.HasKey(_winkAccessManager.SanId) == false);
 
             StartCoroutine(HellowWindowOpening());
             IEnumerator HellowWindowOpening()
