@@ -182,6 +182,11 @@ namespace Agava.Wink
             foreach (TextPlaceholder placeholder in _phoneNumberPlaceholders)
                 placeholder.ReplaceValue(number);
 
+            string sanId = "N/A";
+
+            foreach (TextPlaceholder placeholder in _idPlaceholders)
+                placeholder.ReplaceValue(sanId);
+
             _notifyWindowHandler.OpenHelloWindow(onEnd: () =>
             {
                 AnalyticsWinkService.SendHelloWindow();
