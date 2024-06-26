@@ -14,7 +14,12 @@ namespace Agava.Wink
 
         public bool InputDone { get; private set; } = false;
 
-        private void Start() => _codeLength = _textCells.Length;
+        private void Start()
+        {
+            _codeLength = _textCells.Length;
+            _inputField.resetOnDeActivation = false;
+            _inputField.restoreOriginalTextOnEscape = false;
+        }
 
         private void OnEnable() => _inputField.onValueChanged.AddListener(OnValueChanged);
 

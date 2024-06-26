@@ -24,6 +24,8 @@ namespace Agava.Wink
         private void Awake()
         {
             _inputField.contentType = TMP_InputField.ContentType.IntegerNumber;
+            _inputField.resetOnDeActivation = false;
+            _inputField.restoreOriginalTextOnEscape = false;
             _placeholder.text = PhoneNumber.PlaceholderText;
             _placeholderLength = PhoneNumber.PlaceholderText.Length;
             _colorCode = ColorUtility.ToHtmlStringRGB(_placeholder.color);
