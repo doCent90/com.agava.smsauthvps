@@ -3,9 +3,11 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
 using SmsAuthAPI.Program;
+using UnityEngine.Scripting;
 
 namespace Agava.Wink
 {
+    [Preserve]
     internal class SignInFuctionsUI
     {
         private const string RemoteName = "max-demo-minutes";

@@ -1,9 +1,11 @@
 using System.Text.RegularExpressions;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Scripting;
 
 namespace Agava.Wink
 {
+    [Preserve]
     internal class PhoneNumberFormatting : MonoBehaviour, IInputFieldFormatting
     {
         [SerializeField] private TMP_InputField _inputField;

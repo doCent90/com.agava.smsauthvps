@@ -1,9 +1,11 @@
 ﻿using System;
 using UnityEngine;
 using Lean.Localization;
+using UnityEngine.Scripting;
 
 namespace Agava.Wink
 {
+    [Preserve]
     public class WinkLocalization : MonoBehaviour
     {
         private const string SavedGameSystemLang = nameof(SavedGameSystemLang);

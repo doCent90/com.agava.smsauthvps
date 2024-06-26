@@ -1,9 +1,11 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using UnityEngine.Scripting;
 
 namespace Agava.Wink
 {
+    [Preserve]
     internal class ModifiedShadow : Shadow
     {
         public override void ModifyMesh(VertexHelper vh)

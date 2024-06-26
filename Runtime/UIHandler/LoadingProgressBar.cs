@@ -1,7 +1,9 @@
 using UnityEngine;
+using UnityEngine.Scripting;
 
 namespace Agava.Wink
 {
+    [Preserve]
     internal class LoadingProgressBar : MonoBehaviour
     {
         [SerializeField] private Utils.SlicedFilledImage _progressBar;

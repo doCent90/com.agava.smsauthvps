@@ -1,9 +1,11 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Scripting;
 
 namespace Agava.Wink
 {
+    [Preserve]
     internal class TextTimer : MonoBehaviour
     {
         [SerializeField] private int _time;

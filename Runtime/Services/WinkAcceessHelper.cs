@@ -1,11 +1,13 @@
 ﻿using System.Globalization;
 using System.Text.RegularExpressions;
+using UnityEngine.Scripting;
 
 namespace Agava.Wink
 {
     /// <summary>
     ///     Access extention.
     /// </summary>
+    [Preserve]
     public static class WinkAcceessHelper
     {
         /// <summary>

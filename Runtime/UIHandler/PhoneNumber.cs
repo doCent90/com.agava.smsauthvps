@@ -2,9 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using UnityEngine;
+using UnityEngine.Scripting;
 
 namespace Agava.Wink
 {
+    [Preserve]
     internal static class PhoneNumber
     {
         public const string PlaceholderText = "+7 (999) 000-00-00";

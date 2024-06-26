@@ -1,8 +1,10 @@
 ﻿using Io.AppMetrica;
 using Newtonsoft.Json;
+using UnityEngine.Scripting;
 
 namespace Agava.Wink
 {
+    [Preserve]
     public static class AnalyticsWinkService
     {
         /// <summary>

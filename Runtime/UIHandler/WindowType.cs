@@ -1,5 +1,8 @@
-﻿namespace Agava.Wink
+﻿using UnityEngine.Scripting;
+
+namespace Agava.Wink
 {
+    [Preserve]
     public enum WindowType
     {
         None,

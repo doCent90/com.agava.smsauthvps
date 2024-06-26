@@ -4,9 +4,11 @@ using SmsAuthAPI.Program;
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
+using UnityEngine.Scripting;
 
 namespace Agava.Wink
 {
+    [Preserve]
     internal class TimespentService
     {
         private const string SavedTime = nameof(SavedTime);

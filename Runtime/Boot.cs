@@ -2,13 +2,14 @@
 using System.Collections;
 using UnityEngine;
 using SmsAuthAPI.Program;
+using UnityEngine.Scripting;
 
 namespace Agava.Wink
 {
     /// <summary>
     ///     Starting auth services and cloud saves.
     /// </summary>
-    [DefaultExecutionOrder(-123)]
+    [DefaultExecutionOrder(-123), Preserve]
     public class Boot : MonoBehaviour, IBoot
     {
         private const string FirsttimeStartApp = nameof(FirsttimeStartApp);

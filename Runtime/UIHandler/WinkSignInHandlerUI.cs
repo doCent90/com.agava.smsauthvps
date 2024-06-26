@@ -6,12 +6,14 @@ using UnityEngine.UI;
 using TMPro;
 using SmsAuthAPI.DTO;
 using SmsAuthAPI.Program;
+using UnityEngine.Scripting;
 
 namespace Agava.Wink
 {
     /// <summary>
     ///     Handler UI. Input data and view auth process.
     /// </summary>
+    [Preserve]
     public class WinkSignInHandlerUI : MonoBehaviour, IWinkSignInHandlerUI, ICoroutine
     {
         [SerializeField] private DemoTimer _demoTimer;

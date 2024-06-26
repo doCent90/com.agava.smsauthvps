@@ -1,11 +1,13 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.Scripting;
 
 namespace Agava.Wink
 {
     /// <summary>
     ///     Load target scene after auth.
     /// </summary>
+    [Preserve]
     internal class SceneLoader : MonoBehaviour
     {
         [SerializeField] private string _startSceneName;

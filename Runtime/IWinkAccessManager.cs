@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEngine.Scripting;
 
 namespace Agava.Wink
 {
+    [Preserve]
     public interface IWinkAccessManager
     {
         bool HasAccess { get; }

@@ -1,8 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.Scripting;
 
 namespace Agava.Wink
 {
+    [Preserve]
     internal class BoxOutline : ModifiedShadow
     {
         const int maxHalfSampleCount = 20;

@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Scripting;
 
 namespace Agava.Wink
 {
+    [Preserve]
     internal class ObjectPool<T> where T : new()
     {
         private readonly Stack<T> m_Stack = new Stack<T>();

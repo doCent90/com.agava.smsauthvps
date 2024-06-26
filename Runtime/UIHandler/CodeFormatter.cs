@@ -1,8 +1,10 @@
 using UnityEngine;
 using TMPro;
+using UnityEngine.Scripting;
 
 namespace Agava.Wink
 {
+    [Preserve]
     internal class CodeFormatter : MonoBehaviour, IInputFieldFormatting
     {
         [SerializeField] private TMP_InputField _inputField;

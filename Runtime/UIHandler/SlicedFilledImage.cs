@@ -11,11 +11,12 @@ using Sprites = UnityEngine.Sprites;
 
 #if UNITY_EDITOR
 using UnityEditor;
+using UnityEngine.Scripting;
 
 namespace Agava.Utils
 {
     // Custom Editor to order the variables in the Inspector similar to Image component
-    [CustomEditor(typeof(SlicedFilledImage)), CanEditMultipleObjects]
+    [CustomEditor(typeof(SlicedFilledImage)), CanEditMultipleObjects, Preserve]
     public class SlicedFilledImageEditor : Editor
     {
         private SerializedProperty spriteProp, colorProp;

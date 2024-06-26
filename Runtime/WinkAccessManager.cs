@@ -4,12 +4,14 @@ using UnityEngine;
 using SmsAuthAPI.DTO;
 using SmsAuthAPI.Program;
 using System.Collections;
+using UnityEngine.Scripting;
 
 namespace Agava.Wink
 {
     /// <summary>
     ///     Auth process logic.
     /// </summary>
+    [Preserve]
     public class WinkAccessManager : MonoBehaviour, IWinkAccessManager, ICoroutine
     {
         private const string FirstRegist = nameof(FirstRegist);

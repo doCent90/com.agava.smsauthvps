@@ -2,10 +2,11 @@
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Scripting;
 
 namespace Agava.Wink
 {
-    [Serializable]
+    [Serializable, Preserve]
     internal class NotifyWindowHandler
     {
         [Header("UI Windows")]

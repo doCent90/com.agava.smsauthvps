@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.Scripting;
 using UnityEngine.UI;
 
 namespace Agava.Wink
@@ -7,6 +8,7 @@ namespace Agava.Wink
     /// <summary>
     ///     Lock/unlock any object on scene. Working with auth.
     /// </summary>
+    [Preserve]
     public class LockedObject : MonoBehaviour
     {
         [SerializeField] private Image _lockImage;

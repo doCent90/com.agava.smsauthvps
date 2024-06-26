@@ -2,13 +2,14 @@
 using System.Collections;
 using UnityEngine;
 using SmsAuthAPI.Program;
+using UnityEngine.Scripting;
 
 namespace Agava.Wink
 {
     /// <summary>
     ///     Demo timer Handler. Block app after expired allowed time.
     /// </summary>
-    [Serializable]
+    [Serializable, Preserve]
     internal class DemoTimer
     {
         private const string TimerKey = nameof(TimerKey);

@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.Scripting;
 using UnityEngine.UI;
 
 namespace Agava.Wink
@@ -7,6 +8,7 @@ namespace Agava.Wink
     /// <summary>
     ///     Show logo on start app.
     /// </summary>
+    [Preserve]
     internal class StartLogoPresenter : MonoBehaviour
     {
         [field: SerializeField] public float LogoDuration { get; private set; } = 3f;

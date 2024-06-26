@@ -1,8 +1,10 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.Scripting;
 
 namespace Agava.Wink
 {
+    [Preserve]
     public abstract class WindowPresenter : MonoBehaviour
     {
         [field: SerializeField] public WindowType Type {  get; private set; }

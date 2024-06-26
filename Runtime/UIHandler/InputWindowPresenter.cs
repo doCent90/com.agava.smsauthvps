@@ -6,9 +6,11 @@ using TMPro;
 using SmsAuthAPI.Program;
 using SmsAuthAPI.DTO;
 using UnityEngine.Networking;
+using UnityEngine.Scripting;
 
 namespace Agava.Wink
 {
+    [Preserve]
     internal class InputWindowPresenter : WindowPresenter
     {
         [SerializeField] private NotifyWindowPresenter _failWindow;

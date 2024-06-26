@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Scripting;
 
 namespace Agava.Wink
 {
+    [Preserve]
     static class ListPool<T>
     {
         // Object pool to avoid allocations.

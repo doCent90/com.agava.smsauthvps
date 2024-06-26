@@ -1,8 +1,10 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Scripting;
 
 namespace Agava.Wink
 {
+    [Preserve]
     internal class EnterCodeShaking : MonoBehaviour
     {
         [SerializeField] private RectTransform _rectTransform;

@@ -8,12 +8,14 @@ using SmsAuthAPI.DTO;
 using SmsAuthAPI.Utility;
 using SmsAuthAPI.Program;
 using UnityEngine.Networking;
+using UnityEngine.Scripting;
 
 namespace Agava.Wink
 {
     /// <summary>
     ///    Requests/response to/from VPS server.
     /// </summary>
+    [Preserve]
     internal class RequestHandler
     {
         internal async Task<LoginData> Regist(string phoneNumber, string uniqueId, Action<bool> otpCodeRequest)

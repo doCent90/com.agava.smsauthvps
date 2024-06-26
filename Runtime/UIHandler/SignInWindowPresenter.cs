@@ -1,9 +1,11 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.Scripting;
 using UnityEngine.UI;
 
 namespace Agava.Wink
 {
+    [Preserve]
     internal class SignInWindowPresenter : WindowPresenter
     {
         [SerializeField] private CanvasGroup _canvasGroup;

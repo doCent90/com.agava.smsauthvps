@@ -1,8 +1,10 @@
 ﻿using UnityEngine;
+using UnityEngine.Scripting;
 using UnityEngine.UI;
 
 namespace Agava.Wink
 {
+    [Preserve]
     internal class NotifyWindowPresenter : WindowPresenter
     {
         [SerializeField] private CanvasGroup _canvasGroup;

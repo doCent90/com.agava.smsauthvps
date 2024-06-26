@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Scripting;
 
 namespace Agava.Wink
 {
+    [Preserve]
     internal class SubmitInputButton : MonoBehaviour
     {
         [SerializeField] private MonoBehaviour _inputFieldFormatting;
