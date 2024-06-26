@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.Scripting;
 using UnityEngine.UI;
 
@@ -10,6 +11,7 @@ namespace Agava.Wink
         [SerializeField] private CanvasGroup _canvasGroup;
         [SerializeField] private Button _yesButton;
         [SerializeField] private Button _closeButton;
+        [SerializeField] private Button _signInButton;
         [SerializeField] private string _url;
         [SerializeField] private bool _closeOnYesClicked = true;
 
@@ -27,6 +29,9 @@ namespace Agava.Wink
 
         public void Enable(bool closeButton)
         {
+            if (WinkAccessManager.Instance.Authenficated && _signInButton != null)
+                _signInButton.gameObject.SetActive(false);
+
             _closeButton.gameObject.SetActive(closeButton);
             EnableCanvasGroup(_canvasGroup);
         }

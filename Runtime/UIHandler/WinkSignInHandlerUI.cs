@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using SmsAuthAPI.DTO;
 using SmsAuthAPI.Program;
 using UnityEngine.Scripting;
 
@@ -23,6 +22,7 @@ namespace Agava.Wink
         [Header("UI Buttons")]
         [SerializeField] private Button _signInButton;
         [SerializeField] private Button _openSignInButton;
+        [SerializeField] private Button _openSignInDemoButton;
         [SerializeField] private Button _unlinkButtonTemplate;
         [Header("UI Test Buttons")]
         [SerializeField] private Button _testSignInButton;
@@ -52,6 +52,7 @@ namespace Agava.Wink
         public void Dispose()
         {
             _signInButton.onClick.RemoveAllListeners();
+            _openSignInDemoButton.onClick.RemoveAllListeners();
 
             if (_winkAccessManager == null) return;
 
@@ -80,6 +81,7 @@ namespace Agava.Wink
             _winkAccessManager = winkAccessManager;
             _signInButton.onClick.AddListener(OnSignInClicked);
             _openSignInButton.onClick.AddListener(OpenSignWindow);
+            _openSignInDemoButton.onClick.AddListener(OpenSignWindow);
             CloseAllWindows();
 
             _winkAccessManager.ResetLogin += OpenSignWindow;
@@ -199,6 +201,9 @@ namespace Agava.Wink
                     AnalyticsWinkService.SendPayWallWindow();
                 }
             });
+
+            if (WinkAccessManager.Instance.Authenficated)
+                _signInButton.gameObject.SetActive(false);
         }
 
         private async void OnAuthorizationSuccessfully()
