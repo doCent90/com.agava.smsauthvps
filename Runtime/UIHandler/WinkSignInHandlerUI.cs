@@ -127,7 +127,7 @@ namespace Agava.Wink
                 else
                 {
                     AnalyticsWinkService.SendSubscribeProfileWindow();
-                    _notifyWindowHandler.OpenDemoExpiredWindow(true);
+                    _notifyWindowHandler.OpenWindow(WindowType.Redirect);
                 }
             }
             else
