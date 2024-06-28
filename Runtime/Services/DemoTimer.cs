@@ -27,6 +27,8 @@ namespace Agava.Wink
 
         public event Action TimerExpired;
 
+        public bool Expired { get; private set; }
+
         internal void Construct(IWinkAccessManager winkAccessManager, int remoteCfgSeconds, IWinkSignInHandlerUI winkSignInHandlerUI, ICoroutine coroutine)
         {
             _winkSignInHandlerUI = winkSignInHandlerUI;
@@ -42,6 +44,7 @@ namespace Agava.Wink
                 _seconds = remoteCfgSeconds;
 
             _winkAccessManager.AuthorizationSuccessfully += Stop;
+            Expired = false;
         }
 
         internal void Dispose()
@@ -78,13 +81,18 @@ namespace Agava.Wink
                     yield return tick;
                 }
 
-                if(_seconds <= 0 && WinkAccessManager.Instance.HasAccess == false)
+                if (_seconds <= 0 && WinkAccessManager.Instance.HasAccess == false)
+                {
                     TimerExpired?.Invoke();
+                    Expired = true;
+                }
             }
         }
 
         internal void Stop()
         {
+            Expired = false;
+
             if (_current != null)
             {
                 _coroutine.StopCoroutine(_current);

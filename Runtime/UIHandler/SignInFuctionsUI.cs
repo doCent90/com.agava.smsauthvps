@@ -62,6 +62,7 @@ namespace Agava.Wink
         internal void OnUnlinkClicked(string device)
         {
             _winkAccessManager.Unlink(device);
+            _notifyWindowHandler.CloseWindow(WindowType.Redirect);
             _notifyWindowHandler.CloseWindow(WindowType.Unlink);
             _notifyWindowHandler.OpenSignInWindow();
         }
@@ -100,13 +101,13 @@ namespace Agava.Wink
                 _notifyWindowHandler.CloseWindow(WindowType.ProccessOn);
                 AnalyticsWinkService.SendEnterOtpCodeWindow();
 
-                _notifyWindowHandler.OpenInputOtpCodeWindow(phone, 
+                _notifyWindowHandler.OpenInputOtpCodeWindow(phone,
                 onInputDone: (code) =>
                 {
                     _winkAccessManager.SendOtpCode(code);
                     AnalyticsWinkService.SendOnEnteredOtpCodeWindow();
                 },
-                onBackClicked: () => 
+                onBackClicked: () =>
                 {
                     _notifyWindowHandler.CloseWindow(WindowType.EnterOtpCode);
                     _notifyWindowHandler.OpenSignInWindow();

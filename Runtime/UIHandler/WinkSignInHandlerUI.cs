@@ -197,8 +197,11 @@ namespace Agava.Wink
 
                 if (WinkAccessManager.Instance.HasAccess == false)
                 {
-                    _notifyWindowHandler.OpenWindow(WindowType.Redirect);
-                    AnalyticsWinkService.SendPayWallWindow();
+                    if (_demoTimer.Expired == false)
+                    {
+                        _notifyWindowHandler.OpenWindow(WindowType.Redirect);
+                        AnalyticsWinkService.SendPayWallWindow();
+                    }
                 }
             });
 

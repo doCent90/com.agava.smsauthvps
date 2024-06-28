@@ -19,6 +19,11 @@ namespace Agava.Wink
 
         public void ReplaceValue(string value)
         {
+            var localization = transform.GetComponent<Lean.Localization.LeanLocalizedBehaviour>();
+
+            if (localization != null)
+                _startText = Lean.Localization.LeanLocalization.GetTranslationText(localization.TranslationName);
+
             _text.text = _startText.Replace($"{{{_placeholderText}}}", value);
         }
     }
