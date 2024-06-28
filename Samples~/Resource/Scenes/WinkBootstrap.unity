@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.12731715, g: 0.13414735, b: 0.121078536, a: 1}
+  m_IndirectSpecularColor: {r: 0.12731749, g: 0.13414757, b: 0.1210787, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -734,7 +734,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u0417\u0430\u0433\u0440\u0443\u0437\u043A\u0430..."
+  m_Text: Loading...
 --- !u!114 &1380632647
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1020,10 +1020,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 806f0696300aeac44a0e17efee222854, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentLanguage: Russian
-  detectLanguage: 1
-  defaultLanguage: Russian
-  saveLoad: 1
+  currentLanguage: English
+  detectLanguage: 0
+  defaultLanguage: English
+  saveLoad: 0
   prefabs: []
 --- !u!114 &908546100344722285
 MonoBehaviour:
@@ -1649,7 +1649,7 @@ MonoBehaviour:
   data: 0
   entries:
   - Language: English
-    Text: Get a repeat code after {} sec
+    Text: Get a repeat code after {time} sec
     Object: {fileID: 0}
   - Language: Russian
     Text: "\u041F\u043E\u043B\u0443\u0447\u0438\u0442\u044C \u043A\u043E\u0434 \u043F\u043E\u0432\u0442\u043E\u0440\u043D\u043E
@@ -1734,7 +1734,7 @@ MonoBehaviour:
   data: 0
   entries:
   - Language: English
-    Text: Check your Internter connection to continue playing.
+    Text: Check your Internet connection to continue playing.
     Object: {fileID: 0}
   - Language: Russian
     Text: "\u041F\u0440\u043E\u0432\u0435\u0440\u044C\u0442\u0435 \u0441\u0432\u043E\u0451
@@ -1855,8 +1855,8 @@ MonoBehaviour:
   data: 0
   entries:
   - Language: English
-    Text: "<color=#4D4D3D>I accept the terms</color> of the user agreement and the
-      privacy \npolicy of the Wink Music service"
+    Text: <color=#4D4D3D>I accept the terms</color> of the user agreement and privacy
+      policy of the service
     Object: {fileID: 0}
   - Language: Russian
     Text: "<color=#4D4D3D>\u042F \u043F\u0440\u0438\u043D\u0438\u043C\u0430\u044E
@@ -3561,6 +3561,10 @@ PrefabInstance:
     - target: {fileID: 5548501483995298668, guid: 9c403f81a96e0614aa478405fd9d1560, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5608395904917421869, guid: 9c403f81a96e0614aa478405fd9d1560, type: 3}
+      propertyPath: _demoTimer._defaultTimerSeconds
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 5660423469558593993, guid: 9c403f81a96e0614aa478405fd9d1560, type: 3}
       propertyPath: m_AnchorMax.y
