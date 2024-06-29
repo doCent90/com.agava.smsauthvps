@@ -169,6 +169,8 @@ namespace Agava.Wink
             {
                 button.onClick.RemoveListener(()
                     => OnUnlinkClicked(button.GetComponentInChildren<TMP_Text>().text));
+
+                Destroy(button.gameObject);
             }
 
             _devicesIdButtons.Clear();
