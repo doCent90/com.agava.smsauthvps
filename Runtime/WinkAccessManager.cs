@@ -56,7 +56,7 @@ namespace Agava.Wink
             DontDestroyOnLoad(this);
 
             if (UnityEngine.PlayerPrefs.HasKey(UniqueId) == false)
-                _uniqueId = SystemInfo.deviceName + Application.identifier + _additiveId;
+                _uniqueId = SystemInfo.deviceUniqueIdentifier + _additiveId;
             else
                 _uniqueId = UnityEngine.PlayerPrefs.GetString(UniqueId);
 
@@ -120,7 +120,7 @@ namespace Agava.Wink
             });
         }
 
-        private void QuickAccess() 
+        public void QuickAccess() 
             => _requestHandler.QuickAccess(LoginData.phone, OnSubscriptionExist, ResetLogin, _winkSubscriptionAccessRequest, OnAuthenficationSuccessfully);
 
         private void OnAuthenficationSuccessfully()
