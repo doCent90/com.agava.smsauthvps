@@ -98,11 +98,8 @@ namespace Agava.Wink
                 _notifyWindowHandler.OpenWindow(WindowType.NoEnternet);
                 yield return new WaitWhile(() => Application.internetReachability == NetworkReachability.NotReachable);
             }
-            else
-            {
-                _notifyWindowHandler.CloseWindow(WindowType.NoEnternet);
-            }
 
+            _notifyWindowHandler.CloseWindow(WindowType.NoEnternet);
             _signInFuctionsUI.SetRemoteConfig();
         }
 

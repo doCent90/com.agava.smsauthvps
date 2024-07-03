@@ -93,6 +93,7 @@ namespace Agava.Wink
         public void ResetInputText()
         {
             _inputField.text = string.Empty;
+            _codeFormatter.Clear();
             _enterCodeShaking.StartAnimation();
         }
 
