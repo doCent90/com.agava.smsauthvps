@@ -32,12 +32,6 @@ namespace Agava.Wink
 
         internal void OnSignInClicked(string phone, Action onAuthenficationSuccessfully)
         {
-            if (string.IsNullOrEmpty(phone))
-            {
-                _notifyWindowHandler.OpenWindow(WindowType.WrongNumber);
-                return;
-            }
-
             _notifyWindowHandler.OpenWindow(WindowType.ProccessOn);
             AnalyticsWinkService.SendOnEnteredPhoneWindow();
 

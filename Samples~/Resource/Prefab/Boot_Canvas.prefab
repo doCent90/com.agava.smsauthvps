@@ -316,6 +316,7 @@ GameObject:
   - component: {fileID: 3357559736251278273}
   - component: {fileID: 7643278630717808800}
   - component: {fileID: 6496383777900911950}
+  - component: {fileID: 6127130459431277801}
   m_Layer: 5
   m_Name: Back
   m_TagString: Untagged
@@ -338,7 +339,7 @@ RectTransform:
   m_Father: {fileID: 8574913841638285888}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -370,7 +371,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: 9d10a3e60b646fc4eb5efca6a25be27a, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -380,6 +381,20 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &6127130459431277801
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3420276267175638798}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86710e43de46f6f4bac7c8e50813a599, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AspectMode: 4
+  m_AspectRatio: 2.164
 --- !u!1 &8946962578614644737
 GameObject:
   m_ObjectHideFlags: 0
@@ -486,7 +501,7 @@ MonoBehaviour:
   _startLogoPresenter: {fileID: 115698839703872439}
   _sceneLoader: {fileID: 0}
   _loadingProgressBar: {fileID: 0}
-  _restartAfterAuth: 1
+  _restartAfterAuth: 0
 --- !u!114 &115698839703872439
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -505,7 +520,7 @@ MonoBehaviour:
   _enLogo: {fileID: 5347123710913937166}
   _ruLogo: {fileID: 5950134469734200129}
   _loading: {fileID: 6073833241247710249}
-  _enable: 1
+  _enable: 0
 --- !u!225 &4849872907614531783
 CanvasGroup:
   m_ObjectHideFlags: 0
