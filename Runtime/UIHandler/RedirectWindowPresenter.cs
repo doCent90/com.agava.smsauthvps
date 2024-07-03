@@ -32,7 +32,9 @@ namespace Agava.Wink
             if (WinkAccessManager.Instance.Authenficated && _signInButton != null)
                 _signInButton.gameObject.SetActive(false);
 
-            _closeButton.gameObject.SetActive(closeButton);
+            if (_closeButton != null)
+                _closeButton.gameObject.SetActive(closeButton);
+
             EnableCanvasGroup(_canvasGroup);
         }
 
