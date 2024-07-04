@@ -4,11 +4,17 @@ using UnityEngine;
 public static class AppMetricaActivator
 {
     private const string FirtsAppMetricaLaunch = nameof(FirtsAppMetricaLaunch);
+    private const string TestKey = "e8883556-3e2e-4706-a0a5-a7eb677fe077";
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     private static void Activate()
     {
-        string key = "e8883556-3e2e-4706-a0a5-a7eb677fe077";
+        string key = TestKey;
+
+        var info = Resources.Load<AppMetricaInfo>("AppMetricaInfo");
+
+        if (info != null)
+            key = info.Key;
 
         AppMetrica.Activate(new AppMetricaConfig(key)
         {
