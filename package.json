@@ -1,6 +1,6 @@
 {
   "name": "com.agava.smsauthvps",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "displayName": "Sms Auth VPS",
   "type": "library",
   "unity": "2022.3",
