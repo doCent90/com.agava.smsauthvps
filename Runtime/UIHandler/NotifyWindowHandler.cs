@@ -20,6 +20,7 @@ namespace Agava.Wink
         [SerializeField] private RedirectWindowPresenter _redirectToWebsiteWindow;
         [SerializeField] private InputWindowPresenter _enterCodeWindow;
         [SerializeField] private WinkProfileWindow _winkProfileWindow;
+        [SerializeField] private DeleteAccountWindowPresenter _deleteAccountWindow;
         [Header("All UI Windows")]
         [SerializeField] private List<WindowPresenter> _windows;
 
@@ -32,6 +33,7 @@ namespace Agava.Wink
             => _enterCodeWindow.Enable(phone, onInputDone, onBackClicked);
         internal void OpenHelloWindow(Action onEnd) => _helloWindow.Enable(onEnd);
         internal void OpenDemoExpiredWindow(bool closeButton) => _demoTimerExpiredWindow.Enable(closeButton);
+        internal void OpenDeleteAccountWindow(Action onDeleteAccount) => _deleteAccountWindow.Enable(onDeleteAccount);
 
         internal void ResetInputWindow() => _enterCodeWindow.ResetInputText();
 

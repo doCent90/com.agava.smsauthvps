@@ -63,6 +63,8 @@ namespace Agava.Wink
 
             yield return new WaitUntil(() => { _loadingProgressBar.SetProgress(loadingScene.progress, 0.5f, 1.0f); return loadingScene.isDone; });
 
+            _winkAccessManager.AccountDeleted += OnAccountDeleted;
+
             _loadingProgressBar.Disable();
             AnalyticsWinkService.SendStartApp(appId: Application.identifier);
         }
@@ -70,6 +72,16 @@ namespace Agava.Wink
         private void OnDownloadCloudSavesProgress(float progress)
         {
             _loadingProgressBar.SetProgress(progress, 0.0f, 0.5f);
+        }
+
+        private void OnAccountDeleted()
+        {
+            _winkAccessManager.AccountDeleted -= OnAccountDeleted;
+
+            Restarted?.Invoke();
+
+            if (_restartAfterAuth)
+                _sceneLoader.LoadGameScene();
         }
 
         private IEnumerator OnStarted()

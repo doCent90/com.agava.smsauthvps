@@ -18,5 +18,6 @@ namespace Agava.Wink
         EnterOtpCode,
         Hello,
         WinkProfile,
+        DeleteAccount,
     }
 }

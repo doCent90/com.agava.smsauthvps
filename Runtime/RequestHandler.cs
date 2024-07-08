@@ -18,13 +18,14 @@ namespace Agava.Wink
     [Preserve]
     internal class RequestHandler
     {
-        internal async Task<LoginData> Regist(string phoneNumber, string uniqueId, Action<bool> otpCodeRequest)
+        internal async Task<LoginData> Regist(string phoneNumber, string uniqueId, string appId, Action<bool> otpCodeRequest)
         {
             LoginData data = new()
             {
                 phone = phoneNumber,
                 otp_code = "0",
                 device_id = uniqueId,
+                app_id = appId,
             };
 
             Response response = await SmsAuthApi.Regist(phoneNumber);
@@ -42,15 +43,15 @@ namespace Agava.Wink
             }
         }
 
-        internal async void Unlink(string deviceId, Action onResetLogin)
+        internal async void Unlink(UnlinkData unlinkData, Action onResetLogin)
         {
-            Debug.Log(deviceId);
+            Debug.Log($"deviceId: {unlinkData.device_id}, appId: {unlinkData.app_id}");
 
             var tokens = SaveLoadLocalDataService.Load<Tokens>(TokenLifeHelper.Tokens);
-            var resopnse = await SmsAuthApi.Unlink(tokens.access, deviceId);
+            var response = await SmsAuthApi.Unlink(tokens.access, unlinkData);
 
-            if (resopnse.statusCode != UnityWebRequest.Result.Success)
-                Debug.LogError("Unlink fail: " + resopnse.statusCode);
+            if (response.statusCode != UnityWebRequest.Result.Success)
+                Debug.LogError("Unlink fail: " + response.statusCode);
             else
                 onResetLogin?.Invoke();
         }
@@ -87,7 +88,7 @@ namespace Agava.Wink
 
                 if (string.IsNullOrEmpty(tokens.refresh))
                 {
-                    OnLimitDevicesReached(onLimitReached);
+                    OnLimitDevicesReached(onLimitReached, data.app_id);
                     return;
                 }
 
@@ -152,10 +153,21 @@ namespace Agava.Wink
             }
         }
 
-        internal async void OnLimitDevicesReached(Action<IReadOnlyList<string>> onLimitReached)
+        internal async void DeleteAccount(Action onDeleteAccount)
+        {
+            var tokens = SaveLoadLocalDataService.Load<Tokens>(TokenLifeHelper.Tokens);
+            var response = await SmsAuthApi.DeleteAccount(tokens.access);
+
+            if (response.statusCode != UnityWebRequest.Result.Success)
+                Debug.LogError("Account deletion fail: " + response.statusCode);
+            else
+                onDeleteAccount?.Invoke();
+        }
+
+        internal async void OnLimitDevicesReached(Action<IReadOnlyList<string>> onLimitReached, string app_id)
         {
             Tokens tokens = TokenLifeHelper.GetTokens();
-            var response = await SmsAuthApi.GetDevices(tokens.access);
+            var response = await SmsAuthApi.GetDevices(tokens.access, app_id);
 
             if (response.statusCode != UnityWebRequest.Result.Success)
             {

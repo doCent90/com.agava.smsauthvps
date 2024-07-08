@@ -133,6 +133,11 @@ namespace Agava.Wink
             }
         }
 
+        internal void OnDeleteAccountButtonClick()
+        {
+            _notifyWindowHandler.OpenDeleteAccountWindow(_winkAccessManager.DeleteAccount);
+        }
+
         private void OnSignInClicked()
         {
             string number = WinkAcceessHelper.GetNumber(_numbersInputField.text, _minNumberCount, _maxNumberCount, _additivePlusChar);

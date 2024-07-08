@@ -31,12 +31,14 @@ namespace Agava.Wink
         public LoginData LoginData { get; private set; }
         public bool Authenficated { get; private set; } = false;
         public bool HasAccess { get; private set; } = false;
+        public string AppId => Application.identifier;
         public static WinkAccessManager Instance { get; private set; }
 
         public event Action<IReadOnlyList<string>> LimitReached;
         public event Action ResetLogin;
         public event Action AuthorizationSuccessfully;
         public event Action AuthenficationSuccessfully;
+        public event Action AccountDeleted;
 
         private void OnApplicationFocus(bool focus)
         {
@@ -61,13 +63,13 @@ namespace Agava.Wink
                 _uniqueId = UnityEngine.PlayerPrefs.GetString(UniqueId);
 
             if (UnityEngine.PlayerPrefs.HasKey(PhoneNumber))
-                LoginData = new LoginData() { phone = UnityEngine.PlayerPrefs.GetString(PhoneNumber), device_id = _uniqueId };
+                LoginData = new LoginData() { phone = UnityEngine.PlayerPrefs.GetString(PhoneNumber), device_id = _uniqueId, app_id = AppId };
 
             if (LoginData != null)
                 StartTimespentAnalytics();
 
             if (SmsAuthApi.Initialized == false)
-                SmsAuthApi.Initialize(_ip, _uniqueId);
+                SmsAuthApi.Initialize(_ip, AppId);
 
             yield return null;
 
@@ -88,13 +90,16 @@ namespace Agava.Wink
             _winkSubscriptionAccessRequest = winkSubscriptionAccessRequest;
             _otpCodeAccepted = otpCodeAccepted;
             UnityEngine.PlayerPrefs.SetString(PhoneNumber, phoneNumber);
-            LoginData = await _requestHandler.Regist(phoneNumber, _uniqueId, otpCodeRequest);
+            LoginData = await _requestHandler.Regist(phoneNumber, _uniqueId, AppId, otpCodeRequest);
 
             if (_timespentService == null)
                 StartTimespentAnalytics();
         }
 
-        public void Unlink(string deviceId) => _requestHandler.Unlink(deviceId, ResetLogin);
+        public void Unlink(string deviceId, Action onResetLogin = null) => _requestHandler.Unlink(
+            new UnlinkData() { device_id = deviceId, app_id = AppId },
+            onResetLogin = onResetLogin == null ? ResetLogin : onResetLogin
+            );
 
 #if UNITY_EDITOR || TEST
         public void TestEnableSubsription()
@@ -120,8 +125,25 @@ namespace Agava.Wink
             });
         }
 
-        public void QuickAccess() 
+        public void QuickAccess()
             => _requestHandler.QuickAccess(LoginData.phone, OnSubscriptionExist, ResetLogin, _winkSubscriptionAccessRequest, OnAuthenficationSuccessfully);
+
+        public void DeleteAccount()
+        {
+            if (_timespentService != null)
+            {
+                _timespentService.OnFinishedApp();
+                _timespentService = null;
+            }
+
+            Unlink(_uniqueId, () => _requestHandler.DeleteAccount(() =>
+            {
+                HasAccess = false;
+                Authenficated = false;
+                UnityEngine.PlayerPrefs.DeleteKey(TokenLifeHelper.Tokens);
+                AccountDeleted?.Invoke();
+            }));
+        }
 
         private void OnAuthenficationSuccessfully()
         {
@@ -161,7 +183,7 @@ namespace Agava.Wink
                     {
                         AnalyticsWinkService.SendSanId(responseGetSanId.body);
                         AnalyticsWinkService.SendHasActiveAccountNewUser(hasActiveAcc: true);
-                        SmsAuthApi.OnUserAddApp(LoginData.phone, responseGetSanId.body);
+                        SmsAuthApi.OnUserAddApp(LoginData.phone, responseGetSanId.body, AppId);
                         PlayerPrefs.SetString(FirstRegist, "done");
                     }
                 }
@@ -174,7 +196,7 @@ namespace Agava.Wink
 
         private void StartTimespentAnalytics()
         {
-            _timespentService = new(this, LoginData.phone, _uniqueId, Application.identifier);
+            _timespentService = new(this, LoginData.phone, _uniqueId, AppId);
             _timespentService.OnStartedApp();
         }
 

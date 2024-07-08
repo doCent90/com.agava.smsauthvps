@@ -9,7 +9,7 @@ namespace Agava.Wink
     {
         [SerializeField] private Utils.SlicedFilledImage _progressBar;
         [SerializeField] private CanvasGroup _canvasGroup;
-        [SerializeField, Tooltip("Passive progress per second")] private float _passiveProgress;
+        [SerializeField, Tooltip("Passive progress per second")] private float _passiveProgress = 0.1f;
 
         private const float Max = 1.0f;
         private const float Min = 0.0f;
@@ -34,9 +34,11 @@ namespace Agava.Wink
             {
                 WaitForEndOfFrame waitForEndOfFrame = new WaitForEndOfFrame();
 
-                SetProgress(Mathf.Lerp(_progress, Max, Time.deltaTime * _passiveProgress));
-
-                yield return waitForEndOfFrame;
+                while (_progress < Max)
+                {
+                    SetProgress(Mathf.Lerp(_progress, Max, Time.deltaTime * _passiveProgress));
+                    yield return waitForEndOfFrame;
+                }
             }
         }
 
