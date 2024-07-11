@@ -113,7 +113,7 @@ namespace Agava.Wink
         public void CloseWindow(WindowType type) => _notifyWindowHandler.CloseWindow(type);
         public void CloseAllWindows() => _notifyWindowHandler.CloseAllWindows(AllWindowsClosed);
 
-        internal void OnWinkButtonClick()
+        public void OnWinkButtonClick()
         {
             if (_winkAccessManager.Authenficated)
             {
@@ -133,7 +133,7 @@ namespace Agava.Wink
             }
         }
 
-        internal void OnDeleteAccountButtonClick()
+        public void OnDeleteAccountButtonClick()
         {
             _notifyWindowHandler.OpenDeleteAccountWindow(_winkAccessManager.DeleteAccount);
         }
