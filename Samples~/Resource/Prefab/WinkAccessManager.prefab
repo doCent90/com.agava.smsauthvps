@@ -7028,7 +7028,6 @@ MonoBehaviour:
   _scalerPresenter:
     _target:
     - {fileID: 6728734749496229230}
-    - {fileID: 0}
     _yOffset: 150
 --- !u!225 &3989151970030902438
 CanvasGroup:
@@ -11320,7 +11319,6 @@ MonoBehaviour:
   _scalerPresenter:
     _target:
     - {fileID: 8794679586755067065}
-    - {fileID: 0}
     _yOffset: 150
   _sendButton: {fileID: 1802181641776006251}
   _sendRepeatCodeButton: {fileID: 5838561172021877909}

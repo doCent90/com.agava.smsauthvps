@@ -1,9 +1,9 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using SmsAuthAPI.DTO;
 using SmsAuthAPI.Program;
-using System.Collections;
 using UnityEngine.Scripting;
 
 namespace Agava.Wink
@@ -22,6 +22,7 @@ namespace Agava.Wink
 
         private RequestHandler _requestHandler;
         private TimespentService _timespentService;
+        private SubscriptionSearchSystem _subscribeSearchSystem;
         private Action<bool> _winkSubscriptionAccessRequest;
         private Action<bool> _otpCodeAccepted;
         private string _uniqueId;
@@ -48,6 +49,12 @@ namespace Agava.Wink
                 _timespentService.OnStartedApp();
         }
 
+        public void Initialize()
+        {
+            if (SmsAuthApi.Initialized == false)
+                SmsAuthApi.Initialize(_ip, AppId);
+        }
+
         public IEnumerator Construct()
         {
             if (Instance == null)
@@ -67,9 +74,6 @@ namespace Agava.Wink
 
             if (LoginData != null)
                 StartTimespentAnalytics();
-
-            if (SmsAuthApi.Initialized == false)
-                SmsAuthApi.Initialize(_ip, AppId);
 
             yield return null;
 
@@ -149,6 +153,7 @@ namespace Agava.Wink
         {
             Authenficated = true;
             AuthenficationSuccessfully?.Invoke();
+            SearchSubscription(LoginData.phone);
 #if UNITY_EDITOR || TEST
             Debug.Log("Authenfication succesfully");
 #endif
@@ -156,6 +161,7 @@ namespace Agava.Wink
 
         private void OnSubscriptionExist()
         {
+            _subscribeSearchSystem?.Stop();
             HasAccess = true;
             Authenficated = true;
             AuthorizationSuccessfully?.Invoke();
@@ -165,6 +171,19 @@ namespace Agava.Wink
 #if UNITY_EDITOR || TEST
             Debug.Log("Wink access succesfully");
 #endif
+        }
+
+        private void SearchSubscription(string phone)
+        {
+            if (_subscribeSearchSystem != null) 
+                return;
+
+            _subscribeSearchSystem = new(phone);
+            _subscribeSearchSystem.StartSearching(onSubscriptionExist: () =>
+            {
+                OnSubscriptionExist();
+                TrySendAnalyticsData(LoginData.phone);
+            });
         }
 
         private async void TrySendAnalyticsData(string phone)

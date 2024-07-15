@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine;
 using SmsAuthAPI.Program;
 using UnityEngine.Scripting;
+using SmsAuthAPI.DTO;
 
 namespace Agava.Wink
 {
@@ -23,6 +24,7 @@ namespace Agava.Wink
         [SerializeField] private bool _restartAfterAuth = true;
 
         private Coroutine _signInProcess;
+        private PreloadService _preloadService;
 
         public static Boot Instance { get; private set; }
 
@@ -40,39 +42,55 @@ namespace Agava.Wink
             if (Instance == null)
                 Instance = this;
 
-            SmsAuthApi.DownloadCloudSavesProgress += OnDownloadCloudSavesProgress;
+            _preloadService = new();
+            _winkAccessManager.Initialize();
+            yield return _preloadService.Preparing();
 
-            _startLogoPresenter.Construct();
-            _startLogoPresenter.ShowLogo();
+            if (_preloadService.IsPluginAwailable)
+            {
+                SmsAuthApi.DownloadCloudSavesProgress += OnDownloadCloudSavesProgress;
 
-            yield return _winkAccessManager.Construct();
-            _winkSignInHandlerUI.Construct(_winkAccessManager);
-            yield return _winkSignInHandlerUI.Initialize();
+                _startLogoPresenter.Construct();
+                _startLogoPresenter.ShowLogo();
 
-            yield return new WaitForSecondsRealtime(_startLogoPresenter.LogoDuration);
-            yield return _startLogoPresenter.HidingLogo();
-            yield return new WaitWhile(() => Application.internetReachability == NetworkReachability.NotReachable);
+                yield return _winkAccessManager.Construct();
+                _winkSignInHandlerUI.Construct(_winkAccessManager);
+                yield return _winkSignInHandlerUI.Initialize();
 
-            _signInProcess = StartCoroutine(OnStarted());
-            yield return _signInProcess;
+                yield return new WaitForSecondsRealtime(_startLogoPresenter.LogoDuration);
+                yield return _startLogoPresenter.HidingLogo();
+                yield return new WaitWhile(() => Application.internetReachability == NetworkReachability.NotReachable);
 
-            _startLogoPresenter.CloseBootView();
-            var loadingScene = _sceneLoader.LoadGameScene();
-            SmsAuthApi.DownloadCloudSavesProgress -= OnDownloadCloudSavesProgress;
-            _loadingProgressBar.Enable();
+                _signInProcess = StartCoroutine(OnStarted());
+                yield return _signInProcess;
 
-            yield return new WaitUntil(() => { _loadingProgressBar.SetProgress(loadingScene.progress, 0.5f, 1.0f); return loadingScene.isDone; });
+                _startLogoPresenter.CloseBootView();
+                var loadingScene = _sceneLoader.LoadGameScene();
+                SmsAuthApi.DownloadCloudSavesProgress -= OnDownloadCloudSavesProgress;
+                _loadingProgressBar.Enable();
 
-            _winkAccessManager.AccountDeleted += OnAccountDeleted;
+                yield return new WaitUntil(() => { _loadingProgressBar.SetProgress(loadingScene.progress, 0.5f, 1.0f); return loadingScene.isDone; });
 
-            _loadingProgressBar.Disable();
-            AnalyticsWinkService.SendStartApp(appId: Application.identifier);
+                _winkAccessManager.AccountDeleted += OnAccountDeleted;
+
+                _loadingProgressBar.Disable();
+                AnalyticsWinkService.SendStartApp(appId: Application.identifier);
+            }
+            else
+            {
+                _loadingProgressBar.Disable();
+                _startLogoPresenter.Construct();
+                _startLogoPresenter.ShowLogo();
+                yield return new WaitForSecondsRealtime(_startLogoPresenter.LogoDuration);
+                yield return _startLogoPresenter.HidingLogo();
+                _startLogoPresenter.CloseBootView();
+
+                _sceneLoader.LoadGameScene();
+            }
         }
 
         private void OnDownloadCloudSavesProgress(float progress)
-        {
-            _loadingProgressBar.SetProgress(progress, 0.0f, 0.5f);
-        }
+            => _loadingProgressBar.SetProgress(progress, 0.0f, 0.5f);
 
         private void OnAccountDeleted()
         {
@@ -124,7 +142,8 @@ namespace Agava.Wink
                     OnSkiped();
                 }
 #if UNITY_EDITOR || TEST
-                Debug.Log($"Boot: App Started. SignIn: {WinkAccessManager.Instance.Authenficated}");
+                Debug.Log($"Boot: App Started. Authenficated: {WinkAccessManager.Instance.Authenficated}");
+                Debug.Log($"Boot: App Started. Authorized: {WinkAccessManager.Instance.HasAccess}");
 #endif
             }
 
