@@ -44,13 +44,13 @@ namespace Agava.Wink
 
             _preloadService = new();
             _winkAccessManager.Initialize();
+            _startLogoPresenter.Construct();
             yield return _preloadService.Preparing();
 
             if (_preloadService.IsPluginAwailable)
             {
                 SmsAuthApi.DownloadCloudSavesProgress += OnDownloadCloudSavesProgress;
 
-                _startLogoPresenter.Construct();
                 _startLogoPresenter.ShowLogo();
 
                 yield return _winkAccessManager.Construct();
@@ -79,12 +79,7 @@ namespace Agava.Wink
             else
             {
                 _loadingProgressBar.Disable();
-                _startLogoPresenter.Construct();
-                _startLogoPresenter.ShowLogo();
-                yield return new WaitForSecondsRealtime(_startLogoPresenter.LogoDuration);
-                yield return _startLogoPresenter.HidingLogo();
                 _startLogoPresenter.CloseBootView();
-
                 _sceneLoader.LoadGameScene();
             }
         }

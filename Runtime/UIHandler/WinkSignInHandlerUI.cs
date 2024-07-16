@@ -51,6 +51,8 @@ namespace Agava.Wink
 
         public void Dispose()
         {
+            if (_signInFuctionsUI == null) return;
+
             _signInButton.onClick.RemoveAllListeners();
             _openSignInDemoButton.onClick.RemoveAllListeners();
 
