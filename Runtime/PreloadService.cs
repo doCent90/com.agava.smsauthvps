@@ -9,12 +9,13 @@ namespace Agava.Wink
     [Preserve]
     public class PreloadService
     {
+        private const string True = "true";
 #if UNITY_STANDALONE
-        private const string RemoteName = "skip-auth-standalone";
+        private const string RemoteName = "-standalone";
 #elif UNITY_ANDROID
-        private const string RemoteName = "skip-auth-android";
+        private const string RemoteName = "-android";
 #elif UNITY_IOS
-        private const string RemoteName = "skip-auth-ios";
+        private const string RemoteName = "-ios";
 #endif
         private bool _isEndPrepare = false;
 
@@ -37,13 +38,13 @@ namespace Agava.Wink
 
         private async void SetPluginAwailable()
         {
-            var response = await SmsAuthApi.GetRemoteConfig(RemoteName);
+            var response = await SmsAuthApi.GetRemoteConfig(Application.identifier + RemoteName);
 
             if (response.statusCode == UnityWebRequest.Result.Success)
             {
                 if (string.IsNullOrEmpty(response.body))
                     IsPluginAwailable = false;
-                else if (response.body == "true")
+                else if (response.body == True)
                     IsPluginAwailable = true;
                 else
                     IsPluginAwailable = false;
