@@ -16,15 +16,18 @@ namespace Agava.Wink
         private void Update()
         {
             if (PreloadService.Instance == null)
-                return;
-
-            if (PreloadService.Instance.IsPluginAwailable == false)
             {
-                gameObject.SetActive(false);
+                _button.gameObject.SetActive(false);
                 return;
             }
 
-            gameObject.SetActive(_winkSignInHandlerUI != null);
+            if (PreloadService.Instance.IsPluginAwailable == false)
+            {
+                _button.gameObject.SetActive(false);
+                return;
+            }
+
+            _button.gameObject.SetActive(_winkSignInHandlerUI != null);
         }
 
         private void OnEnable() => _button.onClick.AddListener(OnButtonClick);
