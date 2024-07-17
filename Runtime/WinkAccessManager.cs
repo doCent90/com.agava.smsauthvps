@@ -53,13 +53,13 @@ namespace Agava.Wink
         {
             if (SmsAuthApi.Initialized == false)
                 SmsAuthApi.Initialize(_ip, AppId);
+
+            if (Instance == null)
+                Instance = this;
         }
 
         public IEnumerator Construct()
-        {
-            if (Instance == null)
-                Instance = this;
-
+        {         
             _requestHandler = new();
 
             DontDestroyOnLoad(this);
