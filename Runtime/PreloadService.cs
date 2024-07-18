@@ -18,14 +18,20 @@ namespace Agava.Wink
         private const string RemoteName = "-ios";
 #endif
         private bool _isEndPrepare = false;
+        private readonly WinkSignInHandlerUI _winkSignInHandlerUI;
+
+        public PreloadService(WinkSignInHandlerUI winkSignInHandlerUI)
+        {
+            Instance ??= this;
+            _winkSignInHandlerUI = winkSignInHandlerUI;
+        }
 
         public static PreloadService Instance { get; private set; }
         public bool IsPluginAwailable { get; private set; } = false;
 
-        public PreloadService() => Instance ??= this;
-
         public IEnumerator Preparing()
         {
+            yield return _winkSignInHandlerUI.Initialize();
             yield return new WaitUntil(() => SmsAuthApi.Initialized);
             yield return null;
 

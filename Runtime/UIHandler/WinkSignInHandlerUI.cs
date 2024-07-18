@@ -65,7 +65,24 @@ namespace Agava.Wink
             _demoTimer.Dispose();
         }
 
-        public void Construct(WinkAccessManager winkAccessManager)
+        public IEnumerator Initialize()
+        {
+            if (Application.internetReachability == NetworkReachability.NotReachable)
+            {
+                _notifyWindowHandler.OpenWindow(WindowType.NoEnternet);
+                yield return new WaitWhile(() => Application.internetReachability == NetworkReachability.NotReachable);
+            }
+
+            _notifyWindowHandler.CloseWindow(WindowType.NoEnternet);
+        }
+
+        public void Construct()
+        {
+            StartCoroutine(EnternetChecking());
+            _signInFuctionsUI.SetRemoteConfig();
+        }
+
+        public void StartSevice(WinkAccessManager winkAccessManager)
         {
             if (Instance == null)
                 Instance = this;
@@ -91,18 +108,6 @@ namespace Agava.Wink
             _winkAccessManager.AuthenficationSuccessfully += OnAuthenticationSuccessfully;
             _winkAccessManager.AuthorizationSuccessfully += OnAuthorizationSuccessfully;
             _demoTimer.TimerExpired += OnTimerExpired;
-        }
-
-        public IEnumerator Initialize()
-        {
-            if (Application.internetReachability == NetworkReachability.NotReachable)
-            {
-                _notifyWindowHandler.OpenWindow(WindowType.NoEnternet);
-                yield return new WaitWhile(() => Application.internetReachability == NetworkReachability.NotReachable);
-            }
-
-            _notifyWindowHandler.CloseWindow(WindowType.NoEnternet);
-            _signInFuctionsUI.SetRemoteConfig();
         }
 
         public void OpenSignWindow()
@@ -247,6 +252,27 @@ namespace Agava.Wink
         }
 
         private void OnTimerExpired() => _notifyWindowHandler.OpenDemoExpiredWindow(false);
+
+        private IEnumerator EnternetChecking()
+        {
+            var wait = new WaitForSecondsRealtime(1f);
+
+            while (true)
+            {
+                if (Application.internetReachability == NetworkReachability.NotReachable)
+                {
+                    _notifyWindowHandler.OpenWindow(WindowType.NoEnternet);
+                    Debug.LogError("NO CONNECTION");
+                }
+                else
+                {
+                    if (_notifyWindowHandler.HasOpenedWindow(WindowType.NoEnternet))
+                        _notifyWindowHandler.CloseWindow(WindowType.NoEnternet);
+                }
+
+                yield return wait;
+            }
+        }
         #region TEST_METHODS
 #if UNITY_EDITOR || TEST
         private void OnTestSignInClicked()

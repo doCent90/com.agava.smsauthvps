@@ -42,24 +42,24 @@ namespace Agava.Wink
             if (Instance == null)
                 Instance = this;
 
-            _preloadService = new();
+            _preloadService = new(_winkSignInHandlerUI);
             _winkAccessManager.Initialize();
             _startLogoPresenter.Construct();
             yield return _preloadService.Preparing();
 
             if (_preloadService.IsPluginAwailable)
             {
+                yield return _winkSignInHandlerUI.Initialize();
                 SmsAuthApi.DownloadCloudSavesProgress += OnDownloadCloudSavesProgress;
 
                 _startLogoPresenter.ShowLogo();
 
                 yield return _winkAccessManager.Construct();
-                _winkSignInHandlerUI.Construct(_winkAccessManager);
-                yield return _winkSignInHandlerUI.Initialize();
+                _winkSignInHandlerUI.StartSevice(_winkAccessManager);
+                _winkSignInHandlerUI.Construct();
 
                 yield return new WaitForSecondsRealtime(_startLogoPresenter.LogoDuration);
                 yield return _startLogoPresenter.HidingLogo();
-                yield return new WaitWhile(() => Application.internetReachability == NetworkReachability.NotReachable);
 
                 _signInProcess = StartCoroutine(OnStarted());
                 yield return _signInProcess;
@@ -78,6 +78,7 @@ namespace Agava.Wink
             }
             else
             {
+                yield return _winkSignInHandlerUI.Initialize();
                 _loadingProgressBar.Disable();
                 _startLogoPresenter.CloseBootView();
                 _sceneLoader.LoadGameScene();

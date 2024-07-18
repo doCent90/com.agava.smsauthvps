@@ -37,7 +37,7 @@ namespace Agava.Wink
 
                 if (token.IsCancellationRequested == false)
                 {
-                    await Task.Delay(CoolDown, token);
+                    await Task.Delay(CoolDown);
                     var response = await SmsAuthApi.HasActiveAccount(_phone);
 
                     if (response.statusCode == UnityWebRequest.Result.Success
