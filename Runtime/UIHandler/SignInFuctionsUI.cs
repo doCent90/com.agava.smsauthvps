@@ -30,7 +30,7 @@ namespace Agava.Wink
             _winkSignInHandlerUI = winkSignInHandlerUI;
         }
 
-        internal void OnSignInClicked(string phone, Action onAuthenficationSuccessfully)
+        internal void OnSignInClicked(string phone)
         {
             _notifyWindowHandler.OpenWindow(WindowType.ProccessOn);
             AnalyticsWinkService.SendOnEnteredPhoneWindow();
@@ -39,13 +39,6 @@ namespace Agava.Wink
             otpCodeRequest: (hasOtpCode) =>
             {
                 OnOtpCodeRequested(phone, hasOtpCode);
-            },
-            winkSubscriptionAccessRequest: (hasAccess) =>
-            {
-                if (hasAccess == false)
-                    onAuthenficationSuccessfully?.Invoke();
-
-                OnAutherizationSuccesfully();
             },
             otpCodeAccepted: (accepted) =>
             {
@@ -127,11 +120,18 @@ namespace Agava.Wink
             }
         }
 
-        private void OnAutherizationSuccesfully()
+        internal void OnSignInSuccesfully(bool hasAccess)
         {
-            _demoTimer.Stop();
+            if (hasAccess)
+                OnAuthorizationSuccessfully();
+
             _notifyWindowHandler.CloseWindow(WindowType.SignIn);
             _notifyWindowHandler.CloseWindow(WindowType.ProccessOn);
+        }
+
+        internal void OnAuthorizationSuccessfully()
+        {
+            _demoTimer.Stop();
             _notifyWindowHandler.CloseWindow(WindowType.DemoTimerExpired);
         }
     }

@@ -27,11 +27,18 @@ namespace Agava.Wink
             _yesButton.onClick.AddListener(OnYesClicked);
         }
 
+        private void Update()
+        {
+            if (_signInButton != null)
+            {
+                bool authenticated = WinkAccessManager.Instance == null ? false : WinkAccessManager.Instance.Authenficated;
+                _signInButton.gameObject.SetActive(authenticated == false);
+                _yesButton.gameObject.SetActive(authenticated);
+            }
+        }
+
         public void Enable(bool closeButton)
         {
-            if (WinkAccessManager.Instance.Authenficated && _signInButton != null)
-                _signInButton.gameObject.SetActive(false);
-
             if (_closeButton != null)
                 _closeButton.gameObject.SetActive(closeButton);
 

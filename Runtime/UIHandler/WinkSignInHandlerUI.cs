@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using TMPro;
 using SmsAuthAPI.Program;
 using UnityEngine.Scripting;
+using System.Threading.Tasks;
 
 namespace Agava.Wink
 {
@@ -60,8 +61,7 @@ namespace Agava.Wink
 
             _winkAccessManager.ResetLogin -= OpenSignWindow;
             _winkAccessManager.LimitReached -= OnLimitReached;
-            _winkAccessManager.AuthenficationSuccessfully -= OnAuthenticationSuccessfully;
-            _winkAccessManager.AuthorizationSuccessfully -= OnAuthorizationSuccessfully;
+            _winkAccessManager.SignInSuccessfully -= OnSignInSuccessfully;
             _demoTimer.Dispose();
         }
 
@@ -105,13 +105,14 @@ namespace Agava.Wink
 
             _winkAccessManager.ResetLogin += OpenSignWindow;
             _winkAccessManager.LimitReached += OnLimitReached;
-            _winkAccessManager.AuthenficationSuccessfully += OnAuthenticationSuccessfully;
+            _winkAccessManager.SignInSuccessfully += OnSignInSuccessfully;
             _winkAccessManager.AuthorizationSuccessfully += OnAuthorizationSuccessfully;
             _demoTimer.TimerExpired += OnTimerExpired;
         }
 
         public void OpenSignWindow()
         {
+            _numbersInputField.text = string.Empty;
             _notifyWindowHandler.OpenSignInWindow(() => SignInWindowClosed?.Invoke());
             AnalyticsWinkService.SendEnterPhoneWindow();
         }
@@ -148,13 +149,12 @@ namespace Agava.Wink
         private void OnSignInClicked()
         {
             string number = WinkAcceessHelper.GetNumber(_numbersInputField.text, _minNumberCount, _maxNumberCount, _additivePlusChar);
-
             string formattedNumber = PhoneNumber.FormatNumber(number);
 
             foreach (TextPlaceholder placeholder in _phoneNumberPlaceholders)
                 placeholder.ReplaceValue(formattedNumber);
 
-            _signInFuctionsUI.OnSignInClicked(number, OnAuthenticationSuccessfully);
+            _signInFuctionsUI.OnSignInClicked(number);
         }
 
         private void OnLimitReached(IReadOnlyList<string> devicesList)
@@ -186,9 +186,42 @@ namespace Agava.Wink
             _signInFuctionsUI.OnUnlinkClicked(device);
         }
 
-        private void OnAuthenticationSuccessfully()
+        private void OnAuthorizationSuccessfully() => _signInFuctionsUI.OnAuthorizationSuccessfully();
+
+        private async void OnSignInSuccessfully(bool hasAccess)
         {
+            _signInFuctionsUI.OnSignInSuccesfully(hasAccess);
+
             _openSignInButton.gameObject.SetActive(false);
+            _signInButton.gameObject.SetActive(false);
+
+            SetPhone();
+            bool hasId = await SetId(hasAccess);
+
+            StartCoroutine(OpeningHelloWindow());
+
+            IEnumerator OpeningHelloWindow()
+            {
+                yield return new WaitUntil(() => hasId);
+
+                _notifyWindowHandler.OpenHelloWindow(onEnd: () =>
+                {
+                    AnalyticsWinkService.SendHelloWindow();
+
+                    if (hasAccess == false)
+                    {
+                        if (_demoTimer.Expired == false)
+                        {
+                            _notifyWindowHandler.OpenWindow(WindowType.Redirect);
+                            AnalyticsWinkService.SendPayWallWindow();
+                        }
+                    }
+                });
+            }
+        }
+
+        private void SetPhone()
+        {
             string number = "N/A";
 
             if (UnityEngine.PlayerPrefs.HasKey(_winkAccessManager.PhoneNumber))
@@ -196,32 +229,28 @@ namespace Agava.Wink
 
             foreach (TextPlaceholder placeholder in _phoneNumberPlaceholders)
                 placeholder.ReplaceValue(number);
-
-            string sanId = "N/A";
-
-            foreach (TextPlaceholder placeholder in _idPlaceholders)
-                placeholder.ReplaceValue(sanId);
-
-            _notifyWindowHandler.OpenHelloWindow(onEnd: () =>
-            {
-                AnalyticsWinkService.SendHelloWindow();
-
-                if (WinkAccessManager.Instance.HasAccess == false)
-                {
-                    if (_demoTimer.Expired == false)
-                    {
-                        _notifyWindowHandler.OpenWindow(WindowType.Redirect);
-                        AnalyticsWinkService.SendPayWallWindow();
-                    }
-                }
-            });
-
-            if (WinkAccessManager.Instance.Authenficated)
-                _signInButton.gameObject.SetActive(false);
         }
 
-        private async void OnAuthorizationSuccessfully()
+        private async Task<bool> SetId(bool hasAccess)
         {
+            string id = null;
+
+            if (hasAccess)
+                id = await TryGetId();
+
+            if (string.IsNullOrEmpty(id))
+                id = "N/A";
+
+            foreach (TextPlaceholder placeholder in _idPlaceholders)
+                placeholder.ReplaceValue(id);
+
+            return true;
+        }
+
+        private async Task<string> TryGetId()
+        {
+            string sanId = null;
+
             if (UnityEngine.PlayerPrefs.HasKey(_winkAccessManager.SanId) == false && UnityEngine.PlayerPrefs.HasKey(_winkAccessManager.PhoneNumber))
             {
                 var phone = UnityEngine.PlayerPrefs.GetString(_winkAccessManager.PhoneNumber);
@@ -231,24 +260,10 @@ namespace Agava.Wink
                     UnityEngine.PlayerPrefs.SetString(_winkAccessManager.SanId, responseGetSanId.body);
             }
 
-            string sanId = "N/A";
+            if (UnityEngine.PlayerPrefs.HasKey(_winkAccessManager.SanId))
+                sanId = UnityEngine.PlayerPrefs.GetString(_winkAccessManager.SanId);
 
-            foreach (TextPlaceholder placeholder in _idPlaceholders)
-                placeholder.ReplaceValue(sanId);
-
-            var wait = new WaitWhile(() => UnityEngine.PlayerPrefs.HasKey(_winkAccessManager.SanId) == false);
-
-            StartCoroutine(HellowWindowOpening());
-            IEnumerator HellowWindowOpening()
-            {
-                yield return wait;
-
-                if (UnityEngine.PlayerPrefs.HasKey(_winkAccessManager.SanId))
-                    sanId = UnityEngine.PlayerPrefs.GetString(_winkAccessManager.SanId);
-
-                foreach (TextPlaceholder placeholder in _idPlaceholders)
-                    placeholder.ReplaceValue(sanId);
-            }
+            return sanId;
         }
 
         private void OnTimerExpired() => _notifyWindowHandler.OpenDemoExpiredWindow(false);

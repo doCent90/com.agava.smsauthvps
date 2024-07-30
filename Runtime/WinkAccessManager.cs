@@ -37,8 +37,8 @@ namespace Agava.Wink
 
         public event Action<IReadOnlyList<string>> LimitReached;
         public event Action ResetLogin;
+        public event Action<bool> SignInSuccessfully;
         public event Action AuthorizationSuccessfully;
-        public event Action AuthenficationSuccessfully;
         public event Action AccountDeleted;
 
         private void OnApplicationFocus(bool focus)
@@ -59,7 +59,7 @@ namespace Agava.Wink
         }
 
         public IEnumerator Construct()
-        {         
+        {
             _requestHandler = new();
 
             DontDestroyOnLoad(this);
@@ -77,10 +77,13 @@ namespace Agava.Wink
 
             yield return null;
 
+            StartCoroutine(DelayedSendStatistic());
+        }
+
+        public void TryQuickAccess()
+        {
             if (UnityEngine.PlayerPrefs.HasKey(TokenLifeHelper.Tokens))
                 QuickAccess();
-
-            StartCoroutine(DelayedSendStatistic());
         }
 
         public void SendOtpCode(string enteredOtpCode)
@@ -89,9 +92,9 @@ namespace Agava.Wink
             Login(LoginData);
         }
 
-        public async void Regist(string phoneNumber, Action<bool> otpCodeRequest, Action<bool> winkSubscriptionAccessRequest, Action<bool> otpCodeAccepted)
+        public async void Regist(string phoneNumber, Action<bool> otpCodeRequest, Action<bool> otpCodeAccepted)
         {
-            _winkSubscriptionAccessRequest = winkSubscriptionAccessRequest;
+            _winkSubscriptionAccessRequest = OnSignInSuccessfully;
             _otpCodeAccepted = otpCodeAccepted;
             UnityEngine.PlayerPrefs.SetString(PhoneNumber, phoneNumber);
             LoginData = await _requestHandler.Regist(phoneNumber, _uniqueId, AppId, otpCodeRequest);
@@ -100,10 +103,7 @@ namespace Agava.Wink
                 StartTimespentAnalytics();
         }
 
-        public void Unlink(string deviceId, Action onResetLogin = null) => _requestHandler.Unlink(
-            new UnlinkData() { device_id = deviceId, app_id = AppId },
-            onResetLogin = onResetLogin == null ? ResetLogin : onResetLogin
-            );
+        public void Unlink(string deviceId) => _requestHandler.Unlink(new UnlinkData() { device_id = deviceId, app_id = AppId }, ResetLogin);
 
 #if UNITY_EDITOR || TEST
         public void TestEnableSubsription()
@@ -115,22 +115,10 @@ namespace Agava.Wink
         }
 #endif
 
-        private void Login(LoginData data)
-        {
-            _requestHandler.Login(data, LimitReached, _winkSubscriptionAccessRequest, _otpCodeAccepted,
-            onAuthenficationSuccessfully: () =>
-            {
-                OnAuthenficationSuccessfully();
-            },
-            onAuthorizationSuccessfully: () =>
-            {
-                OnSubscriptionExist();
-                TrySendAnalyticsData(LoginData.phone);
-            });
-        }
+        private void Login(LoginData data) => _requestHandler.Login(data, LimitReached, _winkSubscriptionAccessRequest, _otpCodeAccepted);
 
         public void QuickAccess()
-            => _requestHandler.QuickAccess(LoginData.phone, OnSubscriptionExist, ResetLogin, _winkSubscriptionAccessRequest, OnAuthenficationSuccessfully);
+            => _requestHandler.QuickAccess(LoginData.phone, ResetLogin, null, OnSignInSuccessfully);
 
         public void DeleteAccount()
         {
@@ -140,34 +128,40 @@ namespace Agava.Wink
                 _timespentService = null;
             }
 
-            Unlink(_uniqueId, () => _requestHandler.DeleteAccount(() =>
+            _requestHandler.UnlinkDevices(AppId, _uniqueId, () =>
             {
                 HasAccess = false;
                 Authenficated = false;
                 UnityEngine.PlayerPrefs.DeleteKey(TokenLifeHelper.Tokens);
                 AccountDeleted?.Invoke();
-            }));
+            });
         }
 
-        private void OnAuthenficationSuccessfully()
+        private void OnSignInSuccessfully(bool hasAccess)
         {
             Authenficated = true;
-            AuthenficationSuccessfully?.Invoke();
+            SignInSuccessfully?.Invoke(hasAccess);
             SearchSubscription(LoginData.phone);
+
 #if UNITY_EDITOR || TEST
             Debug.Log("Authenfication succesfully");
 #endif
+
+            if (hasAccess)
+            {
+                OnSubscriptionExist();
+            }
         }
 
         private void OnSubscriptionExist()
         {
             _subscribeSearchSystem?.Stop();
             HasAccess = true;
-            Authenficated = true;
             AuthorizationSuccessfully?.Invoke();
 
             if (PlayerPrefs.HasKey(FirstRegist))
                 AnalyticsWinkService.SendHasActiveAccountUser(hasActiveAcc: true);
+
 #if UNITY_EDITOR || TEST
             Debug.Log("Wink access succesfully");
 #endif
@@ -175,7 +169,7 @@ namespace Agava.Wink
 
         private void SearchSubscription(string phone)
         {
-            if (_subscribeSearchSystem != null) 
+            if (_subscribeSearchSystem != null)
                 return;
 
             _subscribeSearchSystem = new(phone);

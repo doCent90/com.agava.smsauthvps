@@ -99,6 +99,7 @@ namespace Agava.Wink
 
         public void Clear()
         {
+            _sendRepeatCodeButton.gameObject.SetActive(false);
             _inputField.text = string.Empty;
             _codeFormatter.Clear();
         }

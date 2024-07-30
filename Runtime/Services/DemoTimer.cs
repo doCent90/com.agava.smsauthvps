@@ -44,13 +44,16 @@ namespace Agava.Wink
                 _seconds = remoteCfgSeconds;
 
             _winkAccessManager.AuthorizationSuccessfully += Stop;
-            Expired = false;
+            _winkAccessManager.AccountDeleted += Start;
         }
 
         internal void Dispose()
         {
             if (_winkAccessManager != null)
+            {
                 _winkAccessManager.AuthorizationSuccessfully -= Stop;
+                _winkAccessManager.AccountDeleted -= Start;
+            }
 
             UnityEngine.PlayerPrefs.SetInt(TimerKey, _seconds);
         }
@@ -58,6 +61,8 @@ namespace Agava.Wink
         internal void Start()
         {
             _current = _coroutine.StartCoroutine(Ticking());
+            Expired = false;
+
             IEnumerator Ticking()
             {
                 var tick = new WaitForSecondsRealtime(1);
