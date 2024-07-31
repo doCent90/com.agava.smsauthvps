@@ -18,6 +18,8 @@ namespace Agava.Wink
     [Preserve]
     internal class RequestHandler
     {
+        private const string UnlinkProcess = nameof(UnlinkProcess);
+
         internal async Task<LoginData> Regist(string phoneNumber, string uniqueId, string appId, Action<bool> otpCodeRequest)
         {
             LoginData data = new()
@@ -43,7 +45,7 @@ namespace Agava.Wink
             }
         }
 
-        internal async void Unlink(UnlinkData unlinkData, Action onResetLogin)
+        internal async void Unlink(UnlinkData unlinkData, Action onUnlinkDevice)
         {
             Debug.Log($"deviceId: {unlinkData.device_id}, appId: {unlinkData.app_id}");
 
@@ -51,9 +53,15 @@ namespace Agava.Wink
             var response = await SmsAuthApi.Unlink(tokens.access, unlinkData);
 
             if (response.statusCode != UnityWebRequest.Result.Success)
+            {
                 Debug.LogError("Unlink fail: " + response.statusCode);
+                onUnlinkDevice?.Invoke();
+            }
             else
-                onResetLogin?.Invoke();
+            {
+                UnityEngine.PlayerPrefs.DeleteKey(UnlinkProcess);
+                onUnlinkDevice?.Invoke();
+            }
         }
 
         internal async void Login(LoginData data, Action<IReadOnlyList<string>> onLimitReached,
@@ -86,6 +94,7 @@ namespace Agava.Wink
 
                 if (string.IsNullOrEmpty(tokens.refresh))
                 {
+                    UnityEngine.PlayerPrefs.SetString(UnlinkProcess, "true");
                     OnLimitDevicesReached(onLimitReached, data.app_id);
                     return;
                 }
@@ -96,12 +105,20 @@ namespace Agava.Wink
 
         internal async void QuickAccess(string phoneNumber, Action onResetLogin, Action<bool> onWinkSubscriptionAccessRequest, Action<bool> onSignInSuccessfully)
         {
+            if (UnityEngine.PlayerPrefs.HasKey(UnlinkProcess))
+            {
+                Debug.Log("Unlinking process wasn't completed. Quick access is unavailable");
+                SkipQuickAccess();
+                UnityEngine.PlayerPrefs.DeleteKey(UnlinkProcess);
+                return;
+            }
+
             var tokens = SaveLoadLocalDataService.Load<Tokens>(TokenLifeHelper.Tokens);
 
             if (tokens == null)
             {
-                Debug.LogError("Tokens not exhist");
-                onResetLogin?.Invoke();
+                Debug.LogError("Tokens don't exist. Quick access is unavailable");
+                SkipQuickAccess();
                 return;
             }
 
@@ -117,15 +134,13 @@ namespace Agava.Wink
 
                 if (string.IsNullOrEmpty(currentToken))
                 {
-                    TokenLifeHelper.ClearTokens();
-                    onResetLogin?.Invoke();
+                    SkipQuickAccess();
                     return;
                 }
             }
             else
             {
-                TokenLifeHelper.ClearTokens();
-                onResetLogin?.Invoke();
+                SkipQuickAccess();
                 return;
             }
 
@@ -135,14 +150,15 @@ namespace Agava.Wink
             if (response.statusCode == UnityWebRequest.Result.Success)
             {
                 onSignInSuccessfully?.Invoke(hasSubsc);
-                //onAuthorizedSuccessfully?.Invoke();
-
-                //if (hasSubsc)
-                //    onSuccessed?.Invoke();
             }
             else
             {
                 Debug.LogError($"Quick access Validation Error: {response.reasonPhrase}: {response.statusCode}/Wink: {hasSubsc}");
+                SkipQuickAccess();
+            }
+
+            void SkipQuickAccess()
+            {
                 TokenLifeHelper.ClearTokens();
                 onResetLogin?.Invoke();
             }
