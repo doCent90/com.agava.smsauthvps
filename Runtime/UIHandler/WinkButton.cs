@@ -11,9 +11,24 @@ namespace Agava.Wink
 
         private WinkSignInHandlerUI _winkSignInHandlerUI;
 
-        private void Start() => _winkSignInHandlerUI = WinkSignInHandlerUI.Instance;
+        private void Start()
+        {
+            _winkSignInHandlerUI = WinkSignInHandlerUI.Instance;
+            UpdateButtons();
+        }
 
         private void Update()
+        {
+            UpdateButtons();
+        }
+
+        private void OnEnable() => _button.onClick.AddListener(OnButtonClick);
+
+        private void OnDisable() => _button.onClick.RemoveListener(OnButtonClick);
+
+        private void OnButtonClick() => _winkSignInHandlerUI.OnWinkButtonClick();
+
+        private void UpdateButtons()
         {
             if (PreloadService.Instance == null)
             {
@@ -26,11 +41,5 @@ namespace Agava.Wink
             else
                 _button.gameObject.SetActive(_winkSignInHandlerUI != null);
         }
-
-        private void OnEnable() => _button.onClick.AddListener(OnButtonClick);
-
-        private void OnDisable() => _button.onClick.RemoveListener(OnButtonClick);
-
-        private void OnButtonClick() => _winkSignInHandlerUI.OnWinkButtonClick();
     }
 }
