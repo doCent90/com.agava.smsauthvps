@@ -119,8 +119,8 @@ namespace Agava.Wink
             }
             else
             {
-                _notifyWindowHandler.CloseWindow(WindowType.EnterOtpCode);
                 _notifyWindowHandler.OpenWindow(WindowType.ProccessOn);
+                _notifyWindowHandler.CloseWindow(WindowType.EnterOtpCode);
             }
         }
 
@@ -130,7 +130,6 @@ namespace Agava.Wink
                 OnAuthorizationSuccessfully();
 
             _notifyWindowHandler.CloseWindow(WindowType.SignIn);
-            _notifyWindowHandler.CloseWindow(WindowType.ProccessOn);
         }
 
         internal void OnAuthorizationSuccessfully()

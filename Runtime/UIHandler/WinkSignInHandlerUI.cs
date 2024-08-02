@@ -190,7 +190,6 @@ namespace Agava.Wink
 
         private async void OnSignInSuccessfully(bool hasAccess)
         {
-            _notifyWindowHandler.OpenWindow(WindowType.ProccessOn);
             _signInFuctionsUI.OnSignInSuccesfully(hasAccess);
             _openSignInButton.gameObject.SetActive(false);
             _signInButton.gameObject.SetActive(false);
@@ -206,7 +205,6 @@ namespace Agava.Wink
 
                 _notifyWindowHandler.OpenHelloWindow(onEnd: () =>
                 {
-                    _notifyWindowHandler.CloseWindow(WindowType.ProccessOn);
                     AnalyticsWinkService.SendHelloWindow();
 
                     if (hasAccess == false)
@@ -218,6 +216,8 @@ namespace Agava.Wink
                         }
                     }
                 });
+
+                _notifyWindowHandler.CloseWindow(WindowType.ProccessOn);
             }
         }
 
