@@ -25,12 +25,17 @@ namespace Agava.Wink
 
         private Coroutine _signInProcess;
         private PreloadService _preloadService;
+        private bool _bootStarted = false;
 
         public static Boot Instance { get; private set; }
 
         public event Action Restarted;
 
-        private void OnDestroy() => _winkSignInHandlerUI?.Dispose();
+        private void OnDestroy()
+        {
+            _winkAccessManager.AuthorizationSuccessfully -= OnSuccessfully;
+            _winkSignInHandlerUI?.Dispose();
+        }
 
         private IEnumerator Start()
         {
@@ -44,6 +49,7 @@ namespace Agava.Wink
 
             _preloadService = new(_winkSignInHandlerUI);
             _winkAccessManager.Initialize();
+            _winkAccessManager.AuthorizationSuccessfully += OnSuccessfully;
             _startLogoPresenter.Construct();
             yield return _preloadService.Preparing();
 
@@ -65,14 +71,14 @@ namespace Agava.Wink
                 _signInProcess = StartCoroutine(OnStarted());
                 yield return _signInProcess;
 
+                _bootStarted = true;
+
                 _startLogoPresenter.CloseBootView();
                 var loadingScene = _sceneLoader.LoadGameScene();
                 SmsAuthApi.DownloadCloudSavesProgress -= OnDownloadCloudSavesProgress;
                 _loadingProgressBar.Enable();
 
                 yield return new WaitUntil(() => { _loadingProgressBar.SetProgress(loadingScene.progress, 0.5f, 1.0f); return loadingScene.isDone; });
-
-                _winkAccessManager.AccountDeleted += OnAccountDeleted;
 
                 _loadingProgressBar.Disable();
                 AnalyticsWinkService.SendStartApp(appId: Application.identifier);
@@ -88,16 +94,6 @@ namespace Agava.Wink
 
         private void OnDownloadCloudSavesProgress(float progress)
             => _loadingProgressBar.SetProgress(progress, 0.0f, 0.5f);
-
-        private void OnAccountDeleted()
-        {
-            _winkAccessManager.AccountDeleted -= OnAccountDeleted;
-
-            Restarted?.Invoke();
-
-            if (_restartAfterAuth)
-                _sceneLoader.LoadGameScene();
-        }
 
         private IEnumerator OnStarted()
         {
@@ -148,7 +144,8 @@ namespace Agava.Wink
 
         private void OnSuccessfully()
         {
-            _winkAccessManager.AuthorizationSuccessfully -= OnSuccessfully;
+            if (_bootStarted == false)
+                return;
 
 #if UNITY_EDITOR || TEST
             Debug.Log($"Boot: Access Successfully");
@@ -169,6 +166,7 @@ namespace Agava.Wink
 #if UNITY_EDITOR || TEST
             Debug.Log($"Boot: Try load cloud saves");
 #endif
+
             Coroutine cancelation = null;
             cancelation = StartCoroutine(TimeOutWaiting());
 
@@ -186,6 +184,7 @@ namespace Agava.Wink
             StopCoroutine(_signInProcess);
             _winkSignInHandlerUI.CloseAllWindows();
             _winkSignInHandlerUI.OpenWindow(WindowType.Fail);
+
 #if UNITY_EDITOR || TEST
             Debug.Log($"Boot: Time Out!");
 #endif
@@ -193,7 +192,6 @@ namespace Agava.Wink
 
         private void OnSkiped()
         {
-            _winkAccessManager.AuthorizationSuccessfully += OnSuccessfully;
 #if UNITY_EDITOR || TEST
             Debug.Log($"Boot: SignIn skiped");
 #endif
