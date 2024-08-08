@@ -1965,6 +1965,7 @@ GameObject:
   - component: {fileID: 6226865375690094183}
   - component: {fileID: 9104104299092899949}
   - component: {fileID: 6723712067795301760}
+  - component: {fileID: 5500322123703771910}
   m_Layer: 5
   m_Name: BottomText
   m_TagString: Untagged
@@ -2019,7 +2020,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: support@wink.ru
+  m_text: <link="support">support@wink.ru</link>
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: b663b39fdf889c84d98d84b7f77f5eac, type: 2}
   m_sharedMaterial: {fileID: -3705676080865896927, guid: b663b39fdf889c84d98d84b7f77f5eac, type: 2}
@@ -2088,6 +2089,19 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &5500322123703771910
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1150076317728581486}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69ff4c1917fe8e245a7e11955acf286b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _tmpText: {fileID: 6723712067795301760}
 --- !u!1 &1194019623636932558
 GameObject:
   m_ObjectHideFlags: 0
@@ -3167,6 +3181,8 @@ GameObject:
   - component: {fileID: 2441725567973141285}
   - component: {fileID: 3308959540373240751}
   - component: {fileID: 3152714498951477628}
+  - component: {fileID: 7465957162812564624}
+  - component: {fileID: 5358816720898879723}
   m_Layer: 5
   m_Name: BottomText
   m_TagString: Untagged
@@ -3221,10 +3237,11 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "<color=#4D4D3D>\u042F \u043F\u0440\u0438\u043D\u0438\u043C\u0430\u044E
-    \u0443\u0441\u043B\u043E\u0432\u0438\u044F</color> \u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u044C\u0441\u043A\u043E\u0433\u043E
-    \u0441\u043E\u0433\u043B\u0430\u0448\u0435\u043D\u0438\u044F \u0438 \u043F\u043E\u043B\u0438\u0442\u0438\u043A\u0438
-    \u043A\u043E\u043D\u0444\u0438\u0434\u0435\u043D\u0446\u0438\u0430\u043B\u044C\u043D\u043E\u0441\u0442\u0438
+  m_text: "\u042F \u043F\u0440\u0438\u043D\u0438\u043C\u0430\u044E \u0443\u0441\u043B\u043E\u0432\u0438\u044F
+    <color=#4D4D3D><link=\"agreement\">\u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u044C\u0441\u043A\u043E\u0433\u043E
+    \u0441\u043E\u0433\u043B\u0430\u0448\u0435\u043D\u0438\u044F</link></color> \u0438
+    <color=#4D4D3D><link=\"policy\">\u043F\u043E\u043B\u0438\u0442\u0438\u043A\u0438
+    \u043A\u043E\u043D\u0444\u0438\u0434\u0435\u043D\u0446\u0438\u0430\u043B\u044C\u043D\u043E\u0441\u0442\u0438</link></color>
     \u0441\u0435\u0440\u0432\u0438\u0441\u0430"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -3310,6 +3327,32 @@ MonoBehaviour:
     of the Wink Music service
   FallbackText: <color=#AC865A>I accept the terms</color> of the user agreement and
     the privacy policy of the Wink Music service
+--- !u!114 &7465957162812564624
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1652929902484418011}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3faa73618854aa4db4a90796ad8aa17, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _tmpText: {fileID: 3308959540373240751}
+--- !u!114 &5358816720898879723
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1652929902484418011}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9d39f0744e573945ab3cfa058a0e3f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _tmpText: {fileID: 3308959540373240751}
 --- !u!1 &1728843475154545806
 GameObject:
   m_ObjectHideFlags: 0
@@ -3661,6 +3704,8 @@ GameObject:
   - component: {fileID: 4579542754046229169}
   - component: {fileID: 5153092893866284491}
   - component: {fileID: 1751770575307857284}
+  - component: {fileID: 5425123154428050431}
+  - component: {fileID: 5382865741776906442}
   m_Layer: 5
   m_Name: BottomText
   m_TagString: Untagged
@@ -3715,10 +3760,11 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "<color=#4D4D3D>\u042F \u043F\u0440\u0438\u043D\u0438\u043C\u0430\u044E
-    \u0443\u0441\u043B\u043E\u0432\u0438\u044F</color> \u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u044C\u0441\u043A\u043E\u0433\u043E
-    \u0441\u043E\u0433\u043B\u0430\u0448\u0435\u043D\u0438\u044F \u0438 \u043F\u043E\u043B\u0438\u0442\u0438\u043A\u0438
-    \u043A\u043E\u043D\u0444\u0438\u0434\u0435\u043D\u0446\u0438\u0430\u043B\u044C\u043D\u043E\u0441\u0442\u0438
+  m_text: "\u042F \u043F\u0440\u0438\u043D\u0438\u043C\u0430\u044E \u0443\u0441\u043B\u043E\u0432\u0438\u044F
+    <color=#4D4D3D><link=\"agreement\">\u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u044C\u0441\u043A\u043E\u0433\u043E
+    \u0441\u043E\u0433\u043B\u0430\u0448\u0435\u043D\u0438\u044F</link></color> \u0438
+    <color=#4D4D3D><link=\"policy\">\u043F\u043E\u043B\u0438\u0442\u0438\u043A\u0438
+    \u043A\u043E\u043D\u0444\u0438\u0434\u0435\u043D\u0446\u0438\u0430\u043B\u044C\u043D\u043E\u0441\u0442\u0438</link></color>
     \u0441\u0435\u0440\u0432\u0438\u0441\u0430"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: b663b39fdf889c84d98d84b7f77f5eac, type: 2}
@@ -3824,6 +3870,32 @@ MonoBehaviour:
     of the Wink Music service
   FallbackText: <color=#AA8357>I accept the terms</color> of the user agreement and
     the privacy policy of the Wink Music service
+--- !u!114 &5425123154428050431
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1988574712639438700}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3faa73618854aa4db4a90796ad8aa17, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _tmpText: {fileID: 4579542754046229169}
+--- !u!114 &5382865741776906442
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1988574712639438700}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9d39f0744e573945ab3cfa058a0e3f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _tmpText: {fileID: 4579542754046229169}
 --- !u!1 &1996436323869423353
 GameObject:
   m_ObjectHideFlags: 0
@@ -12281,6 +12353,8 @@ GameObject:
   - component: {fileID: 8056479264251231651}
   - component: {fileID: 3299213487740999237}
   - component: {fileID: 8917145213605755181}
+  - component: {fileID: 6333712564089961074}
+  - component: {fileID: 8560359697649945617}
   m_Layer: 5
   m_Name: BottomText
   m_TagString: Untagged
@@ -12335,10 +12409,11 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "<color=#4D4D3D>\u042F \u043F\u0440\u0438\u043D\u0438\u043C\u0430\u044E
-    \u0443\u0441\u043B\u043E\u0432\u0438\u044F</color> \u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u044C\u0441\u043A\u043E\u0433\u043E
-    \u0441\u043E\u0433\u043B\u0430\u0448\u0435\u043D\u0438\u044F \u0438 \u043F\u043E\u043B\u0438\u0442\u0438\u043A\u0438
-    \u043A\u043E\u043D\u0444\u0438\u0434\u0435\u043D\u0446\u0438\u0430\u043B\u044C\u043D\u043E\u0441\u0442\u0438
+  m_text: "\u042F \u043F\u0440\u0438\u043D\u0438\u043C\u0430\u044E \u0443\u0441\u043B\u043E\u0432\u0438\u044F
+    <color=#4D4D3D><link=\"agreement\">\u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u044C\u0441\u043A\u043E\u0433\u043E
+    \u0441\u043E\u0433\u043B\u0430\u0448\u0435\u043D\u0438\u044F</link></color> \u0438
+    <color=#4D4D3D><link=\"policy\">\u043F\u043E\u043B\u0438\u0442\u0438\u043A\u0438
+    \u043A\u043E\u043D\u0444\u0438\u0434\u0435\u043D\u0446\u0438\u0430\u043B\u044C\u043D\u043E\u0441\u0442\u0438</link></color>
     \u0441\u0435\u0440\u0432\u0438\u0441\u0430"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: b663b39fdf889c84d98d84b7f77f5eac, type: 2}
@@ -12444,6 +12519,32 @@ MonoBehaviour:
     of the Wink Music service
   FallbackText: <color=#AA8357>I accept the terms</color> of the user agreement and
     the privacy policy of the Wink Music service
+--- !u!114 &6333712564089961074
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6726662867619407153}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3faa73618854aa4db4a90796ad8aa17, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _tmpText: {fileID: 8056479264251231651}
+--- !u!114 &8560359697649945617
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6726662867619407153}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9d39f0744e573945ab3cfa058a0e3f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _tmpText: {fileID: 8056479264251231651}
 --- !u!1 &6800718852254223540
 GameObject:
   m_ObjectHideFlags: 0

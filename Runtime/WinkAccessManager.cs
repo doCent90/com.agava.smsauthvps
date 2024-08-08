@@ -139,13 +139,15 @@ namespace Agava.Wink
                 _timespentService = null;
             }
 
-            _requestHandler.UnlinkDevices(AppId, _uniqueId, () => _requestHandler.DeleteAccount(() =>
+            _requestHandler.UnlinkDevices(AppId, _uniqueId, () => _requestHandler.DeleteAccount(SignOut), SignOut);
+
+            void SignOut()
             {
                 HasAccess = false;
                 Authenficated = false;
-                TokenLifeHelper.ClearTokens();
                 AccountDeleted?.Invoke();
-            }));
+                TokenLifeHelper.ClearTokens();
+            }
         }
 
         private void OnSignInSuccessfully(bool hasAccess)
@@ -155,7 +157,7 @@ namespace Agava.Wink
             SearchSubscription(LoginData.phone);
 
 #if UNITY_EDITOR || TEST
-            Debug.Log("Authentication succesfully");
+            Debug.Log("Authentication successfully");
 #endif
 
             if (hasAccess)
