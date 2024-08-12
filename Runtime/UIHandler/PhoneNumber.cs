@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.Scripting;
@@ -29,8 +30,16 @@ namespace Agava.Wink
             }
         }
 
-        static public string FormatNumber(string number)
+        public static string FormatNumber(string number)
         {
+            if (number.Length >= 1 && number[0] != '7')
+            {
+                List<char> chars = new();
+                chars.AddRange(number);
+                chars[0] = '7';
+                number = new string(chars.ToArray());
+            }
+
             string symbol;
             int index;
 
