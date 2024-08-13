@@ -195,14 +195,15 @@ namespace Agava.Wink
             }
         }
 
-        internal async void UnlinkDevices(string app_id, string device_id, Action onUnlink = null, Action onFail = null)
+        internal async void UnlinkDevices(string app_id, string device_id, Action onUnlink = null, Action onTokensNull = null, Action onFail = null)
         {
             Tokens tokens = TokenLifeHelper.GetTokens();
 
             if (tokens == null)
             {
                 Debug.LogError("Unlinking fail: tokens do not exist");
-                onFail?.Invoke();
+                onTokensNull?.Invoke();
+                return;
             }
 
             Response response = await SmsAuthApi.GetDevices(tokens.access, Application.identifier);
@@ -210,6 +211,7 @@ namespace Agava.Wink
             if (response.statusCode != UnityWebRequest.Result.Success)
             {
                 Debug.LogError("Fail get devices: " + response.statusCode);
+                onFail?.Invoke();
             }
             else
             {
@@ -227,6 +229,7 @@ namespace Agava.Wink
                     if (response.statusCode != UnityWebRequest.Result.Success)
                     {
                         Debug.LogError($"Unlink fail for device {device}: {response.statusCode}");
+                        onFail?.Invoke();
                     }
                 }
             }

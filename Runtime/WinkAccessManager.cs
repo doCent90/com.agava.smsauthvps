@@ -131,7 +131,7 @@ namespace Agava.Wink
         public void QuickAccess()
             => _requestHandler.QuickAccess(LoginData.phone, ResetLogin, null, OnSignInSuccessfully);
 
-        public void DeleteAccount()
+        public void DeleteAccount(Action<bool> onComplete)
         {
             if (_timespentService != null)
             {
@@ -139,7 +139,21 @@ namespace Agava.Wink
                 _timespentService = null;
             }
 
-            _requestHandler.UnlinkDevices(AppId, _uniqueId, () => _requestHandler.DeleteAccount(SignOut), SignOut);
+            _requestHandler.UnlinkDevices(AppId, _uniqueId,
+                onUnlink: () =>
+                {
+                    _requestHandler.DeleteAccount(SignOut);
+                    onComplete?.Invoke(true);
+                },
+                onTokensNull: () =>
+                {
+                    SignOut();
+                    onComplete?.Invoke(true);
+                },
+                onFail: () =>
+                {
+                    onComplete?.Invoke(false);
+                });
 
             void SignOut()
             {

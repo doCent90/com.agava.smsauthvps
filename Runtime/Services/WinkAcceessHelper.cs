@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System.Collections.Generic;
+using System.Globalization;
 using System.Text.RegularExpressions;
 using UnityEngine.Scripting;
 
@@ -27,8 +28,18 @@ namespace Agava.Wink
                 return string.Empty;
             }
 
+            string correctedNumber = resultNumber.ToString();
+
+            if (correctedNumber.Length >= 1 && correctedNumber[0] != '7')
+            {
+                List<char> chars = new();
+                chars.AddRange(correctedNumber);
+                chars[0] = '7';
+                correctedNumber = new string(chars.ToArray());
+            }
+
             string plus = additivePlusChar == true ? "+" : "";
-            string number = $"{plus}{resultNumber}";
+            string number = $"{plus}{correctedNumber}";
             return number;
         }
     }
