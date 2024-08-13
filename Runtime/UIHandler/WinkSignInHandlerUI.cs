@@ -144,7 +144,10 @@ namespace Agava.Wink
         public void OnDeleteAccountButtonClick()
         {
             _notifyWindowHandler.OpenDeleteAccountWindow(
-                onDeleteAccount: () => _winkAccessManager.DeleteAccount(
+                onDeleteAccount: () =>
+                {
+                    _notifyWindowHandler.OpenWindow(WindowType.ProccessOn);
+                    _winkAccessManager.DeleteAccount(
                     onComplete: (resultSuccess) =>
                     {
                         if (resultSuccess)
@@ -156,9 +159,8 @@ namespace Agava.Wink
                             _notifyWindowHandler.CloseWindow(WindowType.ProccessOn);
                             _notifyWindowHandler.OpenWindow(WindowType.Fail);
                         }
-                    }));
-
-            _notifyWindowHandler.OpenWindow(WindowType.ProccessOn);
+                    });
+                });
         }
 
         private void OnSignInClicked()
