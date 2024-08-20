@@ -3,6 +3,9 @@ using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.Scripting;
 using SmsAuthAPI.Program;
+using UnityEditor;
+using Newtonsoft.Json;
+using SmsAuthAPI.DTO;
 
 namespace Agava.Wink
 {
@@ -10,19 +13,22 @@ namespace Agava.Wink
     public class PreloadService
     {
         private const string True = "true";
+        private const string On = "on";
 #if UNITY_STANDALONE
-        private const string RemoteName = "-standalone";
+        private const string RemoteName = "standalone";
 #elif UNITY_ANDROID
-        private const string RemoteName = "-android";
+        private const string Platform = "android";
 #elif UNITY_IOS
-        private const string RemoteName = "-ios";
+        private const string RemoteName = "ios";
 #endif
+        private int _bundlIdVersion;
         private bool _isEndPrepare = false;
         private readonly WinkSignInHandlerUI _winkSignInHandlerUI;
 
-        public PreloadService(WinkSignInHandlerUI winkSignInHandlerUI)
+        public PreloadService(WinkSignInHandlerUI winkSignInHandlerUI, int bundlIdVersion)
         {
             Instance ??= this;
+            _bundlIdVersion = bundlIdVersion;
             _winkSignInHandlerUI = winkSignInHandlerUI;
         }
 
@@ -31,6 +37,9 @@ namespace Agava.Wink
 
         public IEnumerator Preparing()
         {
+            Debug.Log($"Boot: App bundle Id on build: {PlayerSettings.Android.bundleVersionCode}\n" +
+                $"     Plugin bundle Id on build: {_bundlIdVersion}");
+
             yield return _winkSignInHandlerUI.Initialize();
             yield return new WaitUntil(() => SmsAuthApi.Initialized);
             yield return null;
@@ -44,21 +53,38 @@ namespace Agava.Wink
 
         private async void SetPluginAwailable()
         {
-            var response = await SmsAuthApi.GetRemoteConfig(Application.identifier + RemoteName);
+            string remoteName = $"{Application.identifier}/{Platform}";
+            var response = await SmsAuthApi.GetPluginSettings(remoteName);
 
             if (response.statusCode == UnityWebRequest.Result.Success)
             {
                 if (string.IsNullOrEmpty(response.body))
+                {
                     IsPluginAwailable = false;
-                else if (response.body == True)
-                    IsPluginAwailable = true;
+                    Debug.LogError($"Fail to recieve remote config '{remoteName}': NULL");
+                }
                 else
-                    IsPluginAwailable = false;
+                {
+                    PluginSettings remotePluginSettings = JsonConvert.DeserializeObject<PluginSettings>(response.body);
+                    Debug.Log($"Plugin settings: State - {remotePluginSettings.plugin_state}, release - {remotePluginSettings.released_version}\n" +
+                        $"Test state - {remotePluginSettings.test_review},  review - {remotePluginSettings.review_version}");
+
+                    if (remotePluginSettings.test_review == True && _bundlIdVersion == remotePluginSettings.review_version)
+                        IsPluginAwailable = true;
+                    else if (remotePluginSettings.test_review != True && _bundlIdVersion == remotePluginSettings.review_version)
+                        IsPluginAwailable = false;
+                    else if (remotePluginSettings.plugin_state == On && _bundlIdVersion <= remotePluginSettings.released_version)
+                        IsPluginAwailable = true;
+                    else if(remotePluginSettings.plugin_state != On && _bundlIdVersion <= remotePluginSettings.released_version)
+                        IsPluginAwailable = false;
+                    else
+                        IsPluginAwailable = false;
+                }
             }
             else
             {
                 IsPluginAwailable = false;
-                Debug.LogError($"Fail to recieve remote config '{RemoteName}': " + response.statusCode);
+                Debug.LogError($"Fail to recieve remote config '{remoteName}': " + response.statusCode);
             }
 
             _isEndPrepare = true;
