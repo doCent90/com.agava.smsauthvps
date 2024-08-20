@@ -14,11 +14,11 @@ namespace Agava.Wink
         private const string True = "true";
         private const string On = "on";
 #if UNITY_STANDALONE
-        private const string RemoteName = "standalone";
+        private const string Platform = "standalone";
 #elif UNITY_ANDROID
         private const string Platform = "android";
 #elif UNITY_IOS
-        private const string RemoteName = "ios";
+        private const string Platform = "ios";
 #endif
         private int _bundlIdVersion;
         private bool _isEndPrepare = false;
