@@ -40,6 +40,7 @@ namespace Agava.Wink
 
         private IEnumerator Start()
         {
+            Debug.Log("Boot: Start plugin initialize");
             DontDestroyOnLoad(this);
 
             if (_winkSignInHandlerUI == null || _winkAccessManager == null)
@@ -48,11 +49,15 @@ namespace Agava.Wink
             if (Instance == null)
                 Instance = this;
 
+            Debug.Log("Boot: Try Preload Service initialize");
             _preloadService = new(_winkSignInHandlerUI, _bundlIdVersion);
+            Debug.Log("Boot: Try Wink Access Manager initialize");
             _winkAccessManager.Initialize();
+            Debug.Log("Boot: Try Wink Access Manager initialized");
             _winkAccessManager.AuthorizationSuccessfully += OnSuccessfully;
             _startLogoPresenter.Construct();
             yield return _preloadService.Preparing();
+            Debug.Log("Boot: Preload Service initialized");
 
             if (_preloadService.IsPluginAwailable)
             {
