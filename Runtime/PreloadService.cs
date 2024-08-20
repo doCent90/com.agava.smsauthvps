@@ -3,7 +3,6 @@ using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.Scripting;
 using SmsAuthAPI.Program;
-using UnityEditor;
 using Newtonsoft.Json;
 using SmsAuthAPI.DTO;
 
@@ -37,9 +36,6 @@ namespace Agava.Wink
 
         public IEnumerator Preparing()
         {
-            Debug.Log($"Boot: App bundle Id on build: {PlayerSettings.Android.bundleVersionCode}\n" +
-                $"     Plugin bundle Id on build: {_bundlIdVersion}");
-
             yield return _winkSignInHandlerUI.Initialize();
             yield return new WaitUntil(() => SmsAuthApi.Initialized);
             yield return null;
