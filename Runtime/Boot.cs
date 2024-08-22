@@ -13,7 +13,6 @@ namespace Agava.Wink
     [DefaultExecutionOrder(-123), Preserve]
     public class Boot : MonoBehaviour, IBoot
     {
-        private const string FirsttimeStartApp = nameof(FirsttimeStartApp);
         private const float TimeOutTime = 60f;
 
         [SerializeField] private int _bundlIdVersion = 1;
@@ -49,15 +48,11 @@ namespace Agava.Wink
             if (Instance == null)
                 Instance = this;
 
-            Debug.Log("Boot: Try Preload Service initialize");
             _preloadService = new(_winkSignInHandlerUI, _bundlIdVersion);
-            Debug.Log("Boot: Try Wink Access Manager initialize");
             _winkAccessManager.Initialize();
-            Debug.Log("Boot: Try Wink Access Manager initialized");
             _winkAccessManager.AuthorizationSuccessfully += OnSuccessfully;
             _startLogoPresenter.Construct();
             yield return _preloadService.Preparing();
-            Debug.Log("Boot: Preload Service initialized");
 
             if (_preloadService.IsPluginAwailable)
             {
@@ -105,45 +100,23 @@ namespace Agava.Wink
         {
             yield return new WaitWhile(() => SmsAuthApi.Initialized == false);
 
-            if (UnityEngine.PlayerPrefs.HasKey(FirsttimeStartApp) == false)
-            {
+            if (WinkAccessManager.Instance.HasAccess == false && WinkAccessManager.Instance.Authenficated == false)
                 _winkSignInHandlerUI.OpenSignWindow();
-                UnityEngine.PlayerPrefs.SetString(FirsttimeStartApp, "true");
 
-                yield return new WaitUntil(() => (WinkAccessManager.Instance.HasAccess == true || _winkSignInHandlerUI.IsAnyWindowEnabled == false));
+            yield return new WaitUntil(() => (WinkAccessManager.Instance.HasAccess == true || _winkSignInHandlerUI.IsAnyWindowEnabled == false));
+
+            if (UnityEngine.PlayerPrefs.HasKey(SmsAuthAPI.DTO.TokenLifeHelper.Tokens))
+            {
+                yield return new WaitUntil(() => WinkAccessManager.Instance.Authenficated == true);
 
                 if (WinkAccessManager.Instance.HasAccess)
-                {
                     yield return CloudSavesLoading();
-#if UNITY_EDITOR || TEST
-                    Debug.Log($"Boot: App First Started. SignIn successfully");
-#endif
-                }
-                else
-                {
-                    OnSkiped();
-                }
             }
-            else
-            {
-                if (UnityEngine.PlayerPrefs.HasKey(SmsAuthAPI.DTO.TokenLifeHelper.Tokens))
-                {
-                    yield return new WaitUntil(() => WinkAccessManager.Instance.Authenficated == true);
 
-                    if (WinkAccessManager.Instance.HasAccess)
-                        yield return CloudSavesLoading();
-                    else
-                        OnSkiped();
-                }
-                else
-                {
-                    OnSkiped();
-                }
 #if UNITY_EDITOR || TEST
-                Debug.Log($"Boot: App Started. Authenficated: {WinkAccessManager.Instance.Authenficated}");
-                Debug.Log($"Boot: App Started. Authorized: {WinkAccessManager.Instance.HasAccess}");
+            Debug.Log($"Boot: App Started. Authenficated: {WinkAccessManager.Instance.Authenficated}");
+            Debug.Log($"Boot: App Started. Authorized: {WinkAccessManager.Instance.HasAccess}");
 #endif
-            }
 
             _signInProcess = null;
         }
@@ -193,13 +166,6 @@ namespace Agava.Wink
 
 #if UNITY_EDITOR || TEST
             Debug.Log($"Boot: Time Out!");
-#endif
-        }
-
-        private void OnSkiped()
-        {
-#if UNITY_EDITOR || TEST
-            Debug.Log($"Boot: SignIn skiped");
 #endif
         }
     }
