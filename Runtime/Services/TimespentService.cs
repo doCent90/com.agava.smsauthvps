@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
 using UnityEngine.Scripting;
+using System;
 
 namespace Agava.Wink
 {
@@ -15,12 +16,12 @@ namespace Agava.Wink
 
         private readonly ICoroutine _coroutine;
         private Coroutine _current;
-
         private readonly string _phone;
         private readonly string _deviceId;
         private readonly string _appId;
 
         private ulong _spentTimeMin = 0;
+        private ulong _spentTimeSec = 0;
         private List<int> _savedTime = new();
 
         public TimespentService(ICoroutine coroutine, string phone, string deviceId, string appId)
@@ -37,25 +38,34 @@ namespace Agava.Wink
         internal void OnStartedApp()
         {
             _current = _coroutine.StartCoroutine(Ticking());
+
             IEnumerator Ticking()
             {
-                var wait = new WaitForSecondsRealtime(60f);
+                var wait = new WaitForSecondsRealtime(1f);
+                int currentSec = 0;
 
                 while (true)
                 {
                     yield return wait;
-                    _spentTimeMin += 1;
+                    _spentTimeSec += 1;
+                    currentSec += 1;
+
+                    if (currentSec >= 60f)
+                    {
+                        _spentTimeMin += 1;
+                        currentSec = 0;
+                    }
                 }
             }
         }
 
         internal void OnFinishedApp()
         {
-            if (_current != null && _spentTimeMin != 0)
+            if (_current != null && _spentTimeSec != 0)
             {
                 _coroutine.StopCoroutine(_current);
                 _current = null;
-                SmsAuthApi.SetTimespentAllApp(_phone, _deviceId, _spentTimeMin);
+                SmsAuthApi.SetTimespentAllApp(_phone, _appId, _spentTimeSec);
                 SmsAuthApi.SetTimespentAllUsers(_appId, _spentTimeMin);
                 SetAverageSessionTimespent(_spentTimeMin);
                 _spentTimeMin = 0;
