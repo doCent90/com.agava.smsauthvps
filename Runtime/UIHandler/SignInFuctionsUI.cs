@@ -81,6 +81,8 @@ namespace Agava.Wink
             }
             else
             {
+                _demoTimer.Construct(_winkAccessManager, 0, _winkSignInHandlerUI, _coroutine);
+                _demoTimer.Start();
                 Debug.LogError("Fail to recieve remote config: " + response.statusCode);
             }
         }
