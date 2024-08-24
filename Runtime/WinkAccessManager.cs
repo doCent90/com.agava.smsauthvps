@@ -44,7 +44,7 @@ namespace Agava.Wink
         private void OnApplicationFocus(bool focus)
         {
             if (focus == false && _timespentService != null)
-                _timespentService.OnFinishedApp();
+                _timespentService.OnAppFocusFalse();
             else if (focus && _timespentService != null)
                 _timespentService.OnStartedApp();
         }
@@ -135,7 +135,7 @@ namespace Agava.Wink
         {
             if (_timespentService != null)
             {
-                _timespentService.OnFinishedApp();
+                _timespentService.OnAppFocusFalse();
                 _timespentService = null;
             }
 

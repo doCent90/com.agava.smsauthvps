@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine;
 using SmsAuthAPI.Program;
 using UnityEngine.Scripting;
+using SmsAuthAPI.DTO;
 
 namespace Agava.Wink
 {
@@ -12,7 +13,7 @@ namespace Agava.Wink
     [Serializable, Preserve]
     internal class DemoTimer
     {
-        private const string TimerKey = nameof(TimerKey);
+        private const string FirstTimeSave = nameof(FirstTimeSave);
         private const float Delay = 5f;
 
         [Min(0)]
@@ -22,8 +23,8 @@ namespace Agava.Wink
         private IWinkSignInHandlerUI _winkSignInHandlerUI;
         private ICoroutine _coroutine;
 
+        private DateTime _savedDemoTime;
         private Coroutine _current;
-        private int _seconds;
 
         public event Action TimerExpired;
 
@@ -38,10 +39,16 @@ namespace Agava.Wink
             if (remoteCfgSeconds <= 0)
                 remoteCfgSeconds = _defaultTimerSeconds;
 
-            if (UnityEngine.PlayerPrefs.HasKey(TimerKey))
-                _seconds = UnityEngine.PlayerPrefs.GetInt(TimerKey);
+            if (UnityEngine.PlayerPrefs.HasKey(FirstTimeSave) == false)
+            {
+                _savedDemoTime = DateTime.UtcNow.AddSeconds(remoteCfgSeconds);
+                UnityEngine.PlayerPrefs.SetString(FirstTimeSave, _savedDemoTime.ToString());
+            }
             else
-                _seconds = remoteCfgSeconds;
+            {
+                string time = UnityEngine.PlayerPrefs.GetString(FirstTimeSave);
+                _savedDemoTime = DateTime.Parse(time);
+            }
 
             _winkAccessManager.AuthorizationSuccessfully += Stop;
             _winkAccessManager.AccountDeleted += Start;
@@ -54,8 +61,6 @@ namespace Agava.Wink
                 _winkAccessManager.AuthorizationSuccessfully -= Stop;
                 _winkAccessManager.AccountDeleted -= Start;
             }
-
-            UnityEngine.PlayerPrefs.SetInt(TimerKey, _seconds);
         }
 
         internal void Start()
@@ -65,31 +70,30 @@ namespace Agava.Wink
 
             IEnumerator Ticking()
             {
-                var tick = new WaitForSecondsRealtime(1);
+#if UNITY_EDITOR || TEST
+                Debug.Log("Demo activated");
+#endif
+                var tick = new WaitForSecondsRealtime(1f);
                 var waitBeforeStart = new WaitForSecondsRealtime(Delay);
                 var waitInitialize = new WaitWhile(() => SmsAuthApi.Initialized == false);
+                var waitWindowClosed = new WaitUntil(() => _winkSignInHandlerUI.IsAnyWindowEnabled == false);
 
                 yield return waitInitialize;
                 yield return waitBeforeStart;
+                yield return waitWindowClosed;
 
                 if (WinkAccessManager.Instance.HasAccess)
                     Stop();
 
-                while (_seconds > 0)
+                while (true)
                 {
-                    if (_winkSignInHandlerUI.IsAnyWindowEnabled == false)
+                    if (_savedDemoTime <= DateTime.UtcNow && WinkAccessManager.Instance.HasAccess == false)
                     {
-                        _seconds--;
-                        UnityEngine.PlayerPrefs.SetInt(TimerKey, _seconds);
+                        TimerExpired?.Invoke();
+                        Expired = true;
                     }
 
                     yield return tick;
-                }
-
-                if (_seconds <= 0 && WinkAccessManager.Instance.HasAccess == false)
-                {
-                    TimerExpired?.Invoke();
-                    Expired = true;
                 }
             }
         }
@@ -100,6 +104,9 @@ namespace Agava.Wink
 
             if (_current != null)
             {
+#if UNITY_EDITOR || TEST
+                Debug.Log("Demo Stoped");
+#endif
                 _coroutine.StopCoroutine(_current);
                 _current = null;
             }

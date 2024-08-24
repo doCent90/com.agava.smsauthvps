@@ -37,7 +37,7 @@ namespace Agava.Wink
 
         internal void OnStartedApp()
         {
-            _current = _coroutine.StartCoroutine(Ticking());
+            _current ??= _coroutine.StartCoroutine(Ticking());
 
             IEnumerator Ticking()
             {
@@ -54,23 +54,29 @@ namespace Agava.Wink
                     {
                         _spentTimeMin += 1;
                         currentSec = 0;
+                        SendTimeAnalytics();
+                        _spentTimeSec = 0;
                     }
                 }
             }
         }
 
-        internal void OnFinishedApp()
+        internal void OnAppFocusFalse()
         {
             if (_current != null && _spentTimeSec != 0)
             {
                 _coroutine.StopCoroutine(_current);
                 _current = null;
-                SmsAuthApi.SetTimespentAllApp(_phone, _appId, _spentTimeSec);
-                SmsAuthApi.SetTimespentAllUsers(_appId, _spentTimeMin);
-                SetAverageSessionTimespent(_spentTimeMin);
-                _spentTimeMin = 0;
             }
         }
+
+        private void SendTimeAnalytics()
+        {
+            SmsAuthApi.SetTimespentAllApp(_phone, _appId, _spentTimeSec);
+            SmsAuthApi.SetTimespentAllUsers(_appId, _spentTimeMin);
+            SetAverageSessionTimespent(_spentTimeMin);
+        }
+
 
         private void SetAverageSessionTimespent(ulong minutes)
         {
