@@ -50,6 +50,9 @@ namespace Agava.Wink
         public event Action SignInWindowClosed;
         public event Action HelloWindowsClosed;
 
+        private void OnApplicationFocus(bool focus) => _signInFuctionsUI?.OnAppFocus(focus);
+        private void Update() => _signInFuctionsUI?.Update();
+
         public void Dispose()
         {
             if (_signInFuctionsUI == null) return;

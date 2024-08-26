@@ -30,6 +30,9 @@ namespace Agava.Wink
             _winkSignInHandlerUI = winkSignInHandlerUI;
         }
 
+        internal void OnAppFocus(bool focus) => _demoTimer.OnAppFocus(focus);
+        internal void Update() => _demoTimer?.Update();
+
         internal void OnSignInClicked(string phone)
         {
             _notifyWindowHandler.OpenWindow(WindowType.ProccessOn);
@@ -73,7 +76,7 @@ namespace Agava.Wink
                 else
                     seconds = Convert.ToInt32(response.body) * MinutesFactor;
 
-                _demoTimer.Construct(_winkAccessManager, seconds, _winkSignInHandlerUI, _coroutine);
+                _demoTimer.Construct(_winkAccessManager, seconds, _winkSignInHandlerUI);
                 _demoTimer.Start();
 #if UNITY_EDITOR || TEST
                 Debug.Log("Remote setted: " + response.body);
@@ -81,7 +84,7 @@ namespace Agava.Wink
             }
             else
             {
-                _demoTimer.Construct(_winkAccessManager, 0, _winkSignInHandlerUI, _coroutine);
+                _demoTimer.Construct(_winkAccessManager, 0, _winkSignInHandlerUI);
                 _demoTimer.Start();
                 Debug.LogError("Fail to recieve remote config: " + response.statusCode);
             }

@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections;
 using UnityEngine;
-using SmsAuthAPI.Program;
 using UnityEngine.Scripting;
-using SmsAuthAPI.DTO;
+using SmsAuthAPI.Program;
 
 namespace Agava.Wink
 {
@@ -14,40 +12,42 @@ namespace Agava.Wink
     internal class DemoTimer
     {
         private const string FirstTimeSave = nameof(FirstTimeSave);
-        private const float Delay = 5f;
 
         [Min(0)]
         [SerializeField] private int _defaultTimerSeconds = 1800;
 
         private IWinkAccessManager _winkAccessManager;
         private IWinkSignInHandlerUI _winkSignInHandlerUI;
-        private ICoroutine _coroutine;
 
-        private DateTime _savedDemoTime;
-        private Coroutine _current;
+        private TimeSpan _savedDemoTime;
+        private bool _focus = true;
+        private bool _stoped;
+        private float _second;
+        private float _delay = 5f;
 
         public event Action TimerExpired;
 
         public bool Expired { get; private set; }
 
-        internal void Construct(IWinkAccessManager winkAccessManager, int remoteCfgSeconds, IWinkSignInHandlerUI winkSignInHandlerUI, ICoroutine coroutine)
+        internal void Construct(IWinkAccessManager winkAccessManager, int remoteCfgSeconds, IWinkSignInHandlerUI winkSignInHandlerUI)
         {
             _winkSignInHandlerUI = winkSignInHandlerUI;
             _winkAccessManager = winkAccessManager;
-            _coroutine = coroutine;
 
             if (remoteCfgSeconds <= 0)
                 remoteCfgSeconds = _defaultTimerSeconds;
 
             if (UnityEngine.PlayerPrefs.HasKey(FirstTimeSave) == false)
             {
-                _savedDemoTime = DateTime.UtcNow.AddSeconds(remoteCfgSeconds);
+                _savedDemoTime = TimeSpan.FromSeconds(remoteCfgSeconds);
                 UnityEngine.PlayerPrefs.SetString(FirstTimeSave, _savedDemoTime.ToString());
+                Debug.LogError(_savedDemoTime);
             }
             else
             {
                 string time = UnityEngine.PlayerPrefs.GetString(FirstTimeSave);
-                _savedDemoTime = DateTime.Parse(time);
+                _savedDemoTime = TimeSpan.Parse(time);
+                Debug.LogError(_savedDemoTime);
             }
 
             _winkAccessManager.AuthorizationSuccessfully += Stop;
@@ -63,52 +63,55 @@ namespace Agava.Wink
             }
         }
 
+        internal void OnAppFocus(bool focus) => _focus = focus;
+
         internal void Start()
         {
-            _current = _coroutine.StartCoroutine(Ticking());
             Expired = false;
-
-            IEnumerator Ticking()
-            {
+            _stoped = false;
 #if UNITY_EDITOR || TEST
                 Debug.Log("Demo activated");
 #endif
-                var tick = new WaitForSecondsRealtime(1f);
-                var waitBeforeStart = new WaitForSecondsRealtime(Delay);
-                var waitInitialize = new WaitWhile(() => SmsAuthApi.Initialized == false);
-                var waitWindowClosed = new WaitUntil(() => _winkSignInHandlerUI.IsAnyWindowEnabled == false);
-
-                yield return waitInitialize;
-                yield return waitBeforeStart;
-                yield return waitWindowClosed;
-
-                if (WinkAccessManager.Instance.HasAccess)
-                    Stop();
-
-                while (true)
-                {
-                    if (_savedDemoTime <= DateTime.UtcNow && WinkAccessManager.Instance.HasAccess == false)
-                    {
-                        TimerExpired?.Invoke();
-                        Expired = true;
-                    }
-
-                    yield return tick;
-                }
-            }
         }
 
         internal void Stop()
         {
             Expired = false;
+            _stoped = true;
 
-            if (_current != null)
-            {
 #if UNITY_EDITOR || TEST
-                Debug.Log("Demo Stoped");
+            Debug.Log("Demo Stoped");
 #endif
-                _coroutine.StopCoroutine(_current);
-                _current = null;
+        }
+
+        internal void Update()
+        {
+            if (_focus == false || _stoped)
+                return;
+
+            if (_delay > 0)
+            {
+                _delay -= Time.deltaTime;
+                return;
+            }
+
+            if (_winkSignInHandlerUI.IsAnyWindowEnabled || Expired || SmsAuthApi.Initialized == false)
+                return;
+
+            _second -= Time.deltaTime;
+
+            if (_second <= 0)
+            {
+                if (_savedDemoTime <= TimeSpan.Zero && WinkAccessManager.Instance.HasAccess == false)
+                {
+                    TimerExpired?.Invoke();
+                    Expired = true;
+                }
+
+                _savedDemoTime = _savedDemoTime.Subtract(TimeSpan.FromSeconds(1f));
+                UnityEngine.PlayerPrefs.SetString(FirstTimeSave, _savedDemoTime.ToString());
+                Debug.LogError(_savedDemoTime);
+                _second = 1;
             }
         }
     }
