@@ -41,13 +41,11 @@ namespace Agava.Wink
             {
                 _savedDemoTime = TimeSpan.FromSeconds(remoteCfgSeconds);
                 UnityEngine.PlayerPrefs.SetString(FirstTimeSave, _savedDemoTime.ToString());
-                Debug.LogError(_savedDemoTime);
             }
             else
             {
                 string time = UnityEngine.PlayerPrefs.GetString(FirstTimeSave);
                 _savedDemoTime = TimeSpan.Parse(time);
-                Debug.LogError(_savedDemoTime);
             }
 
             _winkAccessManager.AuthorizationSuccessfully += Stop;
@@ -110,7 +108,6 @@ namespace Agava.Wink
 
                 _savedDemoTime = _savedDemoTime.Subtract(TimeSpan.FromSeconds(1f));
                 UnityEngine.PlayerPrefs.SetString(FirstTimeSave, _savedDemoTime.ToString());
-                Debug.LogError(_savedDemoTime);
                 _second = 1;
             }
         }
