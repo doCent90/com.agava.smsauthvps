@@ -1,6 +1,9 @@
 using System;
 using System.Collections;
+using SmsAuthAPI.DTO;
+using SmsAuthAPI.Program;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.Scripting;
 
 namespace Agava.Wink
@@ -8,34 +11,59 @@ namespace Agava.Wink
     [Preserve]
     internal class TextTimer : MonoBehaviour
     {
-        [SerializeField] private int _time;
+        private const string RemoteName = "sms-delay-seconds";
+        private const string SavedTime = nameof(SavedTime);
+        private const int DefaultTime = 190;
+        private const int AdditiveTime = 10;
+
         [SerializeField] private TextPlaceholder _timePlaceholder;
 
-        private int _seconds;
+        private int _seconds = 0;
         private Coroutine _coroutine;
 
         public event Action TimerExpired;
+        public bool Expired = true;
+
+        private IEnumerator Start()
+        {
+            if (_seconds <= 0)
+                _seconds = DefaultTime;
+
+            yield return new WaitUntil(() => SmsAuthApi.Initialized);
+            SetRemoteConfig();
+        }
 
         internal void Enable()
         {
             _timePlaceholder.gameObject.SetActive(true);
-            _seconds = _time;
-            _coroutine = StartCoroutine(Ticking());
+            _coroutine ??= StartCoroutine(Ticking());
 
             IEnumerator Ticking()
             {
+                int sec = _seconds;
+
+                if (UnityEngine.PlayerPrefs.HasKey(SavedTime))
+                    sec = UnityEngine.PlayerPrefs.GetInt(SavedTime);
+
+                Expired = false;
                 var tick = new WaitForSecondsRealtime(1);
 
-                while (_seconds > 0)
+                while (sec > 0)
                 {
-                    _seconds--;
-                    _timePlaceholder.ReplaceValue(_seconds.ToString());
+                    sec--;
+                    _timePlaceholder.ReplaceValue(sec.ToString());
+                    UnityEngine.PlayerPrefs.SetInt(SavedTime, sec);
 
                     yield return tick;
                 }
 
-                if (_seconds <= 0)
+                if (sec <= 0)
+                {
                     TimerExpired?.Invoke();
+                    Expired = true;
+                    UnityEngine.PlayerPrefs.DeleteKey(SavedTime);
+                    _timePlaceholder.gameObject.SetActive(false);
+                }
             }
         }
 
@@ -47,6 +75,38 @@ namespace Agava.Wink
                 _coroutine = null;
                 _timePlaceholder.gameObject.SetActive(false);
             }
+        }
+
+        private async void SetRemoteConfig()
+        {
+            var response = await SmsAuthApi.GetRemoteConfig(RemoteName);
+
+            if (response.statusCode == UnityWebRequest.Result.Success)
+            {
+                if (string.IsNullOrEmpty(response.body))
+                {
+                    _seconds = DefaultTime;
+                    Debug.LogError($"Fail to recieve remote config '{RemoteName}': value is NULL");
+                }
+                else
+                {
+                    SetTime(response.body);
+                }
+            }
+            else
+            {
+                Debug.LogError($"Fail to recieve remote config '{RemoteName}': BAD REQUEST");
+            }
+        }
+
+        private void SetTime(string timeStr)
+        {
+            bool success = int.TryParse(timeStr, out int time);
+
+            if (success)
+                _seconds = time + AdditiveTime;
+            else
+                _seconds = DefaultTime;
         }
     }
 }

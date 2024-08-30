@@ -174,7 +174,10 @@ namespace Agava.Wink
             foreach (TextPlaceholder placeholder in _phoneNumberPlaceholders)
                 placeholder.ReplaceValue(formattedNumber);
 
-            _signInFuctionsUI.OnSignInClicked(number);
+            if (_notifyWindowHandler.HasCodeDelayExpired == false)
+                _notifyWindowHandler.OpenInputOtpCodeWhileReapetWindow(number);
+            else
+                _signInFuctionsUI.OnSignInClicked(number);
         }
 
         private void OnLimitReached(IReadOnlyList<string> devicesList)

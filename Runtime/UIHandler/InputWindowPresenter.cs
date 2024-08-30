@@ -29,6 +29,8 @@ namespace Agava.Wink
         private Action _onBackClicked;
         private string _phone;
 
+        public bool HasExpired => _repeatCodeTimer.Expired;
+
         private void Awake()
         {
             _sendButton.onClick.AddListener(OnSendCodeClicked);
@@ -63,13 +65,15 @@ namespace Agava.Wink
             EnableCanvasGroup(_canvasGroup);
         }
 
+        public void Enable(string phone)
+        {
+            _phone = phone;
+            EnableCanvasGroup(_canvasGroup);
+        }
+
         public override void Enable() { }
 
-        public override void Disable()
-        {
-            _repeatCodeTimer.Disable();
-            DisableCanvasGroup(_canvasGroup);
-        }
+        public override void Disable() => DisableCanvasGroup(_canvasGroup);
 
         public void OnSendCodeClicked()
         {
