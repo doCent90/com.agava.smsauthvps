@@ -1,5 +1,6 @@
 ﻿using Io.AppMetrica;
 using Newtonsoft.Json;
+using UnityEngine;
 using UnityEngine.Scripting;
 
 namespace Agava.Wink
@@ -12,15 +13,29 @@ namespace Agava.Wink
         /// </summary>
 
         public static void SendStartApp(string appId) => AppMetrica.ReportEvent("App run", GetJson("App run", appId));
-        public static void SendSanId(string sanId) => AppMetrica.ReportEvent("SanId", GetJson("SanId", sanId));
+        public static void SendSanId(string sanId)
+        {
+            AppMetrica.ReportEvent("SanId", GetJson("SanId", sanId));
+            Debug.LogWarning("Analytics: SanId: " + sanId);
+        }
+
         public static void SendSex(string sex) => AppMetrica.ReportEvent($"Sex {sex}");//N/A
         public static void SendAge(string age) => AppMetrica.ReportEvent($"Age {age}");//N/A
 
         /// <summary>
         /// User data
         /// </summary>
-        public static void SendHasActiveAccountNewUser(bool hasActiveAcc) => AppMetrica.ReportEvent("Has Active Account New User", GetJson("New Account", hasActiveAcc.ToString()));
-        public static void SendHasActiveAccountUser(bool hasActiveAcc) => AppMetrica.ReportEvent("Has Active Account Regular User", GetJson("Regular Account", hasActiveAcc.ToString()));
+        public static void SendHasActiveAccountNewUser(bool hasActiveAcc)
+        {
+            AppMetrica.ReportEvent("Has Active Account New User", GetJson("New Account", hasActiveAcc.ToString()));
+            Debug.LogWarning("Analytics: Has Active Account New User: " + hasActiveAcc);
+        }
+
+        public static void SendHasActiveAccountUser(bool hasActiveAcc)
+        {
+            AppMetrica.ReportEvent("Has Active Account Regular User", GetJson("Regular Account", hasActiveAcc.ToString()));
+            Debug.LogWarning("Analytics: Has Active Account Regular User: " + hasActiveAcc);
+        }
 
         /// <summary>
         /// Retention

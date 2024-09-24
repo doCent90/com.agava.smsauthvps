@@ -14,6 +14,7 @@ namespace Agava.Wink
     [Preserve]
     public class WinkAccessManager : MonoBehaviour, IWinkAccessManager, ICoroutine
     {
+        private const string FirstAppOpen = nameof(FirstAppOpen);
         private const string FirstRegist = nameof(FirstRegist);
         private const string UniqueId = nameof(UniqueId);
 
@@ -173,9 +174,9 @@ namespace Agava.Wink
 #if UNITY_EDITOR || TEST
             Debug.Log("Authentication successfully");
 #endif
-
             if (hasAccess)
             {
+                TrySendAnalyticsData(LoginData.phone);
                 OnSubscriptionExist();
             }
         }
@@ -186,7 +187,7 @@ namespace Agava.Wink
             HasAccess = true;
             AuthorizationSuccessfully?.Invoke();
 
-            if (PlayerPrefs.HasKey(FirstRegist))
+            if (PlayerPrefs.HasKey(FirstAppOpen))
                 AnalyticsWinkService.SendHasActiveAccountUser(hasActiveAcc: true);
 
 #if UNITY_EDITOR || TEST
@@ -202,8 +203,8 @@ namespace Agava.Wink
             _subscribeSearchSystem = new(phone);
             _subscribeSearchSystem.StartSearching(onSubscriptionExist: () =>
             {
-                OnSubscriptionExist();
                 TrySendAnalyticsData(LoginData.phone);
+                OnSubscriptionExist();
             });
         }
 
@@ -224,12 +225,10 @@ namespace Agava.Wink
                         AnalyticsWinkService.SendSanId(responseGetSanId.body);
                         AnalyticsWinkService.SendHasActiveAccountNewUser(hasActiveAcc: true);
                         SmsAuthApi.OnUserAddApp(LoginData.phone, responseGetSanId.body, AppId);
+
                         PlayerPrefs.SetString(FirstRegist, "done");
+                        PlayerPrefs.SetString(FirstAppOpen, "done");
                     }
-                }
-                else
-                {
-                    AnalyticsWinkService.SendHasActiveAccountNewUser(hasActiveAcc: false);
                 }
             }
         }
@@ -242,9 +241,15 @@ namespace Agava.Wink
 
         private IEnumerator DelayedSendStatistic()
         {
-            yield return new WaitForSecondsRealtime(time: 120f);
+            yield return new WaitForSecondsRealtime(time: 60f);
 
-            if (HasAccess == false)
+            if (PlayerPrefs.HasKey(FirstAppOpen) == false && PlayerPrefs.HasKey(FirstRegist) == false && HasAccess == false)
+            {
+                AnalyticsWinkService.SendHasActiveAccountNewUser(hasActiveAcc: false);
+                PlayerPrefs.SetString(FirstAppOpen, "done");
+            }
+
+            if (PlayerPrefs.HasKey(FirstAppOpen) && HasAccess == false)
                 AnalyticsWinkService.SendHasActiveAccountUser(hasActiveAcc: false);
         }
     }
