@@ -80,6 +80,7 @@ namespace Agava.Wink
 
         private void SetAverageSessionTimespent(ulong minutes)
         {
+            _savedTime ??= new();
             _savedTime.Add((int)minutes);
 
             if (_savedTime.Count > 3)

@@ -176,7 +176,7 @@ namespace Agava.Wink
 #endif
             if (hasAccess)
             {
-                TrySendAnalyticsData(LoginData.phone);
+                TrySendAnalyticsDataByNewUser(LoginData.phone);
                 OnSubscriptionExist();
             }
         }
@@ -203,12 +203,12 @@ namespace Agava.Wink
             _subscribeSearchSystem = new(phone);
             _subscribeSearchSystem.StartSearching(onSubscriptionExist: () =>
             {
-                TrySendAnalyticsData(LoginData.phone);
+                TrySendAnalyticsDataByNewUser(LoginData.phone);
                 OnSubscriptionExist();
             });
         }
 
-        private async void TrySendAnalyticsData(string phone)
+        private async void TrySendAnalyticsDataByNewUser(string phone)
         {
             if (PlayerPrefs.HasKey(FirstRegist) == false)
             {
@@ -227,10 +227,11 @@ namespace Agava.Wink
                         SmsAuthApi.OnUserAddApp(LoginData.phone, responseGetSanId.body, AppId);
 
                         PlayerPrefs.SetString(FirstRegist, "done");
-                        PlayerPrefs.SetString(FirstAppOpen, "done");
                     }
                 }
             }
+
+            PlayerPrefs.SetString(FirstAppOpen, "done");
         }
 
         private void StartTimespentAnalytics()
