@@ -33,7 +33,6 @@ namespace Agava.Wink
 
         private void OnDestroy()
         {
-            _winkAccessManager.AuthorizationSuccessfully -= OnSuccessfully;
             _winkSignInHandlerUI?.Dispose();
         }
 
