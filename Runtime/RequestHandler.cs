@@ -20,6 +20,24 @@ namespace Agava.Wink
     {
         private const string UnlinkProcess = nameof(UnlinkProcess);
 
+        internal async Task SendStartData(string deviceName, string phone, DateTime dateTime)
+        {
+            StartUserData data = new()
+            {
+                device_name = deviceName,
+                start_date = dateTime,
+                phone = phone,
+                app_app_id = Application.identifier,
+            };
+
+            Response response = await SmsAuthApi.SendStartData(data);
+
+            if (response.statusCode == UnityWebRequest.Result.Success)
+            {
+                Debug.Log($"#RequestHandler# Data send with {response.reasonPhrase}, data {response.body}");
+            }
+        }
+
         internal async Task<LoginData> Regist(string phoneNumber, string uniqueId, string appId, Action<bool> otpCodeRequest)
         {
             LoginData data = new()

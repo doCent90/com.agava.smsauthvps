@@ -5,7 +5,7 @@ public static class AppMetricaActivator
 {
     private const string FirtsAppMetricaLaunch = nameof(FirtsAppMetricaLaunch);
     private const string TestKey = "e8883556-3e2e-4706-a0a5-a7eb677fe077";
-
+#if !WINK_POPUP
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     private static void Activate()
     {
@@ -24,6 +24,7 @@ public static class AppMetricaActivator
         Debug.Log($"AppMetrica start: {key}");
 #endif
     }
+#endif
 
     private static bool IsFirstLaunch()
     {

@@ -14,6 +14,7 @@ namespace Agava.Wink
     [Preserve]
     public class WinkAccessManager : MonoBehaviour, IWinkAccessManager, ICoroutine
     {
+        private const string StartDataSend = nameof(StartDataSend);
         private const string FirstAppOpen = nameof(FirstAppOpen);
         private const string FirstRegist = nameof(FirstRegist);
         private const string UniqueId = nameof(UniqueId);
@@ -79,6 +80,15 @@ namespace Agava.Wink
             yield return null;
 
             StartCoroutine(DelayedSendStatistic());
+
+            if (UnityEngine.PlayerPrefs.HasKey(StartDataSend) == false)
+                SendStartData(string.Empty);
+        }
+
+        public async void SendStartData(string phone)
+        {
+            await _requestHandler.SendStartData(SystemInfo.deviceName, phone, DateTime.UtcNow);
+            PlayerPrefs.SetString(StartDataSend, "send");
         }
 
         public void TryQuickAccess()
@@ -170,10 +180,8 @@ namespace Agava.Wink
             Authenficated = true;
             SignInSuccessfully?.Invoke(hasAccess);
             SearchSubscription(LoginData.phone);
-
-#if UNITY_EDITOR || TEST
             Debug.Log("Authentication successfully");
-#endif
+
             if (hasAccess)
             {
                 TrySendAnalyticsDataByNewUser(LoginData.phone);
@@ -186,13 +194,12 @@ namespace Agava.Wink
             _subscribeSearchSystem?.Stop();
             HasAccess = true;
             AuthorizationSuccessfully?.Invoke();
+            SendStartData(LoginData.phone);
 
             if (PlayerPrefs.HasKey(FirstAppOpen))
                 AnalyticsWinkService.SendHasActiveAccountUser(hasActiveAcc: true);
 
-#if UNITY_EDITOR || TEST
             Debug.Log("Wink access successfully");
-#endif
         }
 
         private void SearchSubscription(string phone)

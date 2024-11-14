@@ -38,11 +38,13 @@ namespace Agava.Wink
 
         private IEnumerator Start()
         {
-            Debug.Log("Boot: Start plugin initialize");
+            Debug.Log("#Boot# : Start plugin initialize");
+            Debug.Log("#Boot# name device " + SystemInfo.deviceName);
+
             DontDestroyOnLoad(this);
 
             if (_winkSignInHandlerUI == null || _winkAccessManager == null)
-                throw new NullReferenceException("Boot: Some Auth Component is Missing On Boot!");
+                throw new NullReferenceException("#Boot# : Some Auth Component is Missing On Boot!");
 
             if (Instance == null)
                 Instance = this;
