@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -10,11 +11,13 @@ namespace Agava.Wink
 
         private string _linkId;
         private string _link;
+        private Action _onClick;
 
-        protected void Initialize(string linkId, string link)
+        protected void Initialize(string linkId, string link, Action onClick=null)
         {
             _linkId = linkId;
             _link = link;
+            _onClick = onClick;
         }
 
         public void OnPointerClick(PointerEventData eventData)
@@ -34,6 +37,7 @@ namespace Agava.Wink
             {
                 Debug.LogFormat($"Open link {selectedLink}");
                 Application.OpenURL(_link);
+                _onClick?.Invoke();
             }
         }
     }

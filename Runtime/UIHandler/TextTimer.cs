@@ -1,9 +1,8 @@
 using System;
 using System.Collections;
-using SmsAuthAPI.DTO;
+using System.Threading.Tasks;
 using SmsAuthAPI.Program;
 using UnityEngine;
-using UnityEngine.Networking;
 using UnityEngine.Scripting;
 
 namespace Agava.Wink
@@ -11,12 +10,16 @@ namespace Agava.Wink
     [Preserve]
     internal class TextTimer : MonoBehaviour
     {
-        private const string RemoteName = "sms-delay-seconds";
+        private const string SmsDelay = "sms-delay-seconds";
+        private const string CodeLifespan = "code-lifespan-seconds";
         private const string SavedTime = nameof(SavedTime);
-        private const int DefaultTime = 190;
-        private const int AdditiveTime = 10;
+        private const int SmsDelayDefaultTime = 60;
+        private const int CodeLifespanDefaultTime = 600;
 
         [SerializeField] private TextPlaceholder _timePlaceholder;
+
+        private int _smsDelaySeconds;
+        private int _codeLifespan;
 
         private int _seconds = 0;
         private Coroutine _coroutine;
@@ -27,10 +30,26 @@ namespace Agava.Wink
         private IEnumerator Start()
         {
             if (_seconds <= 0)
-                _seconds = DefaultTime;
+                _seconds = SmsDelayDefaultTime;
 
             yield return new WaitUntil(() => SmsAuthApi.Initialized);
-            SetRemoteConfig();
+
+            Task task = SetRemoteConfigs();
+            yield return new WaitUntil(() => task.IsCompleted);
+
+            _seconds = _codeLifespan;
+        }
+
+        public void SetSmsDelayConfig()
+        {
+            UnityEngine.PlayerPrefs.DeleteKey(SavedTime);
+            _seconds = _smsDelaySeconds;
+        }
+
+        public void SetCodeLifespanConfig()
+        {
+            UnityEngine.PlayerPrefs.DeleteKey(SavedTime);
+            _seconds = _codeLifespan;
         }
 
         internal void Enable()
@@ -51,7 +70,7 @@ namespace Agava.Wink
                 while (sec > 0)
                 {
                     sec--;
-                    _timePlaceholder.ReplaceValue(sec.ToString());
+                    _timePlaceholder.ReplaceValue(TimeString(sec));
                     UnityEngine.PlayerPrefs.SetInt(SavedTime, sec);
 
                     yield return tick;
@@ -77,36 +96,16 @@ namespace Agava.Wink
             }
         }
 
-        private async void SetRemoteConfig()
+        private async Task SetRemoteConfigs()
         {
-            var response = await SmsAuthApi.GetRemoteConfig(RemoteName);
-
-            if (response.statusCode == UnityWebRequest.Result.Success)
-            {
-                if (string.IsNullOrEmpty(response.body))
-                {
-                    _seconds = DefaultTime;
-                    Debug.LogError($"Fail to recieve remote config '{RemoteName}': value is NULL");
-                }
-                else
-                {
-                    SetTime(response.body);
-                }
-            }
-            else
-            {
-                Debug.LogError($"Fail to recieve remote config '{RemoteName}': BAD REQUEST");
-            }
+            _smsDelaySeconds = await RemoteConfig.IntRemoteConfig(SmsDelay, SmsDelayDefaultTime);
+            _codeLifespan = await RemoteConfig.IntRemoteConfig(CodeLifespan, CodeLifespanDefaultTime);
         }
 
-        private void SetTime(string timeStr)
+        private string TimeString(int seconds)
         {
-            bool success = int.TryParse(timeStr, out int time);
-
-            if (success)
-                _seconds = time + AdditiveTime;
-            else
-                _seconds = DefaultTime;
+            TimeSpan timeSpan = TimeSpan.FromSeconds(seconds);
+            return $"{timeSpan.Minutes}:{timeSpan.Seconds:00}";
         }
     }
 }

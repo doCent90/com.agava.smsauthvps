@@ -1,7 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Scripting;
+using UnityEngine.UI;
 
 namespace Agava.Wink
 {
@@ -9,18 +8,21 @@ namespace Agava.Wink
     internal class SubmitInputButton : MonoBehaviour
     {
         [SerializeField] private MonoBehaviour _inputFieldFormatting;
-        [Header("Buttons")]
-        [SerializeField] private GameObject _active;
-        [SerializeField] private GameObject _unactive;
+        [SerializeField] private Button _button;
+        [SerializeField] private bool _enableObject = false;
 
         private IInputFieldFormatting InputFieldFormatting => (IInputFieldFormatting)_inputFieldFormatting;
 
         private void Update()
         {
-            bool inputDone = InputFieldFormatting.InputDone;
+            bool interactable = InputFieldFormatting.InputDone;
 
-            _active.SetActive(inputDone);
-            _unactive.SetActive(!inputDone);
+            if (_enableObject)
+            {
+                _button.gameObject.SetActive(interactable);
+            }
+
+            _button.interactable = interactable;
         }
 
         private void OnValidate()

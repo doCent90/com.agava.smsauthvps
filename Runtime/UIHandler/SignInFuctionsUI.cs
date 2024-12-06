@@ -35,7 +35,9 @@ namespace Agava.Wink
 
         internal void OnSignInClicked(string phone)
         {
+            _notifyWindowHandler.CloseWindow(WindowType.SignIn);
             _notifyWindowHandler.OpenWindow(WindowType.ProccessOn);
+
             AnalyticsWinkService.SendOnEnteredPhoneWindow();
 
             _winkAccessManager.Regist(phoneNumber: phone,
@@ -46,19 +48,18 @@ namespace Agava.Wink
             otpCodeAccepted: (accepted) =>
             {
                 OnOtpCodeAccepted(accepted);
-            });
+            },
+            onFail: () =>
+            {
+                _notifyWindowHandler.OpenWindow(WindowType.Fail);
+                _notifyWindowHandler.CloseWindow(WindowType.ProccessOn);
+            }
+            );
         }
 
         internal void OnUnlinkClicked(string device)
         {
-            _notifyWindowHandler.OpenWindow(WindowType.ProccessOn);
-
-            _winkAccessManager.Unlink(device, () =>
-            {
-                _notifyWindowHandler.CloseWindow(WindowType.Redirect);
-                _notifyWindowHandler.CloseWindow(WindowType.Unlink);
-                _winkAccessManager.Login();
-            });
+            _winkAccessManager.Unlink(device);
         }
 
         internal async void SetRemoteConfig()
@@ -94,9 +95,9 @@ namespace Agava.Wink
         {
             if (hasOtpCode)
             {
-                _notifyWindowHandler.CloseWindow(WindowType.ProccessOn);
                 AnalyticsWinkService.SendEnterOtpCodeWindow();
 
+                _notifyWindowHandler.CloseWindow(WindowType.ProccessOn);
                 _notifyWindowHandler.OpenInputOtpCodeWindow(phone,
                 onInputDone: (code) =>
                 {
@@ -111,22 +112,13 @@ namespace Agava.Wink
             }
             else
             {
-                _notifyWindowHandler.CloseWindow(WindowType.ProccessOn);
                 _notifyWindowHandler.OpenWindow(WindowType.Fail);
             }
         }
 
         private void OnOtpCodeAccepted(bool accepted)
         {
-            if (accepted == false)
-            {
-                _notifyWindowHandler.ResetInputWindow();
-            }
-            else
-            {
-                _notifyWindowHandler.OpenWindow(WindowType.ProccessOn);
-                _notifyWindowHandler.CloseWindow(WindowType.EnterOtpCode);
-            }
+            _notifyWindowHandler.Response(accepted);
         }
 
         internal void OnSignInSuccesfully(bool hasAccess)

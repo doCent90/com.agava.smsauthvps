@@ -51,6 +51,11 @@ namespace Agava.Wink
                 _timespentService.OnStartedApp();
         }
 
+        private void OnDestroy()
+        {
+            _subscribeSearchSystem?.Stop();
+        }
+
         public void Initialize()
         {
             if (SmsAuthApi.Initialized == false)
@@ -103,18 +108,21 @@ namespace Agava.Wink
             Login(LoginData);
         }
 
-        public async void Regist(string phoneNumber, Action<bool> otpCodeRequest, Action<bool> otpCodeAccepted)
+        public async void Regist(string phoneNumber, Action<bool> otpCodeRequest, Action<bool> otpCodeAccepted, Action onFail = null)
         {
             _winkSubscriptionAccessRequest = OnSignInSuccessfully;
             _otpCodeAccepted = otpCodeAccepted;
             UnityEngine.PlayerPrefs.SetString(PhoneNumber, phoneNumber);
             LoginData = await _requestHandler.Regist(phoneNumber, _uniqueId, AppId, otpCodeRequest);
 
+            if (LoginData == null)
+                onFail?.Invoke();
+
             if (_timespentService == null)
                 StartTimespentAnalytics();
         }
 
-        public void Unlink(string deviceId, Action onUnlinkDevice) => _requestHandler.Unlink(new UnlinkData() { device_id = deviceId, app_id = AppId }, onUnlinkDevice);
+        public void Unlink(string deviceId, Action onUnlinkDevice = null) => _requestHandler.Unlink(new UnlinkData() { device_id = deviceId, app_id = AppId }, onUnlinkDevice);
 
         public void Login()
         {
@@ -243,8 +251,15 @@ namespace Agava.Wink
 
         private void StartTimespentAnalytics()
         {
-            _timespentService = new(this, LoginData.phone, _uniqueId, AppId);
-            _timespentService.OnStartedApp();
+            StartCoroutine(WaitForData());
+
+            IEnumerator WaitForData()
+            {
+                yield return new WaitUntil(() => LoginData != null);
+
+                _timespentService = new(this, LoginData.phone, _uniqueId, AppId);
+                _timespentService.OnStartedApp();
+            }
         }
 
         private IEnumerator DelayedSendStatistic()

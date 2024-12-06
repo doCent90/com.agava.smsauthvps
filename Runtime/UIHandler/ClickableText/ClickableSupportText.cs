@@ -4,7 +4,7 @@ namespace Agava.Wink
     {
         private void Awake()
         {
-            Initialize("support", Links.Support);
+            Initialize("support", Links.Support, () => AnalyticsWinkService.SendSupportLink());
         }
     }
 }

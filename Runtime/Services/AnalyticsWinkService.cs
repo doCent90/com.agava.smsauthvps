@@ -56,6 +56,9 @@ namespace Agava.Wink
         public static void SendFirstOpen() => AppMetrica.ReportEvent("First Open Game");        
         public static void SendSubscribeProfileWindow() => AppMetrica.ReportEvent("Subscribe Profile Window");        
         public static void SendSubscribeProfileRemote() => AppMetrica.ReportEvent("Subscribe Profile Remote");        
+        public static void SendSupportLink() => AppMetrica.ReportEvent("Support Link");       
+        public static void SendSubscriptionLink() => AppMetrica.ReportEvent("About Subscription Link");
+        public static void SendDeleteWindow() => AppMetrica.ReportEvent("Delete Window");
 
         private static string GetJson(string name, string value)
         {
