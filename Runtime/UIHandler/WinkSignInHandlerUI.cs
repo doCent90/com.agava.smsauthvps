@@ -39,6 +39,7 @@ namespace Agava.Wink
 
         public event Action AllWindowsClosed;
 
+
         private void Awake()
         {
             _notifyWindowHandler.OpenWindow(WindowType.ProccessOn);
@@ -79,6 +80,8 @@ namespace Agava.Wink
             }
 
             _notifyWindowHandler.CloseWindow(WindowType.NoEnternet);
+
+            yield return new WaitUntil(() => _notifyWindowHandler.EnterCodeWindowInitialized);
         }
 
         public void Construct()
@@ -192,10 +195,7 @@ namespace Agava.Wink
             foreach (TextPlaceholder placeholder in _phoneNumberPlaceholders)
                 placeholder.ReplaceValue(formattedNumber);
 
-            if (_notifyWindowHandler.HasCodeDelayExpired == false)
-                _notifyWindowHandler.OpenInputOtpCodeWhileReapetWindow(number);
-            else
-                _signInFuctionsUI.OnSignInClicked(number);
+            _signInFuctionsUI.OnSignInClicked(number, _notifyWindowHandler.ZeroSecondsCodeTimer == false);
         }
 
         private void OnLimitReached(IReadOnlyList<string> devicesList)

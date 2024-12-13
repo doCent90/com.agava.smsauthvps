@@ -74,6 +74,8 @@ namespace Agava.Wink
 
             numbers = PhoneNumber.FormatNumber(numbers);
 
+            Number = Regex.Replace(numbers, "[^0-9]", string.Empty);
+
             _visibleTextLength = numbers.Length;
 
             string coloredString = _visibleTextLength >= _placeholderLength ? string.Empty : PhoneNumber.PlaceholderText.Substring(_visibleTextLength);

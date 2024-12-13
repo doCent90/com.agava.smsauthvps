@@ -9,7 +9,7 @@ namespace Agava.Wink
 {
     public class ImagesCarousel : MonoBehaviour
     {
-        private const float OneCycleSeconds = 2.5f;
+        private const float OneCycleSeconds = 0.65f;
         private const float PauseSeconds = 1f;
 
         [SerializeField] private List<CarouselItem> _items;

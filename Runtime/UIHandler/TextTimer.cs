@@ -11,95 +11,85 @@ namespace Agava.Wink
     internal class TextTimer : MonoBehaviour
     {
         private const string SmsDelay = "sms-delay-seconds";
-        private const string CodeLifespan = "code-lifespan-seconds";
-        private const string SavedTime = nameof(SavedTime);
+        private const string ExpirationTime = nameof(ExpirationTime);
         private const int SmsDelayDefaultTime = 60;
-        private const int CodeLifespanDefaultTime = 600;
 
         [SerializeField] private TextPlaceholder _timePlaceholder;
 
         private int _smsDelaySeconds;
-        private int _codeLifespan;
-
-        private int _seconds = 0;
-        private Coroutine _coroutine;
+        private DateTime _expirationDate;
+        private int _seconds;
+        private bool _active = false;
 
         public event Action TimerExpired;
-        public bool Expired = true;
+
+        private DateTime Now => DateTime.Now;
+
+        public bool Initialized { get; private set; } = false;
+        public bool ZeroSeconds => _seconds <= 0;
 
         private IEnumerator Start()
         {
-            if (_seconds <= 0)
-                _seconds = SmsDelayDefaultTime;
-
             yield return new WaitUntil(() => SmsAuthApi.Initialized);
 
             Task task = SetRemoteConfigs();
             yield return new WaitUntil(() => task.IsCompleted);
 
-            _seconds = _codeLifespan;
-        }
+            Initialized = true;
 
-        public void SetSmsDelayConfig()
-        {
-            UnityEngine.PlayerPrefs.DeleteKey(SavedTime);
-            _seconds = _smsDelaySeconds;
-        }
+            _seconds = 0;
 
-        public void SetCodeLifespanConfig()
-        {
-            UnityEngine.PlayerPrefs.DeleteKey(SavedTime);
-            _seconds = _codeLifespan;
-        }
-
-        internal void Enable()
-        {
-            _timePlaceholder.gameObject.SetActive(true);
-            _coroutine ??= StartCoroutine(Ticking());
-
-            IEnumerator Ticking()
+            if (TryLoadSave())
             {
-                int sec = _seconds;
+                _active = true;
+            }
+        }
 
-                if (UnityEngine.PlayerPrefs.HasKey(SavedTime))
-                    sec = UnityEngine.PlayerPrefs.GetInt(SavedTime);
-
-                Expired = false;
-                var tick = new WaitForSecondsRealtime(1);
-
-                while (sec > 0)
+        private void Update()
+        {
+            if (_active)
+            {
+                if (_seconds > 0)
                 {
-                    sec--;
-                    _timePlaceholder.ReplaceValue(TimeString(sec));
-                    UnityEngine.PlayerPrefs.SetInt(SavedTime, sec);
-
-                    yield return tick;
+                    _seconds = SubtractSeconds(_expirationDate);
+                    _timePlaceholder.ReplaceValue(TimeString(_seconds));
                 }
-
-                if (sec <= 0)
+                else
                 {
                     TimerExpired?.Invoke();
-                    Expired = true;
-                    UnityEngine.PlayerPrefs.DeleteKey(SavedTime);
-                    _timePlaceholder.gameObject.SetActive(false);
+                    ResetTimer();
+                    StopTimer();
                 }
             }
+
+            _timePlaceholder.gameObject.SetActive(_active);
         }
 
-        internal void Disable()
+        internal void StartTimer()
         {
-            if (_coroutine != null)
+            TryLoadSave();
+
+            if (_seconds <= 0)
             {
-                StopCoroutine(_coroutine);
-                _coroutine = null;
-                _timePlaceholder.gameObject.SetActive(false);
+                NewSave();
             }
+
+            _active = true;
+        }
+
+        internal void StopTimer()
+        {
+            _active = false;
+        }
+
+        internal void ResetTimer()
+        {
+            UnityEngine.PlayerPrefs.DeleteKey(ExpirationTime);
         }
 
         private async Task SetRemoteConfigs()
         {
             _smsDelaySeconds = await RemoteConfig.IntRemoteConfig(SmsDelay, SmsDelayDefaultTime);
-            _codeLifespan = await RemoteConfig.IntRemoteConfig(CodeLifespan, CodeLifespanDefaultTime);
         }
 
         private string TimeString(int seconds)
@@ -107,5 +97,32 @@ namespace Agava.Wink
             TimeSpan timeSpan = TimeSpan.FromSeconds(seconds);
             return $"{timeSpan.Minutes}:{timeSpan.Seconds:00}";
         }
+
+        private bool TryLoadSave()
+        {
+            if (UnityEngine.PlayerPrefs.HasKey(ExpirationTime))
+            {
+                if (DateTime.TryParse(UnityEngine.PlayerPrefs.GetString(ExpirationTime), out _expirationDate))
+                {
+                    _seconds = SubtractSeconds(_expirationDate);
+
+                    if (_seconds > _smsDelaySeconds)
+                        NewSave();
+
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private void NewSave()
+        {
+            _expirationDate = Now.AddSeconds(_smsDelaySeconds);
+            _seconds = _smsDelaySeconds;
+            UnityEngine.PlayerPrefs.SetString(ExpirationTime, _expirationDate.ToString());
+        }
+
+        private int SubtractSeconds(DateTime expirationDate) => expirationDate.Subtract(Now).Seconds;
     }
 }

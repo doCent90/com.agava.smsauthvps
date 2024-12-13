@@ -25,14 +25,17 @@ namespace Agava.Wink
         [SerializeField] private List<WindowPresenter> _windows;
 
         public bool IsAnyWindowEnabled => _windows.Any(window => window.Enabled);
-        public bool HasCodeDelayExpired => _enterCodeWindow.HasExpired;
+        public bool ZeroSecondsCodeTimer => _enterCodeWindow.ZeroSeconds;
+        public bool EnterCodeWindowInitialized => _enterCodeWindow.Initialized;
 
         internal void OpenSignInWindow(Action closeCallback = null) => _signInWindow.Enable(closeCallback);
         internal void OpenWindow(WindowType type) => GetWindowByType(type).Enable();
         internal void CloseWindow(WindowType type) => GetWindowByType(type).Disable();
-        internal void OpenInputOtpCodeWindow(string phone, Action<string> onInputDone, Action onBackClicked)
-            => _enterCodeWindow.Enable(phone, onInputDone, onBackClicked);
-        internal void OpenInputOtpCodeWhileReapetWindow(string phone) => _enterCodeWindow.Enable(phone);
+        internal void OpenInputOtpCodeWindow(string phone, Action<string> onInputDone = null, Action onBackClicked = null)
+        {
+            _enterCodeWindow.Enable(phone, onInputDone, onBackClicked);
+            _signInWindow.Clear();
+        }
         internal void OpenDemoExpiredWindow(bool closeButton) => _demoTimerExpiredWindow.Enable(closeButton);
         internal void OpenDeleteAccountWindow(Action onDeleteAccount) => _deleteAccountWindow.Enable(onDeleteAccount);
 

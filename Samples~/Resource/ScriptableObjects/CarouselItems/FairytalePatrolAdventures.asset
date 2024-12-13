@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff7fb0c6c202d8747a7ceb3d91de9cf4, type: 3}
   m_Name: FairytalePatrolAdventures
   m_EditorClassIdentifier: 
-  <Sprite>k__BackingField: {fileID: 21300000, guid: ab691e2dae23e754eab790ce942c2cd0, type: 3}
+  <Sprite>k__BackingField: {fileID: 21300000, guid: 2d88532e918b20a429d7e8c6f29496e0, type: 3}
   <Description>k__BackingField: New_TwelveGames

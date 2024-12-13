@@ -9,9 +9,11 @@ namespace Agava.Wink
     {
         [SerializeField] private RectTransform _rectTransform;
         [SerializeField] private int _amplitude;
-        [SerializeField] private float _duration;
+        [SerializeField] private float _duration = 1.0f;
 
         private Coroutine _coroutine;
+
+        public bool Shaking => _coroutine != null;
 
         internal void StartAnimation()
         {
@@ -40,6 +42,8 @@ namespace Agava.Wink
                         _rectTransform.anchoredPosition = new Vector2(x, y);
                         yield return waitForEndOfFrame;
                     }
+
+                    _coroutine = null;
                 }
             }
         }

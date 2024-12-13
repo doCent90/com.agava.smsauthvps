@@ -19,7 +19,8 @@ namespace Agava.Wink
     internal class RequestHandler
     {
         private const string UnlinkProcess = nameof(UnlinkProcess);
-
+        private const string CodeExpirationDateKey = nameof(CodeExpirationDateKey);
+        private const int CodeExpirationMinutes = 2;
         internal async Task SendStartData(string deviceName, string phone, DateTime dateTime)
         {
             StartUserData data = new()
@@ -38,7 +39,7 @@ namespace Agava.Wink
             }
         }
 
-        internal async Task<LoginData> Regist(string phoneNumber, string uniqueId, string appId, Action<bool> otpCodeRequest)
+        internal async Task<LoginData> Regist(string phoneNumber, string uniqueId, string appId, Action<bool> otpCodeRequest, bool skipRegistration = false)
         {
             LoginData data = new()
             {
@@ -48,18 +49,27 @@ namespace Agava.Wink
                 app_id = appId,
             };
 
-            Response response = await SmsAuthApi.Regist(phoneNumber);
-
-            if (response.statusCode != UnityWebRequest.Result.Success)
-            {
-                otpCodeRequest?.Invoke(false);
-                Debug.LogError("Regist Error : " + response.statusCode);
-                return null;
-            }
-            else
+            if (skipRegistration)
             {
                 otpCodeRequest?.Invoke(true);
                 return data;
+            }
+            else
+            {
+                Response response = await SmsAuthApi.Regist(phoneNumber);
+
+                if (response.statusCode != UnityWebRequest.Result.Success)
+                {
+                    otpCodeRequest?.Invoke(false);
+                    Debug.LogError("Regist Error : " + response.statusCode);
+                    return null;
+                }
+                else
+                {
+                    UnityEngine.PlayerPrefs.SetString(CodeExpirationDateKey, DateTime.Now.AddMinutes(CodeExpirationMinutes).ToString());
+                    otpCodeRequest?.Invoke(true);
+                    return data;
+                }
             }
         }
 
@@ -89,7 +99,7 @@ namespace Agava.Wink
 
             if (response.statusCode != UnityWebRequest.Result.Success)
             {
-                Debug.LogError("ValidationError : " + response.statusCode);
+                Debug.Log("ValidationError : " + response.statusCode);
                 otpCodeAccepted?.Invoke(false);
             }
             else

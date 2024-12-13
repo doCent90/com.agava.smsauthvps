@@ -108,12 +108,12 @@ namespace Agava.Wink
             Login(LoginData);
         }
 
-        public async void Regist(string phoneNumber, Action<bool> otpCodeRequest, Action<bool> otpCodeAccepted, Action onFail = null)
+        public async void Regist(string phoneNumber, Action<bool> otpCodeRequest, Action<bool> otpCodeAccepted, Action onFail = null, bool skipRegistration =false)
         {
             _winkSubscriptionAccessRequest = OnSignInSuccessfully;
             _otpCodeAccepted = otpCodeAccepted;
             UnityEngine.PlayerPrefs.SetString(PhoneNumber, phoneNumber);
-            LoginData = await _requestHandler.Regist(phoneNumber, _uniqueId, AppId, otpCodeRequest);
+            LoginData = await _requestHandler.Regist(phoneNumber, _uniqueId, AppId, otpCodeRequest, skipRegistration);
 
             if (LoginData == null)
                 onFail?.Invoke();

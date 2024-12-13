@@ -13,6 +13,7 @@ namespace Agava.Wink
         private int _codeLength;
 
         public bool InputDone { get; private set; } = false;
+        public string InputText => _inputField.text;
 
         private void Start()
         {
@@ -28,17 +29,12 @@ namespace Agava.Wink
 
         public void SetInteractable(bool interactable)
         {
-            _textCells[0].SetActive(interactable);
+            _inputField.interactable = interactable;
         }
 
         public void Clear()
         {
-            foreach (TextCell cell in _textCells)
-            {
-                cell.SetActive(false);
-                cell.SetText(string.Empty);
-            }
-
+            _inputField.text = string.Empty;
             _textCells[0].SetActive(true);
         }
 

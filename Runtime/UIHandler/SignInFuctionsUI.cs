@@ -33,7 +33,7 @@ namespace Agava.Wink
         internal void OnAppFocus(bool focus) => _demoTimer.OnAppFocus(focus);
         internal void Update() => _demoTimer?.Update();
 
-        internal void OnSignInClicked(string phone)
+        internal void OnSignInClicked(string phone, bool skipRegistration = false)
         {
             _notifyWindowHandler.CloseWindow(WindowType.SignIn);
             _notifyWindowHandler.OpenWindow(WindowType.ProccessOn);
@@ -53,8 +53,8 @@ namespace Agava.Wink
             {
                 _notifyWindowHandler.OpenWindow(WindowType.Fail);
                 _notifyWindowHandler.CloseWindow(WindowType.ProccessOn);
-            }
-            );
+            },
+            skipRegistration);
         }
 
         internal void OnUnlinkClicked(string device)
@@ -107,7 +107,9 @@ namespace Agava.Wink
                 onBackClicked: () =>
                 {
                     _notifyWindowHandler.CloseWindow(WindowType.EnterOtpCode);
-                    _notifyWindowHandler.OpenSignInWindow();
+
+                    if (_winkAccessManager.Authenficated == false)
+                        _notifyWindowHandler.OpenSignInWindow();
                 });
             }
             else
