@@ -131,7 +131,7 @@ namespace Agava.Wink
             }
         }
 
-        internal async void QuickAccess(string phoneNumber, Action onResetLogin, Action<bool> onWinkSubscriptionAccessRequest, Action<bool> onSignInSuccessfully)
+        internal async Task QuickAccess(string phoneNumber, Action onResetLogin, Action<bool> onWinkSubscriptionAccessRequest, Action<bool> onSignInSuccessfully)
         {
             if (UnityEngine.PlayerPrefs.HasKey(UnlinkProcess))
             {
