@@ -22,6 +22,9 @@ namespace Agava.Wink
         [SerializeField] private Button _enterCodeContinueButton;
         [SerializeField] private Button[] _signInButtons;
         [SerializeField] private Button _unlinkContinueButton;
+        [Header("Analytics buttons")]
+        [SerializeField] private Button _closeButton;
+        [SerializeField] private Button _haveWinkButton;
         [Header("UI Test Buttons")]
         [SerializeField] private Button _testSignInButton;
         [SerializeField] private Button _testDeleteButton;
@@ -60,6 +63,8 @@ namespace Agava.Wink
                 button.onClick.RemoveAllListeners();
 
             _unlinkContinueButton.onClick.RemoveListener(OnUnlinkContinueClicked);
+            _closeButton.onClick.RemoveListener(OnCloseButtonClick);
+            _haveWinkButton.onClick.RemoveListener(OnHaveWinkButtonClick);
 
             _unlinkDeviceViewContainer.Closed -= OnUnlinkButtonClicked;
 
@@ -116,6 +121,9 @@ namespace Agava.Wink
                 button.onClick.AddListener(OpenSignWindow);
 
             _unlinkContinueButton.onClick.AddListener(OnUnlinkContinueClicked);
+            _closeButton.onClick.AddListener(OnCloseButtonClick);
+            _haveWinkButton.onClick.AddListener(OnHaveWinkButtonClick);
+
             _unlinkDeviceViewContainer.Closed += OnUnlinkButtonClicked;
 
             CloseAllWindows();
@@ -250,6 +258,10 @@ namespace Agava.Wink
         }
 
         private void OnTimerExpired() => _notifyWindowHandler.OpenDemoExpiredWindow(false);
+
+        private void OnCloseButtonClick() => AnalyticsWinkService.SendCloseStartWindow();
+
+        private void OnHaveWinkButtonClick() => AnalyticsWinkService.SendHaveWinkButtonClick();
 
         private IEnumerator EnternetChecking()
         {

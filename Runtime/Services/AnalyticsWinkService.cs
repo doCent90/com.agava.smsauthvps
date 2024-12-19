@@ -53,12 +53,12 @@ namespace Agava.Wink
         public static void SendOnEnteredOtpCodeWindow() => AppMetrica.ReportEvent("On Entered Otp Code");        
         public static void SendPayWallWindow() => AppMetrica.ReportEvent("PayWall Window");        
         public static void SendPayWallRedirect() => AppMetrica.ReportEvent("PayWall Redirect");        
-        public static void SendFirstOpen() => AppMetrica.ReportEvent("First Open Game");        
-        public static void SendSubscribeProfileWindow() => AppMetrica.ReportEvent("Subscribe Profile Window");        
-        public static void SendSubscribeProfileRemote() => AppMetrica.ReportEvent("Subscribe Profile Remote");        
+        public static void SendFirstOpen() => AppMetrica.ReportEvent("First Open Game");              
         public static void SendSupportLink() => AppMetrica.ReportEvent("Support Link");       
         public static void SendSubscriptionLink() => AppMetrica.ReportEvent("About Subscription Link");
         public static void SendDeleteWindow() => AppMetrica.ReportEvent("Delete Window");
+        public static void SendCloseStartWindow() => AppMetrica.ReportEvent("Close Start Window");
+        public static void SendHaveWinkButtonClick() => AppMetrica.ReportEvent("Click Have Wink Button");
 
         private static string GetJson(string name, string value)
         {
