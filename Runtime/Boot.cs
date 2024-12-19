@@ -109,7 +109,7 @@ namespace Agava.Wink
             Debug.Log($"Boot: App Started. Authorized: {WinkAccessManager.Instance.HasAccess}");
 #endif
             if (AdsAppView.Program.Boot.Instance != null)
-                StartCoroutine(AdsAppView.Program.Boot.Instance.Construct(WinkAccessManager.Instance.HasAccess));
+                yield return AdsAppView.Program.Boot.Instance.Construct(WinkAccessManager.Instance.HasAccess);
 
             yield return new WaitUntil(() => _winkSignInHandlerUI.IsAnyWindowEnabled == false);
 
