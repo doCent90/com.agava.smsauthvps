@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 7268493344458704307}
   - component: {fileID: 741568355712530885}
   - component: {fileID: 82802224820374693}
-  - component: {fileID: 1382693065102538742}
   m_Layer: 5
   m_Name: Text_ConfirmPhone
   m_TagString: Untagged
@@ -136,21 +135,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &1382693065102538742
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 92447036311202997}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dbf51be86e70d7941bd40914206e4ddc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  translationName: New_ConfirmNumber
-  FallbackText: "\u041F\u043E\u0434\u0442\u0432\u0435\u0440\u0436\u0434\u0435\u043D\u0438\u0435
-    \u0442\u0435\u043B\u0435\u0444\u043E\u043D\u0430"
 --- !u!1 &222530240031470177
 GameObject:
   m_ObjectHideFlags: 0
@@ -162,7 +146,6 @@ GameObject:
   - component: {fileID: 1362337799994082863}
   - component: {fileID: 8011258483598711323}
   - component: {fileID: 1985713744041958401}
-  - component: {fileID: 2395143000541215584}
   m_Layer: 5
   m_Name: Text_NoFreeDevices
   m_TagString: Untagged
@@ -287,20 +270,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &2395143000541215584
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 222530240031470177}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dbf51be86e70d7941bd40914206e4ddc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  translationName: NoDevices
-  FallbackText: "\u041D\u0435\u0442 \u0438\u043D\u0442\u0435\u0440\u043D\u0435\u0442\u0430"
 --- !u!1 &305304568998117854
 GameObject:
   m_ObjectHideFlags: 0
@@ -312,7 +281,6 @@ GameObject:
   - component: {fileID: 3246492559811206122}
   - component: {fileID: 3486941243059227765}
   - component: {fileID: 4801967504582911541}
-  - component: {fileID: 8531983693293153481}
   - component: {fileID: 7440093493180260889}
   m_Layer: 5
   m_Name: Text_GetNewCode
@@ -438,21 +406,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &8531983693293153481
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 305304568998117854}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dbf51be86e70d7941bd40914206e4ddc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  translationName: New_SendNewCodeAfter
-  FallbackText: "\u041E\u0442\u043F\u0440\u0430\u0432\u0438\u0442\u044C \u043D\u043E\u0432\u044B\u0439
-    \u043A\u043E\u0434 \u0447\u0435\u0440\u0435\u0437 {time}"
 --- !u!114 &7440093493180260889
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -740,7 +693,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _text: {fileID: 4805699572144255494}
   _remoteConfigName: hello-window-text
-  _translationName: New_SubscriptionDescription
   _fallbackText: "<line-height=48px>8000+ \u043C\u0443\u043B\u044C\u0442\u0438\u043A\u043E\u0432,
     23 \u0434\u0435\u0442\u0441\u043A\u0438\u0445 \u0422\u0412-\u043A\u0430\u043D\u0430\u043B\u0430,
     \u043E\u0431\u0443\u0447\u0435\u043D\u0438\u0435 \L\u0441 \u041A\u0443\u0431\u043E\u043A\u043E\u0442
@@ -915,7 +867,6 @@ GameObject:
   - component: {fileID: 55374194466493269}
   - component: {fileID: 2502721660506154447}
   - component: {fileID: 4580377359756694764}
-  - component: {fileID: 2335353927397051033}
   m_Layer: 5
   m_Name: Text_NoInternet
   m_TagString: Untagged
@@ -1039,20 +990,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &2335353927397051033
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 616875341490492284}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dbf51be86e70d7941bd40914206e4ddc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  translationName: New_NoInternet
-  FallbackText: "\u041D\u0435\u0442 \u0438\u043D\u0442\u0435\u0440\u043D\u0435\u0442\u0430"
 --- !u!1 &682132682776558144
 GameObject:
   m_ObjectHideFlags: 0
@@ -1371,7 +1308,6 @@ GameObject:
   - component: {fileID: 8344802578672511262}
   - component: {fileID: 6679221618524220990}
   - component: {fileID: 791460818494098483}
-  - component: {fileID: 469568020143625543}
   m_Layer: 5
   m_Name: Text_GetSubscription
   m_TagString: Untagged
@@ -1495,20 +1431,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &469568020143625543
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 854318531580851938}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dbf51be86e70d7941bd40914206e4ddc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  translationName: New_GetSubscription
-  FallbackText: "\u041E\u0444\u043E\u0440\u043C\u0438\u0442\u0435 \u043F\u043E\u0434\u043F\u0438\u0441\u043A\u0443"
 --- !u!1 &931904935444181000
 GameObject:
   m_ObjectHideFlags: 0
@@ -1779,7 +1701,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _text: {fileID: 1744434992448188376}
   _remoteConfigName: wink-price-text
-  _translationName: New_WinkPrice
   _fallbackText: "\u0414\u0430\u043B\u0435\u0435 \u2014 199 \u20BD \u0432 \u043C\u0435\u0441\u044F\u0446"
 --- !u!1 &978313815550604145
 GameObject:
@@ -1792,7 +1713,6 @@ GameObject:
   - component: {fileID: 3898605438930321666}
   - component: {fileID: 2450994014502476443}
   - component: {fileID: 2231833294093341506}
-  - component: {fileID: 6818950463103223119}
   m_Layer: 5
   m_Name: Text_UnlinkDevices
   m_TagString: Untagged
@@ -1916,20 +1836,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &6818950463103223119
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 978313815550604145}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dbf51be86e70d7941bd40914206e4ddc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  translationName: New_UnlinkDevices
-  FallbackText: "\u041E\u0442\u0432\u044F\u0437\u0430\u0442\u044C \u0443\u0441\u0442\u0440\u043E\u0439\u0441\u0442\u0432\u0430"
 --- !u!1 &1053712676822704989
 GameObject:
   m_ObjectHideFlags: 0
@@ -1941,7 +1847,6 @@ GameObject:
   - component: {fileID: 1000021751253749981}
   - component: {fileID: 8149639470844349854}
   - component: {fileID: 42368227351793498}
-  - component: {fileID: 3504437484806708306}
   m_Layer: 5
   m_Name: Text_SendCode_Enabled
   m_TagString: Untagged
@@ -2065,20 +1970,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &3504437484806708306
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1053712676822704989}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dbf51be86e70d7941bd40914206e4ddc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  translationName: New_SendCode
-  FallbackText: "\u041E\u0442\u043F\u0440\u0430\u0432\u0438\u0442\u044C \u043A\u043E\u0434"
 --- !u!1 &1088830885560125972
 GameObject:
   m_ObjectHideFlags: 0
@@ -2203,7 +2094,6 @@ GameObject:
   - component: {fileID: 9104104299092899949}
   - component: {fileID: 6723712067795301760}
   - component: {fileID: 5500322123703771910}
-  - component: {fileID: 8291029950349779913}
   - component: {fileID: 5952144949280623371}
   m_Layer: 5
   m_Name: Text_MailSupport
@@ -2342,20 +2232,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _tmpText: {fileID: 6723712067795301760}
---- !u!114 &8291029950349779913
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1150076317728581486}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dbf51be86e70d7941bd40914206e4ddc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  translationName: New_Support
-  FallbackText: <link="support">support@wink.ru</link>
 --- !u!114 &5952144949280623371
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2787,7 +2663,6 @@ GameObject:
   - component: {fileID: 7154063474744396099}
   - component: {fileID: 1061983402497008619}
   - component: {fileID: 499573074323877919}
-  - component: {fileID: 1971368003796546298}
   m_Layer: 5
   m_Name: Text_CheckInternet
   m_TagString: Untagged
@@ -2913,22 +2788,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &1971368003796546298
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1680187884989194961}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dbf51be86e70d7941bd40914206e4ddc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  translationName: New_SubscriptionIsActive
-  FallbackText: "<line-height=48px>\u041A \u0432\u0430\u0448\u0435\u043C\u0443 \u043F\u0440\u043E\u0444\u0438\u043B\u044E
-    \u043F\u0440\u0438\u0432\u044F\u0437\u0430\u043D\u043E \u043C\u0430\u043A\u0441\u0438\u043C\u0430\u043B\u044C\u043D\u043E\u0435
-    \u043A\u043E\u043B\u0438\u0447\u0435\u0441\u0442\u0432\u043E \u0443\u0441\u0442\u0440\u043E\u0439\u0441\u0442\u0432"
 --- !u!1 &1728843475154545806
 GameObject:
   m_ObjectHideFlags: 0
@@ -3160,7 +3019,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _text: {fileID: 328723166443109009}
   _remoteConfigName: trial-period-days-text
-  _translationName: New_30Days
   _fallbackText: "7 \u0434\u043D\u0435\u0439 \u0431\u0435\u0441\u043F\u043B\u0430\u0442\u043D\u043E"
 --- !u!1 &1946960583750742624
 GameObject:
@@ -3173,7 +3031,6 @@ GameObject:
   - component: {fileID: 2981079814281632955}
   - component: {fileID: 5589708840250014771}
   - component: {fileID: 4797731436546786943}
-  - component: {fileID: 3154266543236235802}
   m_Layer: 5
   m_Name: Text_CheckInternet
   m_TagString: Untagged
@@ -3299,23 +3156,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &3154266543236235802
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1946960583750742624}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dbf51be86e70d7941bd40914206e4ddc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  translationName: New_UnlinkDescription
-  FallbackText: "<line-height=48px>\u041E\u0442\u0432\u044F\u0436\u0438\u0442\u0435
-    \u0440\u0430\u043D\u0435\u0435 \u043F\u0440\u0438\u0432\u044F\u0437\u0430\u043D\u043D\u044B\u0435
-    \u0443\u0441\u0442\u0440\u043E\u0439\u0441\u0442\u0432\u0430 \u0434\u043B\u044F
-    \u0432\u0445\u043E\u0434\u0430 \u0432 \u043F\u0440\u043E\u0444\u0438\u043B\u044C"
 --- !u!1 &2005605581441719717
 GameObject:
   m_ObjectHideFlags: 0
@@ -3733,7 +3573,6 @@ GameObject:
   - component: {fileID: 4803577126688762880}
   - component: {fileID: 1168722100253749980}
   - component: {fileID: 6178011101030456134}
-  - component: {fileID: 8514725181368577659}
   m_Layer: 5
   m_Name: Text_SendCode_Disabled
   m_TagString: Untagged
@@ -3857,20 +3696,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &8514725181368577659
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2113972761484227872}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dbf51be86e70d7941bd40914206e4ddc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  translationName: New_SendCode
-  FallbackText: "\u041E\u0442\u043F\u0440\u0430\u0432\u0438\u0442\u044C \u043A\u043E\u0434"
 --- !u!1 &2122890669862023238
 GameObject:
   m_ObjectHideFlags: 0
@@ -4255,7 +4080,6 @@ GameObject:
   - component: {fileID: 7884805655204100485}
   - component: {fileID: 2169684176600859166}
   - component: {fileID: 6003736490499729209}
-  - component: {fileID: 1552343358896499922}
   m_Layer: 5
   m_Name: Text_IsOn
   m_TagString: Untagged
@@ -4379,20 +4203,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &1552343358896499922
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2391078707981389328}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dbf51be86e70d7941bd40914206e4ddc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  translationName: New_IsOn
-  FallbackText: "\u041F\u043E\u0434\u043F\u0438\u0441\u043A\u0430"
 --- !u!1 &2408874634425614714
 GameObject:
   m_ObjectHideFlags: 0
@@ -4404,7 +4214,6 @@ GameObject:
   - component: {fileID: 7180957467385631336}
   - component: {fileID: 9214117155294996651}
   - component: {fileID: 2620405188413455507}
-  - component: {fileID: 2401689848866817280}
   - component: {fileID: 1634502056995586391}
   - component: {fileID: 9092318023958944657}
   m_Layer: 5
@@ -4534,25 +4343,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &2401689848866817280
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2408874634425614714}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dbf51be86e70d7941bd40914206e4ddc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  translationName: I accept the terms of the user agreement and the privacy  policy
-    of the Wink Music service
-  FallbackText: "\u0410\u0432\u0442\u043E\u0440\u0438\u0437\u0443\u044F\u0441\u044C,
-    \u0432\u044B \u043F\u0440\u0438\u043D\u0438\u043C\u0430\u0435\u0442\u0435 <color=#4D4D3D><link=\"agreement\">\u041F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u044C\u0441\u043A\u043E\u0435
-    \u0441\u043E\u0433\u043B\u0430\u0448\u0435\u043D\u0438\u0435</link></color> \u0438
-    <color=#4D4D3D><link=\"policy\">\u041F\u043E\u043B\u0438\u0442\u0438\u043A\u0443
-    \u043A\u043E\u043D\u0444\u0438\u0434\u0435\u043D\u0446\u0438\u0430\u043B\u044C\u043D\u043E\u0441\u0442\u0438</link></color>"
 --- !u!114 &1634502056995586391
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5259,7 +5049,6 @@ GameObject:
   - component: {fileID: 2613582393063066689}
   - component: {fileID: 2065269366542561534}
   - component: {fileID: 6985696134456326788}
-  - component: {fileID: 942786666909705766}
   m_Layer: 5
   m_Name: Text_UnlinkDevices
   m_TagString: Untagged
@@ -5383,20 +5172,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &942786666909705766
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2890370592819549396}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dbf51be86e70d7941bd40914206e4ddc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  translationName: Delete
-  FallbackText: "\u0423\u0434\u0430\u043B\u0438\u0442\u044C"
 --- !u!1 &2911680504337999270
 GameObject:
   m_ObjectHideFlags: 0
@@ -6066,7 +5841,6 @@ GameObject:
   - component: {fileID: 8730936737088421814}
   - component: {fileID: 2961355008593753626}
   - component: {fileID: 1166373115147663895}
-  - component: {fileID: 5495442135701006645}
   m_Layer: 5
   m_Name: Text_GetSubscription
   m_TagString: Untagged
@@ -6190,20 +5964,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &5495442135701006645
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3244494602758300339}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dbf51be86e70d7941bd40914206e4ddc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  translationName: New_GetSubscription
-  FallbackText: "\u041E\u0444\u043E\u0440\u043C\u0438\u0442\u0435 \u043F\u043E\u0434\u043F\u0438\u0441\u043A\u0443"
 --- !u!1 &3255982149130309388
 GameObject:
   m_ObjectHideFlags: 0
@@ -6807,7 +6567,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _text: {fileID: 328723166443109009}
   _remoteConfigName: trial-period-days-text
-  _translationName: New_30Days
   _fallbackText: "7 \u0434\u043D\u0435\u0439 \u0431\u0435\u0441\u043F\u043B\u0430\u0442\u043D\u043E"
 --- !u!1 &3585330637198225982
 GameObject:
@@ -7286,7 +7045,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _text: {fileID: 1744434992448188376}
   _remoteConfigName: wink-price-text
-  _translationName: New_WinkPrice
   _fallbackText: "\u0414\u0430\u043B\u0435\u0435 \u2014 199 \u20BD \u0432 \u043C\u0435\u0441\u044F\u0446"
 --- !u!1 &4041766441090329190
 GameObject:
@@ -7727,7 +7485,6 @@ GameObject:
   - component: {fileID: 5048738284240883540}
   - component: {fileID: 6147208933340034529}
   - component: {fileID: 6683777097901441656}
-  - component: {fileID: 1225278856078772060}
   - component: {fileID: 4595403382781964993}
   - component: {fileID: 590661881069077749}
   m_Layer: 5
@@ -7857,25 +7614,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &1225278856078772060
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4275676306476533908}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dbf51be86e70d7941bd40914206e4ddc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  translationName: I accept the terms of the user agreement and the privacy  policy
-    of the Wink Music service
-  FallbackText: "\u0410\u0432\u0442\u043E\u0440\u0438\u0437\u0443\u044F\u0441\u044C,
-    \u0432\u044B \u043F\u0440\u0438\u043D\u0438\u043C\u0430\u0435\u0442\u0435 <color=#4D4D3D><link=\"agreement\">\u041F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u044C\u0441\u043A\u043E\u0435
-    \u0441\u043E\u0433\u043B\u0430\u0448\u0435\u043D\u0438\u0435</link></color> \u0438
-    <color=#4D4D3D><link=\"policy\">\u041F\u043E\u043B\u0438\u0442\u0438\u043A\u0443
-    \u043A\u043E\u043D\u0444\u0438\u0434\u0435\u043D\u0446\u0438\u0430\u043B\u044C\u043D\u043E\u0441\u0442\u0438</link></color>"
 --- !u!114 &4595403382781964993
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8276,7 +8014,6 @@ GameObject:
   - component: {fileID: 8814853245298167009}
   - component: {fileID: 8843156803572031551}
   - component: {fileID: 6792589752342297097}
-  - component: {fileID: 3348996717238052781}
   m_Layer: 5
   m_Name: Text_TryWink
   m_TagString: Untagged
@@ -8400,20 +8137,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &3348996717238052781
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4355818975005607006}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dbf51be86e70d7941bd40914206e4ddc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  translationName: New_IHaveAccount
-  FallbackText: "\u0423 \u043C\u0435\u043D\u044F \u0435\u0441\u0442\u044C Wink \u0414\u0435\u0442\u0438"
 --- !u!1 &4363148353255388112
 GameObject:
   m_ObjectHideFlags: 0
@@ -8462,7 +8185,6 @@ GameObject:
   - component: {fileID: 8488050407745352140}
   - component: {fileID: 984260444561142037}
   - component: {fileID: 9010755348530820931}
-  - component: {fileID: 8647708987851665246}
   m_Layer: 5
   m_Name: Text_ItWillDelete
   m_TagString: Untagged
@@ -8590,24 +8312,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &8647708987851665246
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4386398571162735306}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dbf51be86e70d7941bd40914206e4ddc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  translationName: It will delete
-  FallbackText: "\u0412\u044B \u0443\u0432\u0435\u0440\u0435\u043D\u044B, \u0447\u0442\u043E
-    \u0445\u043E\u0442\u0438\u0442\u0435 \u0443\u0434\u0430\u043B\u0438\u0442\u044C
-    \u0430\u043A\u043A\u0430\u0443\u043D\u0442? \u0412\u0441\u0435 \u0441\u0432\u044F\u0437\u0430\u043D\u043D\u044B\u0435
-    \u0441 \u043D\u0438\u043C \u0434\u0430\u043D\u043D\u044B\u0435 \u0442\u0430\u043A\u0436\u0435
-    \u0431\u0443\u0434\u0443\u0442 \u0443\u0434\u0430\u043B\u0435\u043D\u044B \u0431\u0435\u0437\u0432\u043E\u0437\u0432\u0440\u0430\u0442\u043D\u043E!"
 --- !u!1 &4424752102321890561
 GameObject:
   m_ObjectHideFlags: 0
@@ -9254,7 +8958,6 @@ GameObject:
   - component: {fileID: 3339591734258996973}
   - component: {fileID: 1624535079655313585}
   - component: {fileID: 6219995244902209889}
-  - component: {fileID: 3446005983616151804}
   m_Layer: 5
   m_Name: Text_TryWink
   m_TagString: Untagged
@@ -9378,20 +9081,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &3446005983616151804
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4884788022250306905}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dbf51be86e70d7941bd40914206e4ddc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  translationName: New_IHaveAccount
-  FallbackText: "\u0423 \u043C\u0435\u043D\u044F \u0435\u0441\u0442\u044C Wink \u0414\u0435\u0442\u0438"
 --- !u!1 &4948355432780316641
 GameObject:
   m_ObjectHideFlags: 0
@@ -9479,7 +9168,6 @@ GameObject:
   - component: {fileID: 2466391904523224205}
   - component: {fileID: 3024893827269386686}
   - component: {fileID: 5176035347257125240}
-  - component: {fileID: 7735802949568933647}
   - component: {fileID: 6314375006850774541}
   m_Layer: 5
   m_Name: Text_AboutSubscription
@@ -9618,21 +9306,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _tmpText: {fileID: 3024893827269386686}
---- !u!114 &7735802949568933647
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5010924740088504669}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dbf51be86e70d7941bd40914206e4ddc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  translationName: New_AboutSubcription
-  FallbackText: "<link=\"subscription\">\u041F\u043E\u0434\u0440\u043E\u0431\u043D\u0435\u0435
-    \u043E \u043F\u043E\u0434\u043F\u0438\u0441\u043A\u0435 >"
 --- !u!114 &6314375006850774541
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9658,7 +9331,6 @@ GameObject:
   - component: {fileID: 4231971291141958021}
   - component: {fileID: 7054181025242073483}
   - component: {fileID: 7194212762447462746}
-  - component: {fileID: 6525179618398307329}
   m_Layer: 5
   m_Name: Text_SendNewCode
   m_TagString: Untagged
@@ -9783,21 +9455,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &6525179618398307329
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5048661968275679498}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dbf51be86e70d7941bd40914206e4ddc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  translationName: New_SendNewCode
-  FallbackText: "\u041E\u0442\u043F\u0440\u0430\u0432\u0438\u0442\u044C \u043D\u043E\u0432\u044B\u0439
-    \u043A\u043E\u0434"
 --- !u!1 &5142663488387425046
 GameObject:
   m_ObjectHideFlags: 0
@@ -10299,8 +9956,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 0
-  m_fontSizeBase: 0
+  m_fontSize: 23
+  m_fontSizeBase: 23
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -10323,7 +9980,7 @@ MonoBehaviour:
   m_enableKerning: 1
   m_enableExtraPadding: 1
   checkPaddingRequired: 0
-  m_isRichText: 1
+  m_isRichText: 0
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -10854,7 +10511,6 @@ GameObject:
   - component: {fileID: 1456636076125897469}
   - component: {fileID: 2713250725561234158}
   - component: {fileID: 9198763917933097257}
-  - component: {fileID: 5446420420936547226}
   m_Layer: 5
   m_Name: Text_Fail
   m_TagString: Untagged
@@ -10978,20 +10634,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &5446420420936547226
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5735570293093358871}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dbf51be86e70d7941bd40914206e4ddc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  translationName: Fail access!
-  FallbackText: "\u041E\u0448\u0438\u0431\u043A\u0430 \u0434\u043E\u0441\u0442\u0443\u043F\u0430!"
 --- !u!1 &5761324203509744243
 GameObject:
   m_ObjectHideFlags: 0
@@ -11349,7 +10991,6 @@ GameObject:
   - component: {fileID: 3760418583200520644}
   - component: {fileID: 7626161136284656442}
   - component: {fileID: 3585671731241651572}
-  - component: {fileID: 8391856434703556436}
   m_Layer: 5
   m_Name: Text_Placeholder
   m_TagString: Untagged
@@ -11473,20 +11114,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &8391856434703556436
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5869109009288260012}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dbf51be86e70d7941bd40914206e4ddc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  translationName: New_EnterPhone
-  FallbackText: "\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u0442\u0435\u043B\u0435\u0444\u043E\u043D"
 --- !u!1 &6160770606420310824
 GameObject:
   m_ObjectHideFlags: 0
@@ -11676,7 +11303,6 @@ GameObject:
   - component: {fileID: 7173879417180576435}
   - component: {fileID: 5047629914367609180}
   - component: {fileID: 8500012491695136028}
-  - component: {fileID: 1197502591988694441}
   m_Layer: 5
   m_Name: Text_ConfirmPhone
   m_TagString: Untagged
@@ -11801,21 +11427,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &1197502591988694441
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6347151529241814160}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dbf51be86e70d7941bd40914206e4ddc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  translationName: New_ConfirmNumber
-  FallbackText: "\u041F\u043E\u0434\u0442\u0432\u0435\u0440\u0436\u0434\u0435\u043D\u0438\u0435
-    \u0442\u0435\u043B\u0435\u0444\u043E\u043D\u0430"
 --- !u!1 &6368183858680651950
 GameObject:
   m_ObjectHideFlags: 0
@@ -12176,7 +11787,6 @@ GameObject:
   - component: {fileID: 7542968814740900144}
   - component: {fileID: 5307783952981766381}
   - component: {fileID: 4420539344348009742}
-  - component: {fileID: 6225017593460657916}
   m_Layer: 5
   m_Name: Text_Subscription
   m_TagString: Untagged
@@ -12300,20 +11910,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &6225017593460657916
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6508897395469683376}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dbf51be86e70d7941bd40914206e4ddc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  translationName: Subscription
-  FallbackText: "\u041F\u043E\u0434\u043F\u0438\u0441\u043A\u0430"
 --- !u!1 &6676434773925741898
 GameObject:
   m_ObjectHideFlags: 0
@@ -12792,7 +12388,6 @@ GameObject:
   - component: {fileID: 4197449645304335534}
   - component: {fileID: 3681348098964847594}
   - component: {fileID: 6742698507133470385}
-  - component: {fileID: 7248568336557417901}
   m_Layer: 5
   m_Name: Text_StartPlaying
   m_TagString: Untagged
@@ -12916,20 +12511,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &7248568336557417901
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6899055245886412863}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dbf51be86e70d7941bd40914206e4ddc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  translationName: Manage subscription
-  FallbackText: "\u041D\u0430\u0447\u0430\u0442\u044C \u0438\u0433\u0440\u0430\u0442\u044C"
 --- !u!1 &6902110632886991468
 GameObject:
   m_ObjectHideFlags: 0
@@ -13139,7 +12720,6 @@ GameObject:
   - component: {fileID: 798586398346074427}
   - component: {fileID: 2220464695107520703}
   - component: {fileID: 1020565375137443762}
-  - component: {fileID: 6098352505324751220}
   m_Layer: 5
   m_Name: Text_Subtitle
   m_TagString: Untagged
@@ -13265,22 +12845,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &6098352505324751220
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6965842509332679550}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dbf51be86e70d7941bd40914206e4ddc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  translationName: Enter the phone number
-  FallbackText: "\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u043D\u043E\u043C\u0435\u0440
-    \u0442\u0435\u043B\u0435\u0444\u043E\u043D\u0430 \u0434\u043B\u044F \u043F\u043E\u043B\u0443\u0447\u0435\u043D\u0438\u044F
-    \u043A\u043E\u0434\u0430 \u043F\u043E\u0434\u0442\u0432\u0435\u0440\u0436\u0434\u0435\u043D\u0438\u044F"
 --- !u!1 &6986722248324463446
 GameObject:
   m_ObjectHideFlags: 0
@@ -13367,7 +12931,6 @@ GameObject:
   - component: {fileID: 1567684682010475858}
   - component: {fileID: 9104968008396830992}
   - component: {fileID: 5644881427818149365}
-  - component: {fileID: 9061118548944037798}
   m_Layer: 5
   m_Name: Text_StartPlaying
   m_TagString: Untagged
@@ -13491,20 +13054,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &9061118548944037798
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6999157640824929783}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dbf51be86e70d7941bd40914206e4ddc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  translationName: New_StartPlaying
-  FallbackText: "\u041D\u0430\u0447\u0430\u0442\u044C \u0438\u0433\u0440\u0430\u0442\u044C"
 --- !u!1 &7024142129352608491
 GameObject:
   m_ObjectHideFlags: 0
@@ -13516,7 +13065,6 @@ GameObject:
   - component: {fileID: 4445411541118177284}
   - component: {fileID: 6604717132361715441}
   - component: {fileID: 2552550272462183403}
-  - component: {fileID: 8899382485446688895}
   m_Layer: 5
   m_Name: Text_WrongCodeButtom
   m_TagString: Untagged
@@ -13640,20 +13188,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &8899382485446688895
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7024142129352608491}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dbf51be86e70d7941bd40914206e4ddc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  translationName: New_WrongCode
-  FallbackText: "\u041A\u043E\u0434 \u0432\u0432\u0435\u0434\u0435\u043D \u043D\u0435\u0432\u0435\u0440\u043D\u043E"
 --- !u!1 &7042418207644662663
 GameObject:
   m_ObjectHideFlags: 0
@@ -13739,7 +13273,6 @@ GameObject:
   - component: {fileID: 41208048605436899}
   - component: {fileID: 622718041926268448}
   - component: {fileID: 1695647324349623248}
-  - component: {fileID: 6524345122076512469}
   - component: {fileID: 1880988966042979568}
   m_Layer: 5
   m_Name: Text_CodeWasSent
@@ -13865,21 +13398,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &6524345122076512469
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7071265868314031314}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dbf51be86e70d7941bd40914206e4ddc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  translationName: New_CodePhone
-  FallbackText: "\u041A\u043E\u0434 \u043E\u0442\u043F\u0440\u0430\u0432\u043B\u0435\u043D
-    \u043D\u0430 \u043D\u043E\u043C\u0435\u0440 {number}"
 --- !u!114 &1880988966042979568
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14026,7 +13544,6 @@ GameObject:
   - component: {fileID: 7101502334588973326}
   - component: {fileID: 5807599079310333107}
   - component: {fileID: 3961964166641680059}
-  - component: {fileID: 1759086217648214058}
   m_Layer: 5
   m_Name: Text_Continue
   m_TagString: Untagged
@@ -14150,20 +13667,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &1759086217648214058
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7145359084658048840}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dbf51be86e70d7941bd40914206e4ddc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  translationName: Continue
-  FallbackText: "\u041D\u0430\u0437\u0430\u0434"
 --- !u!1 &7170193485060587888
 GameObject:
   m_ObjectHideFlags: 0
@@ -14483,7 +13986,6 @@ GameObject:
   - component: {fileID: 978489327824410807}
   - component: {fileID: 5701180014875327451}
   - component: {fileID: 6655860426783743831}
-  - component: {fileID: 570417262715836863}
   m_Layer: 5
   m_Name: Text_Subscription
   m_TagString: Untagged
@@ -14607,20 +14109,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &570417262715836863
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7675423496973073078}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dbf51be86e70d7941bd40914206e4ddc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  translationName: Subscription
-  FallbackText: "\u041F\u043E\u0434\u043F\u0438\u0441\u043A\u0430"
 --- !u!1 &7701963659262658918
 GameObject:
   m_ObjectHideFlags: 0
@@ -14803,7 +14291,6 @@ GameObject:
   - component: {fileID: 44860347086655061}
   - component: {fileID: 5554123010125623676}
   - component: {fileID: 1925706589233280404}
-  - component: {fileID: 4950566869928426541}
   m_Layer: 5
   m_Name: Text_NoFreeDevices
   m_TagString: Untagged
@@ -14928,20 +14415,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &4950566869928426541
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7835032987042843012}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dbf51be86e70d7941bd40914206e4ddc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  translationName: NoDevices
-  FallbackText: "\u041D\u0435\u0442 \u0438\u043D\u0442\u0435\u0440\u043D\u0435\u0442\u0430"
 --- !u!1 &7841671388919171636
 GameObject:
   m_ObjectHideFlags: 0
@@ -15028,7 +14501,6 @@ GameObject:
   - component: {fileID: 7988499793911093621}
   - component: {fileID: 4926521079415115192}
   - component: {fileID: 7856008514137693050}
-  - component: {fileID: 6149510348765715147}
   m_Layer: 5
   m_Name: Text_IsOn
   m_TagString: Untagged
@@ -15152,20 +14624,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &6149510348765715147
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8083282593787708831}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dbf51be86e70d7941bd40914206e4ddc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  translationName: New_IsOn
-  FallbackText: "\u041F\u043E\u0434\u043F\u0438\u0441\u043A\u0430"
 --- !u!1 &8123603440551558091
 GameObject:
   m_ObjectHideFlags: 0
@@ -15224,7 +14682,6 @@ GameObject:
   - component: {fileID: 606273063860440997}
   - component: {fileID: 5181578836279220483}
   - component: {fileID: 6909930104125791151}
-  - component: {fileID: 4398861680656249095}
   m_Layer: 5
   m_Name: Text_Back
   m_TagString: Untagged
@@ -15348,20 +14805,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &4398861680656249095
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8187771402034609735}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dbf51be86e70d7941bd40914206e4ddc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  translationName: New_Back
-  FallbackText: "\u041D\u0430\u0437\u0430\u0434"
 --- !u!1 &8364853676636837133
 GameObject:
   m_ObjectHideFlags: 0
@@ -15545,7 +14988,6 @@ GameObject:
   - component: {fileID: 528820863551291237}
   - component: {fileID: 907932381783740122}
   - component: {fileID: 7697059246901840306}
-  - component: {fileID: 8222486923955112269}
   m_Layer: 5
   m_Name: Text_SubscriptionDescription
   m_TagString: Untagged
@@ -15602,7 +15044,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: "<line-height=48px>8000+ \u043C\u0443\u043B\u044C\u0442\u0438\u043A\u043E\u0432,
     23 \u0434\u0435\u0442\u0441\u043A\u0438\u0445 \u0422\u0412-\u043A\u0430\u043D\u0430\u043B\u0430,
-    \u043E\u0431\u0443\u0447\u0435\u043D\u0438\u0435 \L\u0441 \u041A\u0443\u0431\u043E\u043A\u043E\u0442
+    \u043E\u0431\u0443\u0447\u0435\u043D\u0438\u0435 \u0441 \u041A\u0443\u0431\u043E\u043A\u043E\u0442
     \u0438 \u041B\u043E\u0433\u0438\u043A\u041B\u0430\u0439\u043A, 12 \u0438\u0433\u0440
     \u0441 \u043B\u044E\u0431\u0438\u043C\u044B\u043C\u0438 \u0433\u0435\u0440\u043E\u044F\u043C\u0438"
   m_isRightToLeft: 0
@@ -15673,24 +15115,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &8222486923955112269
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8371680552108404271}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dbf51be86e70d7941bd40914206e4ddc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  translationName: New_SubscriptionDescription
-  FallbackText: "\u041F\u043E\u0434\u043F\u0438\u0441\u043A\u0430 \u043E\u0442\u043A\u0440\u044B\u0432\u0430\u0435\u0442
-    \u0434\u043E\u0441\u0442\u0443\u043F \u043A 12 \u0438\u0433\u0440\u0430\u043C
-    \u0438 \u043B\u0443\u0447\u0448\u0438\u043C \u043C\u0443\u043B\u044C\u0442\u0444\u0438\u043B\u044C\u043C\u0430\u043C 
-    \u0434\u043B\u044F \u0441\u0430\u043C\u044B\u0445 \u043C\u0430\u043B\u0435\u043D\u044C\u043A\u0438\u0445
-    \u0437\u0440\u0438\u0442\u0435\u043B\u0435\u0439"
 --- !u!1 &8404057615298336306
 GameObject:
   m_ObjectHideFlags: 0
@@ -16007,7 +15431,7 @@ MonoBehaviour:
   m_CaretBlinkRate: 0
   m_CaretWidth: 1
   m_ReadOnly: 0
-  m_RichText: 1
+  m_RichText: 0
   m_GlobalFontAsset: {fileID: 11400000, guid: b663b39fdf889c84d98d84b7f77f5eac, type: 2}
   m_OnFocusSelectAll: 1
   m_ResetOnDeActivation: 0
@@ -16044,7 +15468,6 @@ GameObject:
   - component: {fileID: 8792982867649344626}
   - component: {fileID: 7342255510906545312}
   - component: {fileID: 3777645495380422731}
-  - component: {fileID: 7878111631716916711}
   m_Layer: 5
   m_Name: Text_Continue
   m_TagString: Untagged
@@ -16168,20 +15591,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &7878111631716916711
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8688990602934262755}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dbf51be86e70d7941bd40914206e4ddc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  translationName: Continue
-  FallbackText: "\u041F\u0440\u043E\u0434\u043E\u043B\u0436\u0438\u0442\u044C"
 --- !u!1 &8698354237420672718
 GameObject:
   m_ObjectHideFlags: 0
@@ -16733,7 +16142,6 @@ GameObject:
   - component: {fileID: 5283643851561257597}
   - component: {fileID: 3617591719027012798}
   - component: {fileID: 4129638137301923575}
-  - component: {fileID: 3615260158398174207}
   m_Layer: 5
   m_Name: Text_WrongCode
   m_TagString: Untagged
@@ -16857,20 +16265,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &3615260158398174207
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9043375541859507661}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dbf51be86e70d7941bd40914206e4ddc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  translationName: New_WrongCode
-  FallbackText: "\u041A\u043E\u0434 \u0432\u0432\u0435\u0434\u0435\u043D \u043D\u0435\u0432\u0435\u0440\u043D\u043E"
 --- !u!1 &9085003691198026649
 GameObject:
   m_ObjectHideFlags: 0
@@ -16921,7 +16315,6 @@ GameObject:
   - component: {fileID: 4106763141663780073}
   - component: {fileID: 2030986648002994630}
   - component: {fileID: 5209215612952512964}
-  - component: {fileID: 5635476586068535987}
   m_Layer: 5
   m_Name: Text_CheckInternet
   m_TagString: Untagged
@@ -17048,22 +16441,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &5635476586068535987
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9119566994089258127}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dbf51be86e70d7941bd40914206e4ddc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  translationName: New_CheckInternet
-  FallbackText: "\u041F\u0440\u043E\u0432\u0435\u0440\u044C\u0442\u0435 \u043F\u043E\u0434\u043A\u043B\u044E\u0447\u0435\u043D\u0438\u0435
-    \u043A \u0438\u043D\u0442\u0435\u0440\u043D\u0435\u0442\u0443, \u0447\u0442\u043E\u0431\u044B
-    \u043F\u0440\u043E\u0434\u043E\u043B\u0436\u0438\u0442\u044C \u0438\u0433\u0440\u0430\u0442\u044C."
 --- !u!1001 &2631324728710041581
 PrefabInstance:
   m_ObjectHideFlags: 0

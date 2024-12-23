@@ -36,7 +36,6 @@ namespace Agava.Wink
         private bool _checkedInputDone = false;
         private bool _wrongCodeTextActive = false;
         private bool _repeatCodeButtonActive = false;
-        private TouchScreenKeyboard _keyboard;
 
         public bool ZeroSeconds => _repeatCodeTimer.ZeroSeconds;
         public bool Initialized => _repeatCodeTimer.Initialized;
@@ -108,7 +107,6 @@ namespace Agava.Wink
 
             EnableCanvasGroup(_canvasGroup);
 
-            _keyboard = TouchScreenKeyboard.Open(string.Empty, TouchScreenKeyboardType.NumberPad, false, false, false, false);
             TouchScreenKeyboard.hideInput = true;
             _inputField.ActivateInputField();
         }
@@ -117,9 +115,6 @@ namespace Agava.Wink
 
         public override void Disable()
         {
-            if (_keyboard != null)
-                _keyboard.active = false;
-
             DisableCanvasGroup(_canvasGroup);
             Clear();
             SetRepeatButtonActive(false);
