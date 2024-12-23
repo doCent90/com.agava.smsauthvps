@@ -43,8 +43,8 @@ namespace Agava.Wink
 
         public override void Disable()
         {
+            TouchScreenKeyboard.Open(string.Empty).active = false;
             DisableCanvasGroup(_canvasGroup);
-            _inputField.DeactivateInputField();
             Closed?.Invoke();
             Clear();
         }
