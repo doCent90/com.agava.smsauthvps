@@ -20,6 +20,7 @@ namespace Agava.Wink
         [SerializeField] private CanvasGroup _canvasGroup;
         [SerializeField] private CodeFormatter _codeFormatter;
         [SerializeField] private EnterCodeShaking _enterCodeShaking;
+        [SerializeField] private TMP_InputField _inputField;
         [SerializeField] private TextTimer _repeatCodeTimer;
         [Header("Buttons")]
         [SerializeField] private Button _sendRepeatCodeButton;
@@ -109,6 +110,7 @@ namespace Agava.Wink
 
             _keyboard = TouchScreenKeyboard.Open(string.Empty, TouchScreenKeyboardType.NumberPad, false, false, false, false);
             TouchScreenKeyboard.hideInput = true;
+            _inputField.ActivateInputField();
         }
 
         public override void Enable() { }

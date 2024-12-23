@@ -41,6 +41,7 @@ namespace Agava.Wink
 
             _keyboard = TouchScreenKeyboard.Open(string.Empty, TouchScreenKeyboardType.NumberPad, false, false, false, false);
             TouchScreenKeyboard.hideInput = true;
+            _inputField.ActivateInputField();
         }
 
         public override void Disable()
