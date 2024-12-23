@@ -44,6 +44,7 @@ namespace Agava.Wink
         public override void Disable()
         {
             DisableCanvasGroup(_canvasGroup);
+            _inputField.DeactivateInputField();
             Closed?.Invoke();
             Clear();
         }

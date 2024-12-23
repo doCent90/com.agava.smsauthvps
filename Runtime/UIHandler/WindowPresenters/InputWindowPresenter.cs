@@ -116,9 +116,11 @@ namespace Agava.Wink
         public override void Disable()
         {
             DisableCanvasGroup(_canvasGroup);
+            _inputField.DeactivateInputField();
             Clear();
             SetRepeatButtonActive(false);
             _repeatCodeTimer.TimerExpired -= OnRepeatCodeTimerExpired;
+
         }
 
         public void OnInputDone()
