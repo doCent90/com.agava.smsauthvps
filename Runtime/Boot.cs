@@ -58,7 +58,7 @@ namespace Agava.Wink
                 SmsAuthApi.DownloadCloudSavesProgress += OnDownloadCloudSavesProgress;
 
                 yield return _winkAccessManager.Construct();
-                _winkSignInHandlerUI.StartSevice(_winkAccessManager);
+                _winkSignInHandlerUI.StartService(_winkAccessManager);
                 _winkSignInHandlerUI.Construct();
                 yield return _winkAccessManager.TryQuickAccess();
 

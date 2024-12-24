@@ -25,9 +25,6 @@ namespace Agava.Wink
         [Header("Analytics buttons")]
         [SerializeField] private Button _closeButton;
         [SerializeField] private Button _haveWinkButton;
-        [Header("UI Test Buttons")]
-        [SerializeField] private Button _testSignInButton;
-        [SerializeField] private Button _testDeleteButton;
         [Header("Factory components")]
         [SerializeField] private UnlinkDeviceViewContainer _unlinkDeviceViewContainer;
         [Header("Placeholders")]
@@ -43,10 +40,7 @@ namespace Agava.Wink
         public event Action AllWindowsClosed;
 
 
-        private void Awake()
-        {
-            _notifyWindowHandler.OpenWindow(WindowType.ProccessOn);
-        }
+        private void Awake() => _notifyWindowHandler.OpenWindow(WindowType.ProccessOn);
 
         private void OnApplicationFocus(bool focus) => _signInFuctionsUI?.OnAppFocus(focus);
 
@@ -95,23 +89,12 @@ namespace Agava.Wink
             _signInFuctionsUI.SetRemoteConfig();
         }
 
-        public void StartSevice(WinkAccessManager winkAccessManager)
+        public void StartService(WinkAccessManager winkAccessManager)
         {
             if (Instance == null)
                 Instance = this;
 
             _signInFuctionsUI = new(_notifyWindowHandler, _demoTimer, winkAccessManager, this, this);
-
-#if TEST
-            _testSignInButton.onClick.AddListener(OnTestSignInClicked);
-            _testDeleteButton.onClick.AddListener(OnTestDeleteClicked);
-            _testSignInButton.gameObject.SetActive(true);
-            _testDeleteButton.gameObject.SetActive(true);
-#else
-            _testDeleteButton.gameObject.SetActive(false);
-            _testSignInButton.gameObject.SetActive(false);
-#endif
-
             _winkAccessManager = winkAccessManager;
 
             _enterCodeContinueButton.onClick.AddListener(OnEnterCodeContinueClicked);
@@ -135,10 +118,7 @@ namespace Agava.Wink
             _demoTimer.TimerExpired += OnTimerExpired;
         }
 
-        public void OpenStartWindow()
-        {
-            OpenSubscriptionWindow();
-        }
+        public void OpenStartWindow() => OpenSubscriptionWindow();
 
         public void OpenSignWindow()
         {
@@ -283,26 +263,5 @@ namespace Agava.Wink
                 yield return wait;
             }
         }
-        #region TEST_METHODS
-#if UNITY_EDITOR || TEST
-        private void OnTestSignInClicked()
-        {
-            _winkAccessManager.TestEnableSubsription();
-            _testSignInButton.gameObject.SetActive(false);
-        }
-
-        private void OnTestDeleteClicked()
-        {
-            if (WinkAccessManager.Instance.HasAccess == false)
-            {
-                Debug.LogError("Wink not authorizated!");
-                return;
-            }
-
-            SmsAuthAPI.Utility.PlayerPrefs.DeleteAll();
-            SmsAuthAPI.Utility.PlayerPrefs.Save();
-        }
-#endif
-        #endregion
     }
 }

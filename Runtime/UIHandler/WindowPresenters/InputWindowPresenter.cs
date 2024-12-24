@@ -23,6 +23,7 @@ namespace Agava.Wink
         [SerializeField] private TMP_InputField _inputField;
         [SerializeField] private TextTimer _repeatCodeTimer;
         [Header("Buttons")]
+        [SerializeField] private CustomKeyboard _keyboard;
         [SerializeField] private Button _sendRepeatCodeButton;
         [SerializeField] private Button _backButton;
         [SerializeField] private Button _continueButton;
@@ -36,7 +37,6 @@ namespace Agava.Wink
         private bool _checkedInputDone = false;
         private bool _wrongCodeTextActive = false;
         private bool _repeatCodeButtonActive = false;
-        private TouchScreenKeyboard _keyboard;
 
         public bool ZeroSeconds => _repeatCodeTimer.ZeroSeconds;
         public bool Initialized => _repeatCodeTimer.Initialized;
@@ -46,6 +46,9 @@ namespace Agava.Wink
             _continueButton.onClick.AddListener(OnContinue);
             _sendRepeatCodeButton.onClick.AddListener(OnRepeatClicked);
             _backButton.onClick.AddListener(OnBackClicked);
+
+            if (_keyboard == null)
+                _keyboard = FindObjectOfType<CustomKeyboard>();
         }
 
         private void OnDestroy()
@@ -95,6 +98,8 @@ namespace Agava.Wink
         public void Enable(string phone, Action<string> onInputDone, Action onBackClicked)
         {
             _phone = phone;
+            _keyboard.Enable();
+            _keyboard.Clicked += OnClicked;
 
             if (onInputDone != null)
                 _onInputDone = onInputDone;
@@ -107,18 +112,14 @@ namespace Agava.Wink
             _codeFormatter.SetInteractable(true);
 
             EnableCanvasGroup(_canvasGroup);
-
-            _keyboard = TouchScreenKeyboard.Open(string.Empty, TouchScreenKeyboardType.NumberPad, false, false, false, false);
-            TouchScreenKeyboard.hideInput = true;
-            _inputField.Select();
         }
 
         public override void Enable() { }
 
         public override void Disable()
         {
-            if (_keyboard != null)
-                _keyboard.active = false;
+            _keyboard.Clicked -= OnClicked;
+            _keyboard.Disable();
 
             DisableCanvasGroup(_canvasGroup);
             Clear();
@@ -169,6 +170,22 @@ namespace Agava.Wink
             SetWrongTextActive(false);
             _continueButton.gameObject.SetActive(false);
             _codeFormatter.Clear();
+        }
+
+        private void OnClicked(KeyCode code)
+        {
+            if (code == KeyCode.Backspace && _inputField.text.Length > 0)
+            {
+                _inputField.text = _inputField.text.Substring(0, _inputField.text.Length - 1);
+            }
+            else
+            {
+                if (string.IsNullOrEmpty(CustomKeyMapping.GetKey(code)) == false)
+                {
+                    string added = _inputField.text + CustomKeyMapping.GetKey(code);
+                    _inputField.text = added;
+                }
+            }
         }
 
         private void OnBackClicked()
